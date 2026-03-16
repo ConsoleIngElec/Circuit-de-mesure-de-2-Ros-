@@ -1,0 +1,19 @@
+# Fichiers de log et journaux de Vivado
+*.log
+*.jou
+*.str
+vivado*.backup.*
+
+# Dossiers temporaires et de compilation
+.Xil/
+*.cache/
+*.hw/
+*.ip_user_files/
+*.runs/
+*.sim/
+*.tmp/
+
+# --- Fichiers système Windows uniquement ---
+Thumbs.db
+desktop.ini
+$RECYCLE.BIN/
