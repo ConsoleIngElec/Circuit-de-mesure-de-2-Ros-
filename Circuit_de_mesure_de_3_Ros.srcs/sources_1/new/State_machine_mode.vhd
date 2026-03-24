@@ -35,115 +35,71 @@ entity State_machine_mode is
     Port ( 
         Clk      : in  STD_LOGIC;
         Reset    : in  STD_LOGIC; 
-        Mode_G   : in  STD_LOGIC; 
+        Mode_G   : in  STD_LOGIC; -- Contrôle l'activation globale
         CE_1Hz   : in  STD_LOGIC; 
-        Mode     : out STD_LOGIC_VECTOR(Architecture_number * RO_by_architecture - 1 downto 0);
-        Reset_RO : out STD_LOGIC_VECTOR(Architecture_number * RO_by_architecture - 1 downto 0);
+        Mode     : out STD_LOGIC_VECTOR(5 downto 0);
+        Reset_RO : out STD_LOGIC_VECTOR(5 downto 0);
         RO_sel   : out STD_LOGIC_VECTOR(2 downto 0); 
         Send     : out STD_LOGIC 
     );
 end State_machine_mode;
 
 architecture Behavioral of State_machine_mode is
+    type type_etat is (IDLE, MEASURE);
+    signal etat : type_etat := IDLE;
 
-    type type_etat is (Eteint, Envoi, Attendre);
-    signal etat : type_etat := Eteint;
-
-    signal i : integer range 0 to 49 := 0; -- Compteur de secondes
-    signal k : integer := 0;               -- Index de l'oscillateur en cours
-    
-    constant MAX_RO : integer := (Architecture_number * RO_by_architecture) - 1;
-
+    signal i : integer range 0 to 49 := 0; -- Compteur 50s
+    signal k : integer range 0 to 5  := 0; -- Index RO (0 à 5)
 begin
 
-    
-
-    Machine_etat : process(Clk)
+    process(Clk)
     begin
         if rising_edge(Clk) then
             if Reset = '1' then
-                etat     <= Eteint;
-                i        <= 0;
-                k        <= 0;
-                Mode     <= (others => '0');
+                etat <= IDLE;
+                i <= 0; k <= 0;
+                Mode <= (others => '0');
                 Reset_RO <= (others => '0');
-                Send     <= '0';
-            else
-                case etat is 
-                    when Eteint => 
-                        i <= 0;
-                        k <= 0;
-                        Mode <= (others => '0');
-                        Reset_RO <= (others => '0'); 
-                        Send <= '0';
-                        if Mode_G = '1' then 
-                           etat <= Envoi;
+                Send <= '0';
+            elsif CE_1Hz = '1' then
+                -- Valeurs par défaut
+                Mode <= (others => '0');
+                Reset_RO <= (others => '0');
+                Send <= '0';
+
+                case etat is
+                    when IDLE =>
+                        if Mode_G = '1' then
+                            etat <= MEASURE;
                         end if;
 
-                    when Envoi => 
-                        if CE_1Hz = '1' then
-                            -- Gestion du compteur i (Cycle total de 50 secondes)
-                            if i < 49 then 
-                                i <= i + 1;
-                            else
-                                i <= 0;
-                                -- Passage au RO suivant après les 50s
-                                if k < MAX_RO then
-                                    k <= k + 1;
-                                else
-                                    k <= 0;
-                                    etat <= Attendre;
-                                end if;
-                            end if;
+                    when MEASURE =>
+                        -- Séquencement interne des 50s
+                        if i <= 5 then         -- Phase RESET
+                            Mode(k) <= '1'; Reset_RO(k) <= '1';
+                        elsif i <= 24 then     -- Phase OSCILLATION
+                            Mode(k) <= '1'; Reset_RO(k) <= '0';
+                        elsif i = 25 then      -- Phase CAPTURE
+                            Mode(k) <= '1'; Reset_RO(k) <= '0'; Send <= '1';
+                        end if;
 
-                            -- ACTIONS SELON LE TIMER i
-                            if i >= 0 and i < 6 then
-                                -- 1. Phase RESET (6s : indices 0,1,2,3,4,5)
-                                Mode(k)     <= '1';
-                                Reset_RO(k) <= '1';
-                                Send        <= '0';
-                                
-                            elsif i >= 6 and i < 24 then
-                                -- 2. Phase STABILISATION (18s : indices 6 à 23)
-                                Mode(k)     <= '1';
-                                Reset_RO(k) <= '0';
-                                Send        <= '0';
-                                
-                            elsif i = 24 then
-                                -- 3. Phase MESURE / ENVOI (La 25ème seconde : index 24)
-                                Mode(k)     <= '1';
-                                Reset_RO(k) <= '0';
-                                Send        <= '1'; -- Déclenchement
-                                
-                            else
-                                -- 4. Phase de PAUSE (25s : indices 25 à 49)
-                                -- Isolation thermique, l'oscillateur k est coupé
-                                Mode(k)     <= '0';
-                                Reset_RO(k) <= '0';
-                                Send        <= '0';
-                            end if;
+                        -- Gestion des compteurs
+                        if i < 49 then
+                            i <= i + 1;
                         else
-                            -- Garantit que Send ne dure qu'un cycle d'horloge Clk (Pulse)
-                            Send <= '0';
+                            i <= 0;
+                            if k < 5 then
+                                k <= k + 1;
+                            else
+                                k <= 0;
+                                etat <= IDLE; -- Fin des 6 RO, on attend le prochain Mode_G
+                            end if;
                         end if;
-
-                    when Attendre =>     
-                        Mode <= (others => '0');
-                        Reset_RO <= (others => '0');
-                        Send     <= '0'; -- Sécurité contre les glitchs (pour éviter les glitchs)
-                        
-                        if Mode_G = '0' then 
-                         etat <= Eteint; 
-                        end if;
-                        
-                    when others => 
-                        etat <= Eteint;
                 end case;
-            end if;      
+            end if;
         end if;
     end process;
-    
-    -- Le numéro de l'oscillateur k (0 à 5) est converti en vecteur 3 bits
+
     RO_sel <= std_logic_vector(to_unsigned(k, 3));
 
 end Behavioral;

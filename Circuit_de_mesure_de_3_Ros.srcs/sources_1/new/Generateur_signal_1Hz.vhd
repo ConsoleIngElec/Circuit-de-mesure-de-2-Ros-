@@ -22,13 +22,9 @@
 
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
-use IEEE.NUMERIC_STD.ALL;
 
 entity Generateur_signal_1Hz is
-    Generic (
-        -- Fréquence d'entrée (ex: 100 MHz = 100 000 000)
-        CLK_FREQ : integer := 100000000 
-    );
+    Generic ( CLK_FREQ : integer := 100000000 );
     Port ( 
         Clk      : in  STD_LOGIC;
         Reset    : in  STD_LOGIC;
@@ -37,29 +33,21 @@ entity Generateur_signal_1Hz is
 end Generateur_signal_1Hz;
 
 architecture Behavioral of Generateur_signal_1Hz is
-
-    -- Compteur pour atteindre 1 seconde
-    -- On compte de 0 à (CLK_FREQ - 1)
-    signal counter : integer range 0 to CLK_FREQ -1  := 0;
-
+    signal counter : integer range 0 to CLK_FREQ - 1 := 0;
 begin
-
     process(Clk)
     begin
         if rising_edge(Clk) then
             if Reset = '1' then
                 counter <= 0;
                 CE_1HZ  <= '0';
+            elsif counter = (CLK_FREQ - 1) then
+                counter <= 0;
+                CE_1HZ  <= '1';
             else
-                if counter = (CLK_FREQ - 1) then
-                    counter <= 0;
-                    CE_1HZ  <= '1'; -- Impulsion d'un cycle d'horloge
-                else
-                    counter <= counter + 1;
-                    CE_1HZ  <= '0';
-                end if;
+                counter <= counter + 1;
+                CE_1HZ  <= '0';
             end if;
         end if;
     end process;
-
 end Behavioral;

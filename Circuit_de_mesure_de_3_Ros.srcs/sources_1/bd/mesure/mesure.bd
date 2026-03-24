@@ -9,9 +9,6 @@
       "validated": "true"
     },
     "design_tree": {
-      "Gen_mode_0": "",
-      "Mux_data_0": "",
-      "Select_data_0": "",
       "IP_Conversion_Axi_0": "",
       "zynq_ultra_ps_e_0": "",
       "Gen_stress_0": "",
@@ -23,136 +20,12 @@
         }
       },
       "rst_ps8_0_100M": "",
+      "Mux_data_0": "",
+      "Gen_mode_0": "",
+      "Select_Data_0": "",
       "All_Ro_out_0": ""
     },
     "components": {
-      "Gen_mode_0": {
-        "vlnv": "xilinx.com:module_ref:Gen_mode:1.0",
-        "xci_name": "mesure_Gen_mode_0_0",
-        "reference_info": {
-          "ref_type": "hdl",
-          "ref_name": "Gen_mode",
-          "boundary_crc": "0x0"
-        },
-        "ports": {
-          "Clk": {
-            "type": "clk",
-            "direction": "I",
-            "parameters": {
-              "ASSOCIATED_RESET": {
-                "value": "Reset",
-                "value_src": "constant"
-              },
-              "CLK_DOMAIN": {
-                "value": "mesure_zynq_ultra_ps_e_0_1_pl_clk0",
-                "value_src": "default_prop"
-              },
-              "FREQ_HZ": {
-                "value": "100000000",
-                "value_src": "user_prop"
-              }
-            }
-          },
-          "Reset": {
-            "type": "rst",
-            "direction": "I"
-          },
-          "CE_1Hz": {
-            "direction": "O"
-          },
-          "Mode": {
-            "direction": "O",
-            "left": "5",
-            "right": "0"
-          },
-          "Reset_RO": {
-            "direction": "O",
-            "left": "5",
-            "right": "0"
-          },
-          "RO_sel": {
-            "direction": "O",
-            "left": "2",
-            "right": "0"
-          },
-          "Send": {
-            "direction": "O"
-          }
-        }
-      },
-      "Mux_data_0": {
-        "vlnv": "xilinx.com:module_ref:Mux_data:1.0",
-        "xci_name": "mesure_Mux_data_0_0",
-        "reference_info": {
-          "ref_type": "hdl",
-          "ref_name": "Mux_data",
-          "boundary_crc": "0x0"
-        },
-        "ports": {
-          "Data_in": {
-            "direction": "I",
-            "left": "127",
-            "right": "0"
-          },
-          "Sel": {
-            "direction": "I",
-            "left": "4",
-            "right": "0"
-          },
-          "Data_out": {
-            "direction": "O",
-            "left": "7",
-            "right": "0"
-          }
-        }
-      },
-      "Select_data_0": {
-        "vlnv": "xilinx.com:module_ref:Select_data:1.0",
-        "xci_name": "mesure_Select_data_0_0",
-        "reference_info": {
-          "ref_type": "hdl",
-          "ref_name": "Select_data",
-          "boundary_crc": "0x0"
-        },
-        "ports": {
-          "Clk": {
-            "type": "clk",
-            "direction": "I",
-            "parameters": {
-              "ASSOCIATED_RESET": {
-                "value": "Reset",
-                "value_src": "constant"
-              },
-              "CLK_DOMAIN": {
-                "value": "mesure_zynq_ultra_ps_e_0_1_pl_clk0",
-                "value_src": "default_prop"
-              },
-              "FREQ_HZ": {
-                "value": "100000000",
-                "value_src": "user_prop"
-              }
-            }
-          },
-          "Reset": {
-            "type": "rst",
-            "direction": "I"
-          },
-          "Done": {
-            "direction": "I"
-          },
-          "Send": {
-            "direction": "I"
-          },
-          "Sel": {
-            "direction": "O",
-            "left": "4",
-            "right": "0"
-          },
-          "Allow": {
-            "direction": "O"
-          }
-        }
-      },
       "IP_Conversion_Axi_0": {
         "vlnv": "IMS.bordeaux:user:IP_Conversion_Axi:1.0",
         "xci_name": "mesure_IP_Conversion_Axi_0_0"
@@ -1620,6 +1493,12 @@
               }
             },
             "interface_nets": {
+              "s00_couplers_to_auto_ds": {
+                "interface_ports": [
+                  "S_AXI",
+                  "auto_ds/S_AXI"
+                ]
+              },
               "auto_pc_to_s00_couplers": {
                 "interface_ports": [
                   "M_AXI",
@@ -1630,12 +1509,6 @@
                 "interface_ports": [
                   "auto_ds/M_AXI",
                   "auto_pc/S_AXI"
-                ]
-              },
-              "s00_couplers_to_auto_ds": {
-                "interface_ports": [
-                  "S_AXI",
-                  "auto_ds/S_AXI"
                 ]
               }
             },
@@ -1658,16 +1531,16 @@
           }
         },
         "interface_nets": {
-          "s00_couplers_to_ps8_0_axi_periph": {
-            "interface_ports": [
-              "M00_AXI",
-              "s00_couplers/M_AXI"
-            ]
-          },
           "ps8_0_axi_periph_to_s00_couplers": {
             "interface_ports": [
               "S00_AXI",
               "s00_couplers/S_AXI"
+            ]
+          },
+          "s00_couplers_to_ps8_0_axi_periph": {
+            "interface_ports": [
+              "M00_AXI",
+              "s00_couplers/M_AXI"
             ]
           }
         },
@@ -1702,6 +1575,133 @@
         "vlnv": "xilinx.com:ip:proc_sys_reset:5.0",
         "xci_name": "mesure_rst_ps8_0_100M_1"
       },
+      "Mux_data_0": {
+        "vlnv": "xilinx.com:module_ref:Mux_data:1.0",
+        "xci_name": "mesure_Mux_data_0_0",
+        "reference_info": {
+          "ref_type": "hdl",
+          "ref_name": "Mux_data",
+          "boundary_crc": "0x0"
+        },
+        "ports": {
+          "Data_in": {
+            "direction": "I",
+            "left": "127",
+            "right": "0"
+          },
+          "Sel": {
+            "direction": "I",
+            "left": "4",
+            "right": "0"
+          },
+          "Data_out": {
+            "direction": "O",
+            "left": "7",
+            "right": "0"
+          }
+        }
+      },
+      "Gen_mode_0": {
+        "vlnv": "xilinx.com:module_ref:Gen_mode:1.0",
+        "xci_name": "mesure_Gen_mode_0_1",
+        "reference_info": {
+          "ref_type": "hdl",
+          "ref_name": "Gen_mode",
+          "boundary_crc": "0x0"
+        },
+        "ports": {
+          "Clk": {
+            "type": "clk",
+            "direction": "I",
+            "parameters": {
+              "ASSOCIATED_RESET": {
+                "value": "Reset",
+                "value_src": "constant"
+              },
+              "CLK_DOMAIN": {
+                "value": "mesure_zynq_ultra_ps_e_0_1_pl_clk0",
+                "value_src": "default_prop"
+              },
+              "FREQ_HZ": {
+                "value": "100000000",
+                "value_src": "user_prop"
+              }
+            }
+          },
+          "Reset": {
+            "type": "rst",
+            "direction": "I"
+          },
+          "CE_1Hz": {
+            "direction": "O"
+          },
+          "Mode": {
+            "direction": "O",
+            "left": "5",
+            "right": "0"
+          },
+          "Reset_RO": {
+            "direction": "O",
+            "left": "5",
+            "right": "0"
+          },
+          "Ro_sel": {
+            "direction": "O",
+            "left": "2",
+            "right": "0"
+          },
+          "Send": {
+            "direction": "O"
+          }
+        }
+      },
+      "Select_Data_0": {
+        "vlnv": "xilinx.com:module_ref:Select_Data:1.0",
+        "xci_name": "mesure_Select_Data_0_1",
+        "reference_info": {
+          "ref_type": "hdl",
+          "ref_name": "Select_Data",
+          "boundary_crc": "0x0"
+        },
+        "ports": {
+          "Clk": {
+            "type": "clk",
+            "direction": "I",
+            "parameters": {
+              "ASSOCIATED_RESET": {
+                "value": "Reset",
+                "value_src": "constant"
+              },
+              "CLK_DOMAIN": {
+                "value": "mesure_zynq_ultra_ps_e_0_1_pl_clk0",
+                "value_src": "default_prop"
+              },
+              "FREQ_HZ": {
+                "value": "100000000",
+                "value_src": "user_prop"
+              }
+            }
+          },
+          "Reset": {
+            "type": "rst",
+            "direction": "I"
+          },
+          "Done": {
+            "direction": "I"
+          },
+          "Send": {
+            "direction": "I"
+          },
+          "Sel": {
+            "direction": "O",
+            "left": "4",
+            "right": "0"
+          },
+          "Allow": {
+            "direction": "O"
+          }
+        }
+      },
       "All_Ro_out_0": {
         "vlnv": "xilinx.com:module_ref:All_Ro_out:1.0",
         "xci_name": "mesure_All_Ro_out_0_0",
@@ -1724,14 +1724,14 @@
             "left": "5",
             "right": "0"
           },
-          "Stress": {
-            "direction": "I",
-            "left": "3",
-            "right": "0"
-          },
           "Ro_sel": {
             "direction": "I",
             "left": "2",
+            "right": "0"
+          },
+          "Stress": {
+            "direction": "I",
+            "left": "3",
             "right": "0"
           },
           "Data": {
@@ -1757,6 +1757,62 @@
       }
     },
     "nets": {
+      "Gen_stress_0_Stress": {
+        "ports": [
+          "Gen_stress_0/Stress",
+          "All_Ro_out_0/Stress"
+        ]
+      },
+      "All_Ro_out_0_Data": {
+        "ports": [
+          "All_Ro_out_0/Data",
+          "Mux_data_0/Data_in"
+        ]
+      },
+      "Mux_data_0_Data_out": {
+        "ports": [
+          "Mux_data_0/Data_out",
+          "IP_Conversion_Axi_0/Data"
+        ]
+      },
+      "zynq_ultra_ps_e_0_pl_resetn0": {
+        "ports": [
+          "zynq_ultra_ps_e_0/pl_resetn0",
+          "util_vector_logic_0/Op1",
+          "rst_ps8_0_100M/ext_reset_in"
+        ]
+      },
+      "util_vector_logic_0_Res": {
+        "ports": [
+          "util_vector_logic_0/Res",
+          "Gen_stress_0/Reset",
+          "Gen_mode_0/Reset",
+          "Select_Data_0/Reset"
+        ]
+      },
+      "zynq_ultra_ps_e_0_pl_clk0": {
+        "ports": [
+          "zynq_ultra_ps_e_0/pl_clk0",
+          "zynq_ultra_ps_e_0/maxihpm0_fpd_aclk",
+          "ps8_0_axi_periph/S00_ACLK",
+          "rst_ps8_0_100M/slowest_sync_clk",
+          "IP_Conversion_Axi_0/s00_axi_aclk",
+          "ps8_0_axi_periph/M00_ACLK",
+          "ps8_0_axi_periph/ACLK",
+          "Gen_stress_0/Clk",
+          "Gen_mode_0/Clk",
+          "Select_Data_0/Clk"
+        ]
+      },
+      "rst_ps8_0_100M_peripheral_aresetn": {
+        "ports": [
+          "rst_ps8_0_100M/peripheral_aresetn",
+          "ps8_0_axi_periph/S00_ARESETN",
+          "IP_Conversion_Axi_0/s00_axi_aresetn",
+          "ps8_0_axi_periph/M00_ARESETN",
+          "ps8_0_axi_periph/ARESETN"
+        ]
+      },
       "Gen_mode_0_CE_1Hz": {
         "ports": [
           "Gen_mode_0/CE_1Hz",
@@ -1775,90 +1831,34 @@
           "All_Ro_out_0/Reset_RO"
         ]
       },
-      "Gen_mode_0_Send": {
+      "Gen_mode_0_Ro_sel": {
         "ports": [
-          "Gen_mode_0/Send",
-          "Select_data_0/Send"
-        ]
-      },
-      "Gen_mode_0_RO_sel": {
-        "ports": [
-          "Gen_mode_0/RO_sel",
+          "Gen_mode_0/Ro_sel",
           "All_Ro_out_0/Ro_sel"
         ]
       },
-      "Gen_stress_0_Stress": {
+      "Gen_mode_0_Send": {
         "ports": [
-          "Gen_stress_0/Stress",
-          "All_Ro_out_0/Stress"
-        ]
-      },
-      "All_Ro_out_0_Data": {
-        "ports": [
-          "All_Ro_out_0/Data",
-          "Mux_data_0/Data_in"
+          "Gen_mode_0/Send",
+          "Select_Data_0/Send"
         ]
       },
       "IP_Conversion_Axi_0_Done": {
         "ports": [
           "IP_Conversion_Axi_0/Done",
-          "Select_data_0/Done"
+          "Select_Data_0/Done"
         ]
       },
-      "Mux_data_0_Data_out": {
+      "Select_Data_0_Allow": {
         "ports": [
-          "Mux_data_0/Data_out",
-          "IP_Conversion_Axi_0/Data"
-        ]
-      },
-      "Select_data_0_Sel": {
-        "ports": [
-          "Select_data_0/Sel",
-          "Mux_data_0/Sel"
-        ]
-      },
-      "Select_data_0_Allow": {
-        "ports": [
-          "Select_data_0/Allow",
+          "Select_Data_0/Allow",
           "IP_Conversion_Axi_0/Allow"
         ]
       },
-      "zynq_ultra_ps_e_0_pl_resetn0": {
+      "Select_Data_0_Sel": {
         "ports": [
-          "zynq_ultra_ps_e_0/pl_resetn0",
-          "util_vector_logic_0/Op1",
-          "rst_ps8_0_100M/ext_reset_in"
-        ]
-      },
-      "util_vector_logic_0_Res": {
-        "ports": [
-          "util_vector_logic_0/Res",
-          "Select_data_0/Reset",
-          "Gen_stress_0/Reset",
-          "Gen_mode_0/Reset"
-        ]
-      },
-      "zynq_ultra_ps_e_0_pl_clk0": {
-        "ports": [
-          "zynq_ultra_ps_e_0/pl_clk0",
-          "Gen_mode_0/Clk",
-          "Select_data_0/Clk",
-          "zynq_ultra_ps_e_0/maxihpm0_fpd_aclk",
-          "ps8_0_axi_periph/S00_ACLK",
-          "rst_ps8_0_100M/slowest_sync_clk",
-          "IP_Conversion_Axi_0/s00_axi_aclk",
-          "ps8_0_axi_periph/M00_ACLK",
-          "ps8_0_axi_periph/ACLK",
-          "Gen_stress_0/Clk"
-        ]
-      },
-      "rst_ps8_0_100M_peripheral_aresetn": {
-        "ports": [
-          "rst_ps8_0_100M/peripheral_aresetn",
-          "ps8_0_axi_periph/S00_ARESETN",
-          "IP_Conversion_Axi_0/s00_axi_aresetn",
-          "ps8_0_axi_periph/M00_ARESETN",
-          "ps8_0_axi_periph/ARESETN"
+          "Select_Data_0/Sel",
+          "Mux_data_0/Sel"
         ]
       }
     },

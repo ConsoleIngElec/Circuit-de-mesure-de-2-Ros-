@@ -58,8 +58,8 @@ ENTITY mesure_All_Ro_out_0_0 IS
     CE_1Hz : IN STD_LOGIC;
     Mode : IN STD_LOGIC_VECTOR(5 DOWNTO 0);
     Reset_RO : IN STD_LOGIC_VECTOR(5 DOWNTO 0);
-    Stress : IN STD_LOGIC_VECTOR(3 DOWNTO 0);
     Ro_sel : IN STD_LOGIC_VECTOR(2 DOWNTO 0);
+    Stress : IN STD_LOGIC_VECTOR(3 DOWNTO 0);
     Data : OUT STD_LOGIC_VECTOR(127 DOWNTO 0)
   );
 END mesure_All_Ro_out_0_0;
@@ -77,8 +77,8 @@ ARCHITECTURE mesure_All_Ro_out_0_0_arch OF mesure_All_Ro_out_0_0 IS
       CE_1Hz : IN STD_LOGIC;
       Mode : IN STD_LOGIC_VECTOR(5 DOWNTO 0);
       Reset_RO : IN STD_LOGIC_VECTOR(5 DOWNTO 0);
-      Stress : IN STD_LOGIC_VECTOR(3 DOWNTO 0);
       Ro_sel : IN STD_LOGIC_VECTOR(2 DOWNTO 0);
+      Stress : IN STD_LOGIC_VECTOR(3 DOWNTO 0);
       Data : OUT STD_LOGIC_VECTOR(127 DOWNTO 0)
     );
   END COMPONENT All_Ro_out;
@@ -95,8 +95,8 @@ BEGIN
       CE_1Hz => CE_1Hz,
       Mode => Mode,
       Reset_RO => Reset_RO,
-      Stress => Stress,
       Ro_sel => Ro_sel,
+      Stress => Stress,
       Data => Data
     );
 END mesure_All_Ro_out_0_0_arch;

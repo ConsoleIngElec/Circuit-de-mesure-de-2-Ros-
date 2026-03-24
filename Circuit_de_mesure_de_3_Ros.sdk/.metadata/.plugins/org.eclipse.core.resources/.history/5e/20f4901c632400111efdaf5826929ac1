@@ -1,0 +1,124 @@
+#include <stdio.h>
+#include <string.h>
+#include "xparameters.h"
+#include "xil_io.h"
+#include "sleep.h"
+#include "ff.h"      // Bibliothèque pour la carte SD
+#include "xstatus.h"
+
+// Adresse de ton IP (Vérifie bien ce nom dans xparameters.h)
+#define BASE_ADDR XPAR_IP_CONVERSION_AXI_0_S00_AXI_BASEADDR
+
+// --- OBJETS GLOBAUX POUR LA CARTE SD ---
+static FATFS fatfs;
+FIL myFile;
+FRESULT res;
+UINT bw;
+
+int main() {
+    // --- DÉCLARATION DES VARIABLES ---
+    u32 brute_val;
+    u32 ro_32bit;
+    float freq_mhz;
+    int cycle = 0;
+    int total_sec;
+    int hh, mm, ss;
+    char buffer_sd[2048]; // Taille pour contenir les 24 colonnes de fréquences
+    char *filename = "STRESS_24RO.CSV";
+
+    printf("======================================================\n\r");
+    printf("   MONITORING 24 OSCILLATEURS (6 MODES x 4 RO)       \n\r");
+    printf("======================================================\n\n\r");
+
+    // 1. Montage de la carte SD
+    res = f_mount(&fatfs, "0:/", 1);
+    if (res != FR_OK) {
+        printf("ERREUR : Impossible de monter la carte SD (Code: %d)\n\r", res);
+    } else {
+        printf("Carte SD detectee et montee avec succes !\n\r");
+
+        // 2. Création de l'entête du fichier (si c'est un nouveau fichier)
+        res = f_open(&myFile, filename, FA_OPEN_ALWAYS | FA_WRITE);
+        if (res == FR_OK) {
+            if (f_size(&myFile) == 0) {
+                // Construction de l'entête : Cycle;Temps;RO_0;RO_1;...;RO_23
+                strcpy(buffer_sd, "Cycle;Temps");
+                for(int i=0; i<24; i++) {
+                    sprintf(buffer_sd + strlen(buffer_sd), ";RO_%d_MHz", i);
+                }
+                strcat(buffer_sd, "\n");
+                f_write(&myFile, buffer_sd, strlen(buffer_sd), &bw);
+            }
+            f_close(&myFile);
+            printf("Fichier %s pret.\n\r", filename);
+        }
+    }
+
+    while(1) {
+        // --- CALCUL DU TEMPS (Basé sur ton cycle de 10 minutes total) ---
+        total_sec = cycle * 600;
+        hh = total_sec / 3600;
+        mm = (total_sec % 3600) / 60;
+        ss = total_sec % 60;
+
+        printf("\n>>> CYCLE N %03d | TEMPS THEORIQUE : %02d:%02d:%02d\n\r", cycle, hh, mm, ss);
+
+        // Initialisation de la ligne de données pour ce cycle
+        sprintf(buffer_sd, "%d;%02d:%02d:%02d", cycle, hh, mm, ss);
+
+        // --- BOUCLE POUR LES 6 MODES (k de 0 à 5 géré par Gen_mode) ---
+        for (int k = 0; k < 6; k++) {
+
+            // --- BOUCLE POUR LES 4 RO PAR MODE (Envoyés par Select_Data) ---
+            for (int i = 0; i < 4; i++) {
+
+                ro_32bit = 0;
+
+                // Lecture des 4 octets pour former un RO de 32 bits
+                for (int byte = 0; byte < 4; byte++) {
+
+                    // A. Attente du signal de validation (Bit 0 de BASE_ADDR + 4)
+                    // Le FPGA maintient ce bit à '1' tant qu'on n'a pas répondu DONE
+                    while ((Xil_In32(BASE_ADDR + 4) & 0x01) == 0);
+
+                    // B. Lecture de l'octet courant
+                    brute_val = (Xil_In32(BASE_ADDR + 0) & 0xFF);
+
+                    // C. Reconstruction du mot 32 bits
+                    ro_32bit |= (brute_val << (byte * 8));
+
+                    // D. Handshake DONE (Bit 0 de BASE_ADDR + 8)
+                    // On envoie une impulsion pour dire au FPGA de passer à l'octet/RO suivant
+                    Xil_Out32(BASE_ADDR + 8, 1);
+                    Xil_Out32(BASE_ADDR + 8, 0);
+                }
+
+                // Conversion en MHz
+                freq_mhz = (float)ro_32bit / 1000000.0f;
+
+                // Ajout de la valeur dans le buffer de la carte SD
+                sprintf(buffer_sd + strlen(buffer_sd), ";%.3f", freq_mhz);
+            }
+            printf("  Mode k=%d lu (4 ROs collectes).\n\r", k);
+        }
+
+        // Fin de la ligne CSV
+        strcat(buffer_sd, "\n");
+
+        // 3. ECRITURE FINALE DU CYCLE SUR LA CARTE SD
+        res = f_open(&myFile, filename, FA_OPEN_APPEND | FA_WRITE);
+        if (res == FR_OK) {
+            f_write(&myFile, buffer_sd, strlen(buffer_sd), &bw);
+            f_close(&myFile);
+            printf(">> Sauvegarde SD OK pour le Cycle %d.\n\r", cycle);
+        } else {
+            printf(">> ERREUR SD : Impossible d'ouvrir le fichier en ecriture.\n\r");
+        }
+
+        cycle++;
+        // Le processeur va maintenant remonter au début du 'while(1)'
+        // et bloquer sur le premier 'while' d'attente jusqu'à la prochaine mesure du FPGA.
+    }
+
+    return 0;
+}

@@ -40,7 +40,7 @@ if { [string first $scripts_vivado_version $current_vivado_version] == -1 } {
 
 # The design that will be created by this Tcl script contains the following 
 # module references:
-# All_Ro_out, Gen_mode, Gen_stress, Mux_data, Select_data
+# All_Ro_out, Gen_mode, Gen_stress, Mux_data, Select_Data
 
 # Please add the sources of those modules before sourcing this Tcl script.
 
@@ -213,13 +213,13 @@ proc create_root_design { parentCell } {
      return 1
    }
   
-  # Create instance: Select_data_0, and set properties
-  set block_name Select_data
-  set block_cell_name Select_data_0
-  if { [catch {set Select_data_0 [create_bd_cell -type module -reference $block_name $block_cell_name] } errmsg] } {
+  # Create instance: Select_Data_0, and set properties
+  set block_name Select_Data
+  set block_cell_name Select_Data_0
+  if { [catch {set Select_Data_0 [create_bd_cell -type module -reference $block_name $block_cell_name] } errmsg] } {
      catch {common::send_msg_id "BD_TCL-105" "ERROR" "Unable to add referenced block <$block_name>. Please add the files for ${block_name}'s definition into the project."}
      return 1
-   } elseif { $Select_data_0 eq "" } {
+   } elseif { $Select_Data_0 eq "" } {
      catch {common::send_msg_id "BD_TCL-106" "ERROR" "Unable to referenced block <$block_name>. Please add the files for ${block_name}'s definition into the project."}
      return 1
    }
@@ -871,17 +871,17 @@ proc create_root_design { parentCell } {
   connect_bd_net -net All_Ro_out_0_Data [get_bd_pins All_Ro_out_0/Data] [get_bd_pins Mux_data_0/Data_in]
   connect_bd_net -net Gen_mode_0_CE_1Hz [get_bd_pins All_Ro_out_0/CE_1Hz] [get_bd_pins Gen_mode_0/CE_1Hz]
   connect_bd_net -net Gen_mode_0_Mode [get_bd_pins All_Ro_out_0/Mode] [get_bd_pins Gen_mode_0/Mode]
-  connect_bd_net -net Gen_mode_0_RO_sel [get_bd_pins All_Ro_out_0/Ro_sel] [get_bd_pins Gen_mode_0/RO_sel]
   connect_bd_net -net Gen_mode_0_Reset_RO [get_bd_pins All_Ro_out_0/Reset_RO] [get_bd_pins Gen_mode_0/Reset_RO]
-  connect_bd_net -net Gen_mode_0_Send [get_bd_pins Gen_mode_0/Send] [get_bd_pins Select_data_0/Send]
+  connect_bd_net -net Gen_mode_0_Ro_sel [get_bd_pins All_Ro_out_0/Ro_sel] [get_bd_pins Gen_mode_0/Ro_sel]
+  connect_bd_net -net Gen_mode_0_Send [get_bd_pins Gen_mode_0/Send] [get_bd_pins Select_Data_0/Send]
   connect_bd_net -net Gen_stress_0_Stress [get_bd_pins All_Ro_out_0/Stress] [get_bd_pins Gen_stress_0/Stress]
-  connect_bd_net -net IP_Conversion_Axi_0_Done [get_bd_pins IP_Conversion_Axi_0/Done] [get_bd_pins Select_data_0/Done]
+  connect_bd_net -net IP_Conversion_Axi_0_Done [get_bd_pins IP_Conversion_Axi_0/Done] [get_bd_pins Select_Data_0/Done]
   connect_bd_net -net Mux_data_0_Data_out [get_bd_pins IP_Conversion_Axi_0/Data] [get_bd_pins Mux_data_0/Data_out]
-  connect_bd_net -net Select_data_0_Allow [get_bd_pins IP_Conversion_Axi_0/Allow] [get_bd_pins Select_data_0/Allow]
-  connect_bd_net -net Select_data_0_Sel [get_bd_pins Mux_data_0/Sel] [get_bd_pins Select_data_0/Sel]
+  connect_bd_net -net Select_Data_0_Allow [get_bd_pins IP_Conversion_Axi_0/Allow] [get_bd_pins Select_Data_0/Allow]
+  connect_bd_net -net Select_Data_0_Sel [get_bd_pins Mux_data_0/Sel] [get_bd_pins Select_Data_0/Sel]
   connect_bd_net -net rst_ps8_0_100M_peripheral_aresetn [get_bd_pins IP_Conversion_Axi_0/s00_axi_aresetn] [get_bd_pins ps8_0_axi_periph/ARESETN] [get_bd_pins ps8_0_axi_periph/M00_ARESETN] [get_bd_pins ps8_0_axi_periph/S00_ARESETN] [get_bd_pins rst_ps8_0_100M/peripheral_aresetn]
-  connect_bd_net -net util_vector_logic_0_Res [get_bd_pins Gen_mode_0/Reset] [get_bd_pins Gen_stress_0/Reset] [get_bd_pins Select_data_0/Reset] [get_bd_pins util_vector_logic_0/Res]
-  connect_bd_net -net zynq_ultra_ps_e_0_pl_clk0 [get_bd_pins Gen_mode_0/Clk] [get_bd_pins Gen_stress_0/Clk] [get_bd_pins IP_Conversion_Axi_0/s00_axi_aclk] [get_bd_pins Select_data_0/Clk] [get_bd_pins ps8_0_axi_periph/ACLK] [get_bd_pins ps8_0_axi_periph/M00_ACLK] [get_bd_pins ps8_0_axi_periph/S00_ACLK] [get_bd_pins rst_ps8_0_100M/slowest_sync_clk] [get_bd_pins zynq_ultra_ps_e_0/maxihpm0_fpd_aclk] [get_bd_pins zynq_ultra_ps_e_0/pl_clk0]
+  connect_bd_net -net util_vector_logic_0_Res [get_bd_pins Gen_mode_0/Reset] [get_bd_pins Gen_stress_0/Reset] [get_bd_pins Select_Data_0/Reset] [get_bd_pins util_vector_logic_0/Res]
+  connect_bd_net -net zynq_ultra_ps_e_0_pl_clk0 [get_bd_pins Gen_mode_0/Clk] [get_bd_pins Gen_stress_0/Clk] [get_bd_pins IP_Conversion_Axi_0/s00_axi_aclk] [get_bd_pins Select_Data_0/Clk] [get_bd_pins ps8_0_axi_periph/ACLK] [get_bd_pins ps8_0_axi_periph/M00_ACLK] [get_bd_pins ps8_0_axi_periph/S00_ACLK] [get_bd_pins rst_ps8_0_100M/slowest_sync_clk] [get_bd_pins zynq_ultra_ps_e_0/maxihpm0_fpd_aclk] [get_bd_pins zynq_ultra_ps_e_0/pl_clk0]
   connect_bd_net -net zynq_ultra_ps_e_0_pl_resetn0 [get_bd_pins rst_ps8_0_100M/ext_reset_in] [get_bd_pins util_vector_logic_0/Op1] [get_bd_pins zynq_ultra_ps_e_0/pl_resetn0]
 
   # Create address segments

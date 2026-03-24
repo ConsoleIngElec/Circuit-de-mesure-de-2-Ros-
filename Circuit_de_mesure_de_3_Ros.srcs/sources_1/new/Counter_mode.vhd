@@ -23,27 +23,23 @@
 ----------------------------------------------------------------------------------
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
-use IEEE.NUMERIC_STD.ALL;
 
 entity Counter_mode is
     generic (
-        RISING_EDGE_DURATION : integer := 300; -- Durée à laquelle notre Mode_G='1'
-        TOTAL_DURATION       : integer := 600  -- Période totale
+        RISING_EDGE_DURATION : integer := 300; -- 5 min de mesure
+        TOTAL_DURATION       : integer := 600  -- Cycle total (5 min ON + 5 min OFF)
     );
     Port ( 
         Clk    : in  STD_LOGIC;
         Reset  : in  STD_LOGIC;
-        Enable : in  STD_LOGIC; 
-        Mode_G : out STD_LOGIC
+        Enable : in  STD_LOGIC; -- Reçoit le CE_1Hz
+        Mode_G : out STD_LOGIC  -- '1' pour Mesurer, '0' pour Pause
     );
 end Counter_mode;
 
 architecture Behavioral of Counter_mode is
-    -- Plage du compteur de 0 à 599 pour une période de 600
     signal s : integer range 0 to TOTAL_DURATION - 1 := 0;
-
 begin
-
     process (Clk)
     begin
         if rising_edge(Clk) then
@@ -51,24 +47,18 @@ begin
                 s <= 0;
                 Mode_G <= '0';
             elsif Enable = '1' then
-                
-                -- 1. Gestion du compteur circulaire
                 if s < (TOTAL_DURATION - 1) then
                     s <= s + 1;
                 else
                     s <= 0;
                 end if;
 
-                -- 2. Logique de sortie synchrone
-                -- Pour 300 cycles : s va de 0 à 299. 
                 if s < RISING_EDGE_DURATION then
                     Mode_G <= '1';
                 else
                     Mode_G <= '0';
                 end if;
-                
             end if;
         end if;
     end process;
-
 end Behavioral;

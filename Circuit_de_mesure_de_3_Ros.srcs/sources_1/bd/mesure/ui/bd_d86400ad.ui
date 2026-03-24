@@ -2,38 +2,38 @@
    "ExpandedHierarchyInLayout":"",
    "guistr":"# # String gsaved with Nlview 6.8.11  2018-08-07 bk=1.4403 VDI=40 GEI=35 GUI=JA:9.0 non-TLS
 #  -string -flagsOSRD
+preplace inst Gen_mode_0 -pg 1 -lvl 3 -y 50 -defaultsOSRD
 preplace inst ps8_0_axi_periph -pg 1 -lvl 3 -y 450 -defaultsOSRD
 preplace inst zynq_ultra_ps_e_0 -pg 1 -lvl 1 -y 110 -defaultsOSRD
 preplace inst IP_Conversion_Axi_0 -pg 1 -lvl 6 -y 340 -defaultsOSRD
-preplace inst Select_data_0 -pg 1 -lvl 4 -y 330 -defaultsOSRD
-preplace inst Gen_mode_0 -pg 1 -lvl 3 -y 100 -defaultsOSRD
-preplace inst All_Ro_out_0 -pg 1 -lvl 4 -y 100 -defaultsOSRD
+preplace inst All_Ro_out_0 -pg 1 -lvl 4 -y 80 -defaultsOSRD
 preplace inst util_vector_logic_0 -pg 1 -lvl 2 -y 110 -defaultsOSRD
 preplace inst Gen_stress_0 -pg 1 -lvl 3 -y 250 -defaultsOSRD
-preplace inst rst_ps8_0_100M -pg 1 -lvl 2 -y -60 -defaultsOSRD
 preplace inst Mux_data_0 -pg 1 -lvl 5 -y 110 -defaultsOSRD
-preplace netloc zynq_ultra_ps_e_0_pl_clk0 1 0 6 10 200 610 40 980 330 1360 240 NJ 240 1940J
-preplace netloc Gen_mode_0_CE_1Hz 1 3 1 N
-preplace netloc Select_data_0_Allow 1 4 2 NJ 340 N
-preplace netloc All_Ro_out_0_Data 1 4 1 N
-preplace netloc Gen_mode_0_Mode 1 3 1 N
-preplace netloc zynq_ultra_ps_e_0_M_AXI_HPM0_FPD 1 1 2 620J 50 970
-preplace netloc util_vector_logic_0_Res 1 2 2 1000 0 1340J
-preplace netloc Mux_data_0_Data_out 1 5 1 1970
-preplace netloc rst_ps8_0_100M_peripheral_aresetn 1 2 4 990 320 1330J 230 NJ 230 1950J
-preplace netloc IP_Conversion_Axi_0_Done 1 3 4 1370 210 NJ 210 NJ 210 2200
-preplace netloc ps8_0_axi_periph_M00_AXI 1 3 3 1350 220 NJ 220 1960J
+preplace inst rst_ps8_0_100M -pg 1 -lvl 2 -y -60 -defaultsOSRD
+preplace inst Select_Data_0 -pg 1 -lvl 4 -y 250 -defaultsOSRD
+preplace netloc Select_Data_0_Allow 1 4 2 N 260 1970J
+preplace netloc Gen_mode_0_Ro_sel 1 3 1 1340
+preplace netloc Gen_mode_0_CE_1Hz 1 3 1 1370
+preplace netloc zynq_ultra_ps_e_0_pl_clk0 1 0 6 10 200 610 40 990 170 1310 350 1660J 360 NJ
+preplace netloc Gen_mode_0_Mode 1 3 1 1360
+preplace netloc All_Ro_out_0_Data 1 4 1 1670
+preplace netloc zynq_ultra_ps_e_0_M_AXI_HPM0_FPD 1 1 2 620J 170 980
+preplace netloc util_vector_logic_0_Res 1 2 2 1000 180 1320
+preplace netloc Mux_data_0_Data_out 1 5 1 1980
+preplace netloc Select_Data_0_Sel 1 4 1 1670
+preplace netloc IP_Conversion_Axi_0_Done 1 3 4 1360 360 1650J 440 NJ 440 2210
+preplace netloc rst_ps8_0_100M_peripheral_aresetn 1 2 4 970 330 1300J 340 NJ 340 1960J
+preplace netloc ps8_0_axi_periph_M00_AXI 1 3 3 1340 370 1670J 300 NJ
 preplace netloc zynq_ultra_ps_e_0_pl_resetn0 1 1 1 630J
-preplace netloc Gen_stress_0_Stress 1 3 1 1320J
-preplace netloc Gen_mode_0_RO_sel 1 3 1 1310
-preplace netloc Select_data_0_Sel 1 4 1 1650
-preplace netloc Gen_mode_0_Send 1 3 1 1300
-preplace netloc Gen_mode_0_Reset_RO 1 3 1 N
-levelinfo -pg 1 -10 310 800 1150 1510 1800 2090 2220 -top -160 -bot 570
+preplace netloc Gen_stress_0_Stress 1 3 1 1360J
+preplace netloc Gen_mode_0_Send 1 3 1 1330
+preplace netloc Gen_mode_0_Reset_RO 1 3 1 1350
+levelinfo -pg 1 -10 310 800 1150 1510 1820 2100 2230 -top -390 -bot 570
 "
 }
 {
    "da_axi4_cnt":"2",
-   "da_clkrst_cnt":"6",
+   "da_clkrst_cnt":"11",
    "da_zynq_ultra_ps_e_cnt":"2"
 }

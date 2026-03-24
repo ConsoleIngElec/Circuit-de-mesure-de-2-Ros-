@@ -1,7 +1,7 @@
 -- Copyright 1986-2018 Xilinx, Inc. All Rights Reserved.
 -- --------------------------------------------------------------------------------
 -- Tool Version: Vivado v.2018.3 (win64) Build 2405991 Thu Dec  6 23:38:27 MST 2018
--- Date        : Fri Mar 13 15:26:56 2026
+-- Date        : Tue Mar 24 09:33:35 2026
 -- Host        : poste-16 running 64-bit major release  (build 9200)
 -- Command     : write_vhdl -force -mode funcsim
 --               C:/Users/cmbouba/Mes_projets_pour_le_stage/Circuit_de_mesure_de_3_Ros/Circuit_de_mesure_de_3_Ros.srcs/sources_1/bd/mesure/ip/mesure_All_Ro_out_0_0/mesure_All_Ro_out_0_0_sim_netlist.vhdl
@@ -3863,35 +3863,22 @@ architecture STRUCTURE of mesure_All_Ro_out_0_0_Ro_B is
   attribute ALLOW_COMBINATORIAL_LOOPS of ring : signal is std.standard.true;
   attribute DONT_TOUCH : boolean;
   attribute DONT_TOUCH of ring : signal is std.standard.true;
-  attribute LOCK_PINS : string;
-  attribute LOCK_PINS of \P1_gen_ro[0].gate\ : label is "I0:A1";
   attribute box_type : string;
-  attribute box_type of \P1_gen_ro[0].gate\ : label is "PRIMITIVE";
-  attribute LOCK_PINS of \P1_gen_ro[1].gate\ : label is "I0:A1";
-  attribute box_type of \P1_gen_ro[1].gate\ : label is "PRIMITIVE";
-  attribute LOCK_PINS of \P1_gen_ro[2].gate\ : label is "I0:A1";
-  attribute box_type of \P1_gen_ro[2].gate\ : label is "PRIMITIVE";
-  attribute LOCK_PINS of \P1_gen_ro[3].gate\ : label is "I0:A1";
-  attribute box_type of \P1_gen_ro[3].gate\ : label is "PRIMITIVE";
-  attribute LOCK_PINS of \P1_gen_ro[4].gate\ : label is "I0:A1";
-  attribute box_type of \P1_gen_ro[4].gate\ : label is "PRIMITIVE";
-  attribute LOCK_PINS of \P1_gen_ro[5].gate\ : label is "I0:A1";
-  attribute box_type of \P1_gen_ro[5].gate\ : label is "PRIMITIVE";
-  attribute LOCK_PINS of \P1_gen_ro[6].gate\ : label is "I0:A1";
-  attribute box_type of \P1_gen_ro[6].gate\ : label is "PRIMITIVE";
-  attribute LOCK_PINS of \P1_gen_ro[7].gate\ : label is "I0:A1";
-  attribute box_type of \P1_gen_ro[7].gate\ : label is "PRIMITIVE";
-  attribute LOCK_PINS of \P2_gen_ro[10].gate\ : label is "I0:A1";
-  attribute box_type of \P2_gen_ro[10].gate\ : label is "PRIMITIVE";
-  attribute LOCK_PINS of \P2_gen_ro[11].gate\ : label is "I0:A1";
-  attribute box_type of \P2_gen_ro[11].gate\ : label is "PRIMITIVE";
-  attribute LOCK_PINS of \P2_gen_ro[8].gate\ : label is "I0:A1";
-  attribute box_type of \P2_gen_ro[8].gate\ : label is "PRIMITIVE";
-  attribute LOCK_PINS of \P2_gen_ro[9].gate\ : label is "I0:A1";
-  attribute box_type of \P2_gen_ro[9].gate\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[0].gate_inst\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[10].gate_inst\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[11].gate_inst\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[1].gate_inst\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[2].gate_inst\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[3].gate_inst\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[4].gate_inst\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[5].gate_inst\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[6].gate_inst\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[7].gate_inst\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[8].gate_inst\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[9].gate_inst\ : label is "PRIMITIVE";
 begin
   \out\(0) <= ring(12);
-\P1_gen_ro[0].gate\: unisim.vcomponents.LUT1
+\P1_gen_ro[0].gate_inst\: unisim.vcomponents.LUT1
     generic map(
       INIT => X"2"
     )
@@ -3899,63 +3886,7 @@ begin
       I0 => ring(0),
       O => ring(1)
     );
-\P1_gen_ro[1].gate\: unisim.vcomponents.LUT1
-    generic map(
-      INIT => X"2"
-    )
-        port map (
-      I0 => ring(1),
-      O => ring(2)
-    );
-\P1_gen_ro[2].gate\: unisim.vcomponents.LUT1
-    generic map(
-      INIT => X"2"
-    )
-        port map (
-      I0 => ring(2),
-      O => ring(3)
-    );
-\P1_gen_ro[3].gate\: unisim.vcomponents.LUT1
-    generic map(
-      INIT => X"2"
-    )
-        port map (
-      I0 => ring(3),
-      O => ring(4)
-    );
-\P1_gen_ro[4].gate\: unisim.vcomponents.LUT1
-    generic map(
-      INIT => X"2"
-    )
-        port map (
-      I0 => ring(4),
-      O => ring(5)
-    );
-\P1_gen_ro[5].gate\: unisim.vcomponents.LUT1
-    generic map(
-      INIT => X"2"
-    )
-        port map (
-      I0 => ring(5),
-      O => ring(6)
-    );
-\P1_gen_ro[6].gate\: unisim.vcomponents.LUT1
-    generic map(
-      INIT => X"2"
-    )
-        port map (
-      I0 => ring(6),
-      O => ring(7)
-    );
-\P1_gen_ro[7].gate\: unisim.vcomponents.LUT1
-    generic map(
-      INIT => X"2"
-    )
-        port map (
-      I0 => ring(7),
-      O => ring(8)
-    );
-\P2_gen_ro[10].gate\: unisim.vcomponents.LUT1
+\P1_gen_ro[10].gate_inst\: unisim.vcomponents.LUT1
     generic map(
       INIT => X"2"
     )
@@ -3963,7 +3894,7 @@ begin
       I0 => ring(10),
       O => ring(11)
     );
-\P2_gen_ro[11].gate\: unisim.vcomponents.LUT1
+\P1_gen_ro[11].gate_inst\: unisim.vcomponents.LUT1
     generic map(
       INIT => X"2"
     )
@@ -3971,7 +3902,63 @@ begin
       I0 => ring(11),
       O => ring(12)
     );
-\P2_gen_ro[8].gate\: unisim.vcomponents.LUT1
+\P1_gen_ro[1].gate_inst\: unisim.vcomponents.LUT1
+    generic map(
+      INIT => X"2"
+    )
+        port map (
+      I0 => ring(1),
+      O => ring(2)
+    );
+\P1_gen_ro[2].gate_inst\: unisim.vcomponents.LUT1
+    generic map(
+      INIT => X"2"
+    )
+        port map (
+      I0 => ring(2),
+      O => ring(3)
+    );
+\P1_gen_ro[3].gate_inst\: unisim.vcomponents.LUT1
+    generic map(
+      INIT => X"2"
+    )
+        port map (
+      I0 => ring(3),
+      O => ring(4)
+    );
+\P1_gen_ro[4].gate_inst\: unisim.vcomponents.LUT1
+    generic map(
+      INIT => X"2"
+    )
+        port map (
+      I0 => ring(4),
+      O => ring(5)
+    );
+\P1_gen_ro[5].gate_inst\: unisim.vcomponents.LUT1
+    generic map(
+      INIT => X"2"
+    )
+        port map (
+      I0 => ring(5),
+      O => ring(6)
+    );
+\P1_gen_ro[6].gate_inst\: unisim.vcomponents.LUT1
+    generic map(
+      INIT => X"2"
+    )
+        port map (
+      I0 => ring(6),
+      O => ring(7)
+    );
+\P1_gen_ro[7].gate_inst\: unisim.vcomponents.LUT1
+    generic map(
+      INIT => X"2"
+    )
+        port map (
+      I0 => ring(7),
+      O => ring(8)
+    );
+\P1_gen_ro[8].gate_inst\: unisim.vcomponents.LUT1
     generic map(
       INIT => X"2"
     )
@@ -3979,7 +3966,7 @@ begin
       I0 => ring(8),
       O => ring(9)
     );
-\P2_gen_ro[9].gate\: unisim.vcomponents.LUT1
+\P1_gen_ro[9].gate_inst\: unisim.vcomponents.LUT1
     generic map(
       INIT => X"2"
     )
@@ -4020,35 +4007,22 @@ architecture STRUCTURE of mesure_All_Ro_out_0_0_Ro_B_10 is
   attribute ALLOW_COMBINATORIAL_LOOPS of ring : signal is std.standard.true;
   attribute DONT_TOUCH : boolean;
   attribute DONT_TOUCH of ring : signal is std.standard.true;
-  attribute LOCK_PINS : string;
-  attribute LOCK_PINS of \P1_gen_ro[0].gate\ : label is "I0:A1";
   attribute box_type : string;
-  attribute box_type of \P1_gen_ro[0].gate\ : label is "PRIMITIVE";
-  attribute LOCK_PINS of \P1_gen_ro[1].gate\ : label is "I0:A1";
-  attribute box_type of \P1_gen_ro[1].gate\ : label is "PRIMITIVE";
-  attribute LOCK_PINS of \P1_gen_ro[2].gate\ : label is "I0:A1";
-  attribute box_type of \P1_gen_ro[2].gate\ : label is "PRIMITIVE";
-  attribute LOCK_PINS of \P1_gen_ro[3].gate\ : label is "I0:A1";
-  attribute box_type of \P1_gen_ro[3].gate\ : label is "PRIMITIVE";
-  attribute LOCK_PINS of \P1_gen_ro[4].gate\ : label is "I0:A1";
-  attribute box_type of \P1_gen_ro[4].gate\ : label is "PRIMITIVE";
-  attribute LOCK_PINS of \P1_gen_ro[5].gate\ : label is "I0:A1";
-  attribute box_type of \P1_gen_ro[5].gate\ : label is "PRIMITIVE";
-  attribute LOCK_PINS of \P1_gen_ro[6].gate\ : label is "I0:A1";
-  attribute box_type of \P1_gen_ro[6].gate\ : label is "PRIMITIVE";
-  attribute LOCK_PINS of \P1_gen_ro[7].gate\ : label is "I0:A1";
-  attribute box_type of \P1_gen_ro[7].gate\ : label is "PRIMITIVE";
-  attribute LOCK_PINS of \P2_gen_ro[10].gate\ : label is "I0:A1";
-  attribute box_type of \P2_gen_ro[10].gate\ : label is "PRIMITIVE";
-  attribute LOCK_PINS of \P2_gen_ro[11].gate\ : label is "I0:A1";
-  attribute box_type of \P2_gen_ro[11].gate\ : label is "PRIMITIVE";
-  attribute LOCK_PINS of \P2_gen_ro[8].gate\ : label is "I0:A1";
-  attribute box_type of \P2_gen_ro[8].gate\ : label is "PRIMITIVE";
-  attribute LOCK_PINS of \P2_gen_ro[9].gate\ : label is "I0:A1";
-  attribute box_type of \P2_gen_ro[9].gate\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[0].gate_inst\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[10].gate_inst\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[11].gate_inst\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[1].gate_inst\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[2].gate_inst\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[3].gate_inst\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[4].gate_inst\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[5].gate_inst\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[6].gate_inst\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[7].gate_inst\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[8].gate_inst\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[9].gate_inst\ : label is "PRIMITIVE";
 begin
   \out\(0) <= ring(12);
-\P1_gen_ro[0].gate\: unisim.vcomponents.LUT1
+\P1_gen_ro[0].gate_inst\: unisim.vcomponents.LUT1
     generic map(
       INIT => X"2"
     )
@@ -4056,63 +4030,7 @@ begin
       I0 => ring(0),
       O => ring(1)
     );
-\P1_gen_ro[1].gate\: unisim.vcomponents.LUT1
-    generic map(
-      INIT => X"2"
-    )
-        port map (
-      I0 => ring(1),
-      O => ring(2)
-    );
-\P1_gen_ro[2].gate\: unisim.vcomponents.LUT1
-    generic map(
-      INIT => X"2"
-    )
-        port map (
-      I0 => ring(2),
-      O => ring(3)
-    );
-\P1_gen_ro[3].gate\: unisim.vcomponents.LUT1
-    generic map(
-      INIT => X"2"
-    )
-        port map (
-      I0 => ring(3),
-      O => ring(4)
-    );
-\P1_gen_ro[4].gate\: unisim.vcomponents.LUT1
-    generic map(
-      INIT => X"2"
-    )
-        port map (
-      I0 => ring(4),
-      O => ring(5)
-    );
-\P1_gen_ro[5].gate\: unisim.vcomponents.LUT1
-    generic map(
-      INIT => X"2"
-    )
-        port map (
-      I0 => ring(5),
-      O => ring(6)
-    );
-\P1_gen_ro[6].gate\: unisim.vcomponents.LUT1
-    generic map(
-      INIT => X"2"
-    )
-        port map (
-      I0 => ring(6),
-      O => ring(7)
-    );
-\P1_gen_ro[7].gate\: unisim.vcomponents.LUT1
-    generic map(
-      INIT => X"2"
-    )
-        port map (
-      I0 => ring(7),
-      O => ring(8)
-    );
-\P2_gen_ro[10].gate\: unisim.vcomponents.LUT1
+\P1_gen_ro[10].gate_inst\: unisim.vcomponents.LUT1
     generic map(
       INIT => X"2"
     )
@@ -4120,7 +4038,7 @@ begin
       I0 => ring(10),
       O => ring(11)
     );
-\P2_gen_ro[11].gate\: unisim.vcomponents.LUT1
+\P1_gen_ro[11].gate_inst\: unisim.vcomponents.LUT1
     generic map(
       INIT => X"2"
     )
@@ -4128,7 +4046,63 @@ begin
       I0 => ring(11),
       O => ring(12)
     );
-\P2_gen_ro[8].gate\: unisim.vcomponents.LUT1
+\P1_gen_ro[1].gate_inst\: unisim.vcomponents.LUT1
+    generic map(
+      INIT => X"2"
+    )
+        port map (
+      I0 => ring(1),
+      O => ring(2)
+    );
+\P1_gen_ro[2].gate_inst\: unisim.vcomponents.LUT1
+    generic map(
+      INIT => X"2"
+    )
+        port map (
+      I0 => ring(2),
+      O => ring(3)
+    );
+\P1_gen_ro[3].gate_inst\: unisim.vcomponents.LUT1
+    generic map(
+      INIT => X"2"
+    )
+        port map (
+      I0 => ring(3),
+      O => ring(4)
+    );
+\P1_gen_ro[4].gate_inst\: unisim.vcomponents.LUT1
+    generic map(
+      INIT => X"2"
+    )
+        port map (
+      I0 => ring(4),
+      O => ring(5)
+    );
+\P1_gen_ro[5].gate_inst\: unisim.vcomponents.LUT1
+    generic map(
+      INIT => X"2"
+    )
+        port map (
+      I0 => ring(5),
+      O => ring(6)
+    );
+\P1_gen_ro[6].gate_inst\: unisim.vcomponents.LUT1
+    generic map(
+      INIT => X"2"
+    )
+        port map (
+      I0 => ring(6),
+      O => ring(7)
+    );
+\P1_gen_ro[7].gate_inst\: unisim.vcomponents.LUT1
+    generic map(
+      INIT => X"2"
+    )
+        port map (
+      I0 => ring(7),
+      O => ring(8)
+    );
+\P1_gen_ro[8].gate_inst\: unisim.vcomponents.LUT1
     generic map(
       INIT => X"2"
     )
@@ -4136,7 +4110,7 @@ begin
       I0 => ring(8),
       O => ring(9)
     );
-\P2_gen_ro[9].gate\: unisim.vcomponents.LUT1
+\P1_gen_ro[9].gate_inst\: unisim.vcomponents.LUT1
     generic map(
       INIT => X"2"
     )
@@ -4177,35 +4151,22 @@ architecture STRUCTURE of mesure_All_Ro_out_0_0_Ro_B_11 is
   attribute ALLOW_COMBINATORIAL_LOOPS of ring : signal is std.standard.true;
   attribute DONT_TOUCH : boolean;
   attribute DONT_TOUCH of ring : signal is std.standard.true;
-  attribute LOCK_PINS : string;
-  attribute LOCK_PINS of \P1_gen_ro[0].gate\ : label is "I0:A1";
   attribute box_type : string;
-  attribute box_type of \P1_gen_ro[0].gate\ : label is "PRIMITIVE";
-  attribute LOCK_PINS of \P1_gen_ro[1].gate\ : label is "I0:A1";
-  attribute box_type of \P1_gen_ro[1].gate\ : label is "PRIMITIVE";
-  attribute LOCK_PINS of \P1_gen_ro[2].gate\ : label is "I0:A1";
-  attribute box_type of \P1_gen_ro[2].gate\ : label is "PRIMITIVE";
-  attribute LOCK_PINS of \P1_gen_ro[3].gate\ : label is "I0:A1";
-  attribute box_type of \P1_gen_ro[3].gate\ : label is "PRIMITIVE";
-  attribute LOCK_PINS of \P1_gen_ro[4].gate\ : label is "I0:A1";
-  attribute box_type of \P1_gen_ro[4].gate\ : label is "PRIMITIVE";
-  attribute LOCK_PINS of \P1_gen_ro[5].gate\ : label is "I0:A1";
-  attribute box_type of \P1_gen_ro[5].gate\ : label is "PRIMITIVE";
-  attribute LOCK_PINS of \P1_gen_ro[6].gate\ : label is "I0:A1";
-  attribute box_type of \P1_gen_ro[6].gate\ : label is "PRIMITIVE";
-  attribute LOCK_PINS of \P1_gen_ro[7].gate\ : label is "I0:A1";
-  attribute box_type of \P1_gen_ro[7].gate\ : label is "PRIMITIVE";
-  attribute LOCK_PINS of \P2_gen_ro[10].gate\ : label is "I0:A1";
-  attribute box_type of \P2_gen_ro[10].gate\ : label is "PRIMITIVE";
-  attribute LOCK_PINS of \P2_gen_ro[11].gate\ : label is "I0:A1";
-  attribute box_type of \P2_gen_ro[11].gate\ : label is "PRIMITIVE";
-  attribute LOCK_PINS of \P2_gen_ro[8].gate\ : label is "I0:A1";
-  attribute box_type of \P2_gen_ro[8].gate\ : label is "PRIMITIVE";
-  attribute LOCK_PINS of \P2_gen_ro[9].gate\ : label is "I0:A1";
-  attribute box_type of \P2_gen_ro[9].gate\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[0].gate_inst\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[10].gate_inst\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[11].gate_inst\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[1].gate_inst\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[2].gate_inst\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[3].gate_inst\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[4].gate_inst\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[5].gate_inst\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[6].gate_inst\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[7].gate_inst\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[8].gate_inst\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[9].gate_inst\ : label is "PRIMITIVE";
 begin
   \out\(0) <= ring(12);
-\P1_gen_ro[0].gate\: unisim.vcomponents.LUT1
+\P1_gen_ro[0].gate_inst\: unisim.vcomponents.LUT1
     generic map(
       INIT => X"2"
     )
@@ -4213,63 +4174,7 @@ begin
       I0 => ring(0),
       O => ring(1)
     );
-\P1_gen_ro[1].gate\: unisim.vcomponents.LUT1
-    generic map(
-      INIT => X"2"
-    )
-        port map (
-      I0 => ring(1),
-      O => ring(2)
-    );
-\P1_gen_ro[2].gate\: unisim.vcomponents.LUT1
-    generic map(
-      INIT => X"2"
-    )
-        port map (
-      I0 => ring(2),
-      O => ring(3)
-    );
-\P1_gen_ro[3].gate\: unisim.vcomponents.LUT1
-    generic map(
-      INIT => X"2"
-    )
-        port map (
-      I0 => ring(3),
-      O => ring(4)
-    );
-\P1_gen_ro[4].gate\: unisim.vcomponents.LUT1
-    generic map(
-      INIT => X"2"
-    )
-        port map (
-      I0 => ring(4),
-      O => ring(5)
-    );
-\P1_gen_ro[5].gate\: unisim.vcomponents.LUT1
-    generic map(
-      INIT => X"2"
-    )
-        port map (
-      I0 => ring(5),
-      O => ring(6)
-    );
-\P1_gen_ro[6].gate\: unisim.vcomponents.LUT1
-    generic map(
-      INIT => X"2"
-    )
-        port map (
-      I0 => ring(6),
-      O => ring(7)
-    );
-\P1_gen_ro[7].gate\: unisim.vcomponents.LUT1
-    generic map(
-      INIT => X"2"
-    )
-        port map (
-      I0 => ring(7),
-      O => ring(8)
-    );
-\P2_gen_ro[10].gate\: unisim.vcomponents.LUT1
+\P1_gen_ro[10].gate_inst\: unisim.vcomponents.LUT1
     generic map(
       INIT => X"2"
     )
@@ -4277,7 +4182,7 @@ begin
       I0 => ring(10),
       O => ring(11)
     );
-\P2_gen_ro[11].gate\: unisim.vcomponents.LUT1
+\P1_gen_ro[11].gate_inst\: unisim.vcomponents.LUT1
     generic map(
       INIT => X"2"
     )
@@ -4285,7 +4190,63 @@ begin
       I0 => ring(11),
       O => ring(12)
     );
-\P2_gen_ro[8].gate\: unisim.vcomponents.LUT1
+\P1_gen_ro[1].gate_inst\: unisim.vcomponents.LUT1
+    generic map(
+      INIT => X"2"
+    )
+        port map (
+      I0 => ring(1),
+      O => ring(2)
+    );
+\P1_gen_ro[2].gate_inst\: unisim.vcomponents.LUT1
+    generic map(
+      INIT => X"2"
+    )
+        port map (
+      I0 => ring(2),
+      O => ring(3)
+    );
+\P1_gen_ro[3].gate_inst\: unisim.vcomponents.LUT1
+    generic map(
+      INIT => X"2"
+    )
+        port map (
+      I0 => ring(3),
+      O => ring(4)
+    );
+\P1_gen_ro[4].gate_inst\: unisim.vcomponents.LUT1
+    generic map(
+      INIT => X"2"
+    )
+        port map (
+      I0 => ring(4),
+      O => ring(5)
+    );
+\P1_gen_ro[5].gate_inst\: unisim.vcomponents.LUT1
+    generic map(
+      INIT => X"2"
+    )
+        port map (
+      I0 => ring(5),
+      O => ring(6)
+    );
+\P1_gen_ro[6].gate_inst\: unisim.vcomponents.LUT1
+    generic map(
+      INIT => X"2"
+    )
+        port map (
+      I0 => ring(6),
+      O => ring(7)
+    );
+\P1_gen_ro[7].gate_inst\: unisim.vcomponents.LUT1
+    generic map(
+      INIT => X"2"
+    )
+        port map (
+      I0 => ring(7),
+      O => ring(8)
+    );
+\P1_gen_ro[8].gate_inst\: unisim.vcomponents.LUT1
     generic map(
       INIT => X"2"
     )
@@ -4293,7 +4254,7 @@ begin
       I0 => ring(8),
       O => ring(9)
     );
-\P2_gen_ro[9].gate\: unisim.vcomponents.LUT1
+\P1_gen_ro[9].gate_inst\: unisim.vcomponents.LUT1
     generic map(
       INIT => X"2"
     )
@@ -4334,35 +4295,22 @@ architecture STRUCTURE of mesure_All_Ro_out_0_0_Ro_B_17 is
   attribute ALLOW_COMBINATORIAL_LOOPS of ring : signal is std.standard.true;
   attribute DONT_TOUCH : boolean;
   attribute DONT_TOUCH of ring : signal is std.standard.true;
-  attribute LOCK_PINS : string;
-  attribute LOCK_PINS of \P1_gen_ro[0].gate\ : label is "I0:A1";
   attribute box_type : string;
-  attribute box_type of \P1_gen_ro[0].gate\ : label is "PRIMITIVE";
-  attribute LOCK_PINS of \P1_gen_ro[1].gate\ : label is "I0:A1";
-  attribute box_type of \P1_gen_ro[1].gate\ : label is "PRIMITIVE";
-  attribute LOCK_PINS of \P1_gen_ro[2].gate\ : label is "I0:A1";
-  attribute box_type of \P1_gen_ro[2].gate\ : label is "PRIMITIVE";
-  attribute LOCK_PINS of \P1_gen_ro[3].gate\ : label is "I0:A1";
-  attribute box_type of \P1_gen_ro[3].gate\ : label is "PRIMITIVE";
-  attribute LOCK_PINS of \P1_gen_ro[4].gate\ : label is "I0:A1";
-  attribute box_type of \P1_gen_ro[4].gate\ : label is "PRIMITIVE";
-  attribute LOCK_PINS of \P1_gen_ro[5].gate\ : label is "I0:A1";
-  attribute box_type of \P1_gen_ro[5].gate\ : label is "PRIMITIVE";
-  attribute LOCK_PINS of \P1_gen_ro[6].gate\ : label is "I0:A1";
-  attribute box_type of \P1_gen_ro[6].gate\ : label is "PRIMITIVE";
-  attribute LOCK_PINS of \P1_gen_ro[7].gate\ : label is "I0:A1";
-  attribute box_type of \P1_gen_ro[7].gate\ : label is "PRIMITIVE";
-  attribute LOCK_PINS of \P2_gen_ro[10].gate\ : label is "I0:A1";
-  attribute box_type of \P2_gen_ro[10].gate\ : label is "PRIMITIVE";
-  attribute LOCK_PINS of \P2_gen_ro[11].gate\ : label is "I0:A1";
-  attribute box_type of \P2_gen_ro[11].gate\ : label is "PRIMITIVE";
-  attribute LOCK_PINS of \P2_gen_ro[8].gate\ : label is "I0:A1";
-  attribute box_type of \P2_gen_ro[8].gate\ : label is "PRIMITIVE";
-  attribute LOCK_PINS of \P2_gen_ro[9].gate\ : label is "I0:A1";
-  attribute box_type of \P2_gen_ro[9].gate\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[0].gate_inst\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[10].gate_inst\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[11].gate_inst\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[1].gate_inst\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[2].gate_inst\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[3].gate_inst\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[4].gate_inst\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[5].gate_inst\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[6].gate_inst\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[7].gate_inst\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[8].gate_inst\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[9].gate_inst\ : label is "PRIMITIVE";
 begin
   \out\(0) <= ring(12);
-\P1_gen_ro[0].gate\: unisim.vcomponents.LUT1
+\P1_gen_ro[0].gate_inst\: unisim.vcomponents.LUT1
     generic map(
       INIT => X"2"
     )
@@ -4370,63 +4318,7 @@ begin
       I0 => ring(0),
       O => ring(1)
     );
-\P1_gen_ro[1].gate\: unisim.vcomponents.LUT1
-    generic map(
-      INIT => X"2"
-    )
-        port map (
-      I0 => ring(1),
-      O => ring(2)
-    );
-\P1_gen_ro[2].gate\: unisim.vcomponents.LUT1
-    generic map(
-      INIT => X"2"
-    )
-        port map (
-      I0 => ring(2),
-      O => ring(3)
-    );
-\P1_gen_ro[3].gate\: unisim.vcomponents.LUT1
-    generic map(
-      INIT => X"2"
-    )
-        port map (
-      I0 => ring(3),
-      O => ring(4)
-    );
-\P1_gen_ro[4].gate\: unisim.vcomponents.LUT1
-    generic map(
-      INIT => X"2"
-    )
-        port map (
-      I0 => ring(4),
-      O => ring(5)
-    );
-\P1_gen_ro[5].gate\: unisim.vcomponents.LUT1
-    generic map(
-      INIT => X"2"
-    )
-        port map (
-      I0 => ring(5),
-      O => ring(6)
-    );
-\P1_gen_ro[6].gate\: unisim.vcomponents.LUT1
-    generic map(
-      INIT => X"2"
-    )
-        port map (
-      I0 => ring(6),
-      O => ring(7)
-    );
-\P1_gen_ro[7].gate\: unisim.vcomponents.LUT1
-    generic map(
-      INIT => X"2"
-    )
-        port map (
-      I0 => ring(7),
-      O => ring(8)
-    );
-\P2_gen_ro[10].gate\: unisim.vcomponents.LUT1
+\P1_gen_ro[10].gate_inst\: unisim.vcomponents.LUT1
     generic map(
       INIT => X"2"
     )
@@ -4434,7 +4326,7 @@ begin
       I0 => ring(10),
       O => ring(11)
     );
-\P2_gen_ro[11].gate\: unisim.vcomponents.LUT1
+\P1_gen_ro[11].gate_inst\: unisim.vcomponents.LUT1
     generic map(
       INIT => X"2"
     )
@@ -4442,7 +4334,63 @@ begin
       I0 => ring(11),
       O => ring(12)
     );
-\P2_gen_ro[8].gate\: unisim.vcomponents.LUT1
+\P1_gen_ro[1].gate_inst\: unisim.vcomponents.LUT1
+    generic map(
+      INIT => X"2"
+    )
+        port map (
+      I0 => ring(1),
+      O => ring(2)
+    );
+\P1_gen_ro[2].gate_inst\: unisim.vcomponents.LUT1
+    generic map(
+      INIT => X"2"
+    )
+        port map (
+      I0 => ring(2),
+      O => ring(3)
+    );
+\P1_gen_ro[3].gate_inst\: unisim.vcomponents.LUT1
+    generic map(
+      INIT => X"2"
+    )
+        port map (
+      I0 => ring(3),
+      O => ring(4)
+    );
+\P1_gen_ro[4].gate_inst\: unisim.vcomponents.LUT1
+    generic map(
+      INIT => X"2"
+    )
+        port map (
+      I0 => ring(4),
+      O => ring(5)
+    );
+\P1_gen_ro[5].gate_inst\: unisim.vcomponents.LUT1
+    generic map(
+      INIT => X"2"
+    )
+        port map (
+      I0 => ring(5),
+      O => ring(6)
+    );
+\P1_gen_ro[6].gate_inst\: unisim.vcomponents.LUT1
+    generic map(
+      INIT => X"2"
+    )
+        port map (
+      I0 => ring(6),
+      O => ring(7)
+    );
+\P1_gen_ro[7].gate_inst\: unisim.vcomponents.LUT1
+    generic map(
+      INIT => X"2"
+    )
+        port map (
+      I0 => ring(7),
+      O => ring(8)
+    );
+\P1_gen_ro[8].gate_inst\: unisim.vcomponents.LUT1
     generic map(
       INIT => X"2"
     )
@@ -4450,7 +4398,7 @@ begin
       I0 => ring(8),
       O => ring(9)
     );
-\P2_gen_ro[9].gate\: unisim.vcomponents.LUT1
+\P1_gen_ro[9].gate_inst\: unisim.vcomponents.LUT1
     generic map(
       INIT => X"2"
     )
@@ -4491,35 +4439,22 @@ architecture STRUCTURE of mesure_All_Ro_out_0_0_Ro_B_18 is
   attribute ALLOW_COMBINATORIAL_LOOPS of ring : signal is std.standard.true;
   attribute DONT_TOUCH : boolean;
   attribute DONT_TOUCH of ring : signal is std.standard.true;
-  attribute LOCK_PINS : string;
-  attribute LOCK_PINS of \P1_gen_ro[0].gate\ : label is "I0:A1";
   attribute box_type : string;
-  attribute box_type of \P1_gen_ro[0].gate\ : label is "PRIMITIVE";
-  attribute LOCK_PINS of \P1_gen_ro[1].gate\ : label is "I0:A1";
-  attribute box_type of \P1_gen_ro[1].gate\ : label is "PRIMITIVE";
-  attribute LOCK_PINS of \P1_gen_ro[2].gate\ : label is "I0:A1";
-  attribute box_type of \P1_gen_ro[2].gate\ : label is "PRIMITIVE";
-  attribute LOCK_PINS of \P1_gen_ro[3].gate\ : label is "I0:A1";
-  attribute box_type of \P1_gen_ro[3].gate\ : label is "PRIMITIVE";
-  attribute LOCK_PINS of \P1_gen_ro[4].gate\ : label is "I0:A1";
-  attribute box_type of \P1_gen_ro[4].gate\ : label is "PRIMITIVE";
-  attribute LOCK_PINS of \P1_gen_ro[5].gate\ : label is "I0:A1";
-  attribute box_type of \P1_gen_ro[5].gate\ : label is "PRIMITIVE";
-  attribute LOCK_PINS of \P1_gen_ro[6].gate\ : label is "I0:A1";
-  attribute box_type of \P1_gen_ro[6].gate\ : label is "PRIMITIVE";
-  attribute LOCK_PINS of \P1_gen_ro[7].gate\ : label is "I0:A1";
-  attribute box_type of \P1_gen_ro[7].gate\ : label is "PRIMITIVE";
-  attribute LOCK_PINS of \P2_gen_ro[10].gate\ : label is "I0:A1";
-  attribute box_type of \P2_gen_ro[10].gate\ : label is "PRIMITIVE";
-  attribute LOCK_PINS of \P2_gen_ro[11].gate\ : label is "I0:A1";
-  attribute box_type of \P2_gen_ro[11].gate\ : label is "PRIMITIVE";
-  attribute LOCK_PINS of \P2_gen_ro[8].gate\ : label is "I0:A1";
-  attribute box_type of \P2_gen_ro[8].gate\ : label is "PRIMITIVE";
-  attribute LOCK_PINS of \P2_gen_ro[9].gate\ : label is "I0:A1";
-  attribute box_type of \P2_gen_ro[9].gate\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[0].gate_inst\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[10].gate_inst\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[11].gate_inst\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[1].gate_inst\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[2].gate_inst\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[3].gate_inst\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[4].gate_inst\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[5].gate_inst\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[6].gate_inst\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[7].gate_inst\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[8].gate_inst\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[9].gate_inst\ : label is "PRIMITIVE";
 begin
   \out\(0) <= ring(12);
-\P1_gen_ro[0].gate\: unisim.vcomponents.LUT1
+\P1_gen_ro[0].gate_inst\: unisim.vcomponents.LUT1
     generic map(
       INIT => X"2"
     )
@@ -4527,63 +4462,7 @@ begin
       I0 => ring(0),
       O => ring(1)
     );
-\P1_gen_ro[1].gate\: unisim.vcomponents.LUT1
-    generic map(
-      INIT => X"2"
-    )
-        port map (
-      I0 => ring(1),
-      O => ring(2)
-    );
-\P1_gen_ro[2].gate\: unisim.vcomponents.LUT1
-    generic map(
-      INIT => X"2"
-    )
-        port map (
-      I0 => ring(2),
-      O => ring(3)
-    );
-\P1_gen_ro[3].gate\: unisim.vcomponents.LUT1
-    generic map(
-      INIT => X"2"
-    )
-        port map (
-      I0 => ring(3),
-      O => ring(4)
-    );
-\P1_gen_ro[4].gate\: unisim.vcomponents.LUT1
-    generic map(
-      INIT => X"2"
-    )
-        port map (
-      I0 => ring(4),
-      O => ring(5)
-    );
-\P1_gen_ro[5].gate\: unisim.vcomponents.LUT1
-    generic map(
-      INIT => X"2"
-    )
-        port map (
-      I0 => ring(5),
-      O => ring(6)
-    );
-\P1_gen_ro[6].gate\: unisim.vcomponents.LUT1
-    generic map(
-      INIT => X"2"
-    )
-        port map (
-      I0 => ring(6),
-      O => ring(7)
-    );
-\P1_gen_ro[7].gate\: unisim.vcomponents.LUT1
-    generic map(
-      INIT => X"2"
-    )
-        port map (
-      I0 => ring(7),
-      O => ring(8)
-    );
-\P2_gen_ro[10].gate\: unisim.vcomponents.LUT1
+\P1_gen_ro[10].gate_inst\: unisim.vcomponents.LUT1
     generic map(
       INIT => X"2"
     )
@@ -4591,7 +4470,7 @@ begin
       I0 => ring(10),
       O => ring(11)
     );
-\P2_gen_ro[11].gate\: unisim.vcomponents.LUT1
+\P1_gen_ro[11].gate_inst\: unisim.vcomponents.LUT1
     generic map(
       INIT => X"2"
     )
@@ -4599,7 +4478,63 @@ begin
       I0 => ring(11),
       O => ring(12)
     );
-\P2_gen_ro[8].gate\: unisim.vcomponents.LUT1
+\P1_gen_ro[1].gate_inst\: unisim.vcomponents.LUT1
+    generic map(
+      INIT => X"2"
+    )
+        port map (
+      I0 => ring(1),
+      O => ring(2)
+    );
+\P1_gen_ro[2].gate_inst\: unisim.vcomponents.LUT1
+    generic map(
+      INIT => X"2"
+    )
+        port map (
+      I0 => ring(2),
+      O => ring(3)
+    );
+\P1_gen_ro[3].gate_inst\: unisim.vcomponents.LUT1
+    generic map(
+      INIT => X"2"
+    )
+        port map (
+      I0 => ring(3),
+      O => ring(4)
+    );
+\P1_gen_ro[4].gate_inst\: unisim.vcomponents.LUT1
+    generic map(
+      INIT => X"2"
+    )
+        port map (
+      I0 => ring(4),
+      O => ring(5)
+    );
+\P1_gen_ro[5].gate_inst\: unisim.vcomponents.LUT1
+    generic map(
+      INIT => X"2"
+    )
+        port map (
+      I0 => ring(5),
+      O => ring(6)
+    );
+\P1_gen_ro[6].gate_inst\: unisim.vcomponents.LUT1
+    generic map(
+      INIT => X"2"
+    )
+        port map (
+      I0 => ring(6),
+      O => ring(7)
+    );
+\P1_gen_ro[7].gate_inst\: unisim.vcomponents.LUT1
+    generic map(
+      INIT => X"2"
+    )
+        port map (
+      I0 => ring(7),
+      O => ring(8)
+    );
+\P1_gen_ro[8].gate_inst\: unisim.vcomponents.LUT1
     generic map(
       INIT => X"2"
     )
@@ -4607,7 +4542,7 @@ begin
       I0 => ring(8),
       O => ring(9)
     );
-\P2_gen_ro[9].gate\: unisim.vcomponents.LUT1
+\P1_gen_ro[9].gate_inst\: unisim.vcomponents.LUT1
     generic map(
       INIT => X"2"
     )
@@ -4648,35 +4583,22 @@ architecture STRUCTURE of mesure_All_Ro_out_0_0_Ro_B_19 is
   attribute ALLOW_COMBINATORIAL_LOOPS of ring : signal is std.standard.true;
   attribute DONT_TOUCH : boolean;
   attribute DONT_TOUCH of ring : signal is std.standard.true;
-  attribute LOCK_PINS : string;
-  attribute LOCK_PINS of \P1_gen_ro[0].gate\ : label is "I0:A1";
   attribute box_type : string;
-  attribute box_type of \P1_gen_ro[0].gate\ : label is "PRIMITIVE";
-  attribute LOCK_PINS of \P1_gen_ro[1].gate\ : label is "I0:A1";
-  attribute box_type of \P1_gen_ro[1].gate\ : label is "PRIMITIVE";
-  attribute LOCK_PINS of \P1_gen_ro[2].gate\ : label is "I0:A1";
-  attribute box_type of \P1_gen_ro[2].gate\ : label is "PRIMITIVE";
-  attribute LOCK_PINS of \P1_gen_ro[3].gate\ : label is "I0:A1";
-  attribute box_type of \P1_gen_ro[3].gate\ : label is "PRIMITIVE";
-  attribute LOCK_PINS of \P1_gen_ro[4].gate\ : label is "I0:A1";
-  attribute box_type of \P1_gen_ro[4].gate\ : label is "PRIMITIVE";
-  attribute LOCK_PINS of \P1_gen_ro[5].gate\ : label is "I0:A1";
-  attribute box_type of \P1_gen_ro[5].gate\ : label is "PRIMITIVE";
-  attribute LOCK_PINS of \P1_gen_ro[6].gate\ : label is "I0:A1";
-  attribute box_type of \P1_gen_ro[6].gate\ : label is "PRIMITIVE";
-  attribute LOCK_PINS of \P1_gen_ro[7].gate\ : label is "I0:A1";
-  attribute box_type of \P1_gen_ro[7].gate\ : label is "PRIMITIVE";
-  attribute LOCK_PINS of \P2_gen_ro[10].gate\ : label is "I0:A1";
-  attribute box_type of \P2_gen_ro[10].gate\ : label is "PRIMITIVE";
-  attribute LOCK_PINS of \P2_gen_ro[11].gate\ : label is "I0:A1";
-  attribute box_type of \P2_gen_ro[11].gate\ : label is "PRIMITIVE";
-  attribute LOCK_PINS of \P2_gen_ro[8].gate\ : label is "I0:A1";
-  attribute box_type of \P2_gen_ro[8].gate\ : label is "PRIMITIVE";
-  attribute LOCK_PINS of \P2_gen_ro[9].gate\ : label is "I0:A1";
-  attribute box_type of \P2_gen_ro[9].gate\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[0].gate_inst\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[10].gate_inst\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[11].gate_inst\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[1].gate_inst\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[2].gate_inst\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[3].gate_inst\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[4].gate_inst\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[5].gate_inst\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[6].gate_inst\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[7].gate_inst\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[8].gate_inst\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[9].gate_inst\ : label is "PRIMITIVE";
 begin
   \out\(0) <= ring(12);
-\P1_gen_ro[0].gate\: unisim.vcomponents.LUT1
+\P1_gen_ro[0].gate_inst\: unisim.vcomponents.LUT1
     generic map(
       INIT => X"2"
     )
@@ -4684,63 +4606,7 @@ begin
       I0 => ring(0),
       O => ring(1)
     );
-\P1_gen_ro[1].gate\: unisim.vcomponents.LUT1
-    generic map(
-      INIT => X"2"
-    )
-        port map (
-      I0 => ring(1),
-      O => ring(2)
-    );
-\P1_gen_ro[2].gate\: unisim.vcomponents.LUT1
-    generic map(
-      INIT => X"2"
-    )
-        port map (
-      I0 => ring(2),
-      O => ring(3)
-    );
-\P1_gen_ro[3].gate\: unisim.vcomponents.LUT1
-    generic map(
-      INIT => X"2"
-    )
-        port map (
-      I0 => ring(3),
-      O => ring(4)
-    );
-\P1_gen_ro[4].gate\: unisim.vcomponents.LUT1
-    generic map(
-      INIT => X"2"
-    )
-        port map (
-      I0 => ring(4),
-      O => ring(5)
-    );
-\P1_gen_ro[5].gate\: unisim.vcomponents.LUT1
-    generic map(
-      INIT => X"2"
-    )
-        port map (
-      I0 => ring(5),
-      O => ring(6)
-    );
-\P1_gen_ro[6].gate\: unisim.vcomponents.LUT1
-    generic map(
-      INIT => X"2"
-    )
-        port map (
-      I0 => ring(6),
-      O => ring(7)
-    );
-\P1_gen_ro[7].gate\: unisim.vcomponents.LUT1
-    generic map(
-      INIT => X"2"
-    )
-        port map (
-      I0 => ring(7),
-      O => ring(8)
-    );
-\P2_gen_ro[10].gate\: unisim.vcomponents.LUT1
+\P1_gen_ro[10].gate_inst\: unisim.vcomponents.LUT1
     generic map(
       INIT => X"2"
     )
@@ -4748,7 +4614,7 @@ begin
       I0 => ring(10),
       O => ring(11)
     );
-\P2_gen_ro[11].gate\: unisim.vcomponents.LUT1
+\P1_gen_ro[11].gate_inst\: unisim.vcomponents.LUT1
     generic map(
       INIT => X"2"
     )
@@ -4756,7 +4622,63 @@ begin
       I0 => ring(11),
       O => ring(12)
     );
-\P2_gen_ro[8].gate\: unisim.vcomponents.LUT1
+\P1_gen_ro[1].gate_inst\: unisim.vcomponents.LUT1
+    generic map(
+      INIT => X"2"
+    )
+        port map (
+      I0 => ring(1),
+      O => ring(2)
+    );
+\P1_gen_ro[2].gate_inst\: unisim.vcomponents.LUT1
+    generic map(
+      INIT => X"2"
+    )
+        port map (
+      I0 => ring(2),
+      O => ring(3)
+    );
+\P1_gen_ro[3].gate_inst\: unisim.vcomponents.LUT1
+    generic map(
+      INIT => X"2"
+    )
+        port map (
+      I0 => ring(3),
+      O => ring(4)
+    );
+\P1_gen_ro[4].gate_inst\: unisim.vcomponents.LUT1
+    generic map(
+      INIT => X"2"
+    )
+        port map (
+      I0 => ring(4),
+      O => ring(5)
+    );
+\P1_gen_ro[5].gate_inst\: unisim.vcomponents.LUT1
+    generic map(
+      INIT => X"2"
+    )
+        port map (
+      I0 => ring(5),
+      O => ring(6)
+    );
+\P1_gen_ro[6].gate_inst\: unisim.vcomponents.LUT1
+    generic map(
+      INIT => X"2"
+    )
+        port map (
+      I0 => ring(6),
+      O => ring(7)
+    );
+\P1_gen_ro[7].gate_inst\: unisim.vcomponents.LUT1
+    generic map(
+      INIT => X"2"
+    )
+        port map (
+      I0 => ring(7),
+      O => ring(8)
+    );
+\P1_gen_ro[8].gate_inst\: unisim.vcomponents.LUT1
     generic map(
       INIT => X"2"
     )
@@ -4764,7 +4686,7 @@ begin
       I0 => ring(8),
       O => ring(9)
     );
-\P2_gen_ro[9].gate\: unisim.vcomponents.LUT1
+\P1_gen_ro[9].gate_inst\: unisim.vcomponents.LUT1
     generic map(
       INIT => X"2"
     )
@@ -4805,35 +4727,22 @@ architecture STRUCTURE of mesure_All_Ro_out_0_0_Ro_B_25 is
   attribute ALLOW_COMBINATORIAL_LOOPS of ring : signal is std.standard.true;
   attribute DONT_TOUCH : boolean;
   attribute DONT_TOUCH of ring : signal is std.standard.true;
-  attribute LOCK_PINS : string;
-  attribute LOCK_PINS of \P1_gen_ro[0].gate\ : label is "I0:A1";
   attribute box_type : string;
-  attribute box_type of \P1_gen_ro[0].gate\ : label is "PRIMITIVE";
-  attribute LOCK_PINS of \P1_gen_ro[1].gate\ : label is "I0:A1";
-  attribute box_type of \P1_gen_ro[1].gate\ : label is "PRIMITIVE";
-  attribute LOCK_PINS of \P1_gen_ro[2].gate\ : label is "I0:A1";
-  attribute box_type of \P1_gen_ro[2].gate\ : label is "PRIMITIVE";
-  attribute LOCK_PINS of \P1_gen_ro[3].gate\ : label is "I0:A1";
-  attribute box_type of \P1_gen_ro[3].gate\ : label is "PRIMITIVE";
-  attribute LOCK_PINS of \P1_gen_ro[4].gate\ : label is "I0:A1";
-  attribute box_type of \P1_gen_ro[4].gate\ : label is "PRIMITIVE";
-  attribute LOCK_PINS of \P1_gen_ro[5].gate\ : label is "I0:A1";
-  attribute box_type of \P1_gen_ro[5].gate\ : label is "PRIMITIVE";
-  attribute LOCK_PINS of \P1_gen_ro[6].gate\ : label is "I0:A1";
-  attribute box_type of \P1_gen_ro[6].gate\ : label is "PRIMITIVE";
-  attribute LOCK_PINS of \P1_gen_ro[7].gate\ : label is "I0:A1";
-  attribute box_type of \P1_gen_ro[7].gate\ : label is "PRIMITIVE";
-  attribute LOCK_PINS of \P2_gen_ro[10].gate\ : label is "I0:A1";
-  attribute box_type of \P2_gen_ro[10].gate\ : label is "PRIMITIVE";
-  attribute LOCK_PINS of \P2_gen_ro[11].gate\ : label is "I0:A1";
-  attribute box_type of \P2_gen_ro[11].gate\ : label is "PRIMITIVE";
-  attribute LOCK_PINS of \P2_gen_ro[8].gate\ : label is "I0:A1";
-  attribute box_type of \P2_gen_ro[8].gate\ : label is "PRIMITIVE";
-  attribute LOCK_PINS of \P2_gen_ro[9].gate\ : label is "I0:A1";
-  attribute box_type of \P2_gen_ro[9].gate\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[0].gate_inst\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[10].gate_inst\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[11].gate_inst\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[1].gate_inst\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[2].gate_inst\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[3].gate_inst\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[4].gate_inst\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[5].gate_inst\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[6].gate_inst\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[7].gate_inst\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[8].gate_inst\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[9].gate_inst\ : label is "PRIMITIVE";
 begin
   \out\(0) <= ring(12);
-\P1_gen_ro[0].gate\: unisim.vcomponents.LUT1
+\P1_gen_ro[0].gate_inst\: unisim.vcomponents.LUT1
     generic map(
       INIT => X"2"
     )
@@ -4841,63 +4750,7 @@ begin
       I0 => ring(0),
       O => ring(1)
     );
-\P1_gen_ro[1].gate\: unisim.vcomponents.LUT1
-    generic map(
-      INIT => X"2"
-    )
-        port map (
-      I0 => ring(1),
-      O => ring(2)
-    );
-\P1_gen_ro[2].gate\: unisim.vcomponents.LUT1
-    generic map(
-      INIT => X"2"
-    )
-        port map (
-      I0 => ring(2),
-      O => ring(3)
-    );
-\P1_gen_ro[3].gate\: unisim.vcomponents.LUT1
-    generic map(
-      INIT => X"2"
-    )
-        port map (
-      I0 => ring(3),
-      O => ring(4)
-    );
-\P1_gen_ro[4].gate\: unisim.vcomponents.LUT1
-    generic map(
-      INIT => X"2"
-    )
-        port map (
-      I0 => ring(4),
-      O => ring(5)
-    );
-\P1_gen_ro[5].gate\: unisim.vcomponents.LUT1
-    generic map(
-      INIT => X"2"
-    )
-        port map (
-      I0 => ring(5),
-      O => ring(6)
-    );
-\P1_gen_ro[6].gate\: unisim.vcomponents.LUT1
-    generic map(
-      INIT => X"2"
-    )
-        port map (
-      I0 => ring(6),
-      O => ring(7)
-    );
-\P1_gen_ro[7].gate\: unisim.vcomponents.LUT1
-    generic map(
-      INIT => X"2"
-    )
-        port map (
-      I0 => ring(7),
-      O => ring(8)
-    );
-\P2_gen_ro[10].gate\: unisim.vcomponents.LUT1
+\P1_gen_ro[10].gate_inst\: unisim.vcomponents.LUT1
     generic map(
       INIT => X"2"
     )
@@ -4905,7 +4758,7 @@ begin
       I0 => ring(10),
       O => ring(11)
     );
-\P2_gen_ro[11].gate\: unisim.vcomponents.LUT1
+\P1_gen_ro[11].gate_inst\: unisim.vcomponents.LUT1
     generic map(
       INIT => X"2"
     )
@@ -4913,7 +4766,63 @@ begin
       I0 => ring(11),
       O => ring(12)
     );
-\P2_gen_ro[8].gate\: unisim.vcomponents.LUT1
+\P1_gen_ro[1].gate_inst\: unisim.vcomponents.LUT1
+    generic map(
+      INIT => X"2"
+    )
+        port map (
+      I0 => ring(1),
+      O => ring(2)
+    );
+\P1_gen_ro[2].gate_inst\: unisim.vcomponents.LUT1
+    generic map(
+      INIT => X"2"
+    )
+        port map (
+      I0 => ring(2),
+      O => ring(3)
+    );
+\P1_gen_ro[3].gate_inst\: unisim.vcomponents.LUT1
+    generic map(
+      INIT => X"2"
+    )
+        port map (
+      I0 => ring(3),
+      O => ring(4)
+    );
+\P1_gen_ro[4].gate_inst\: unisim.vcomponents.LUT1
+    generic map(
+      INIT => X"2"
+    )
+        port map (
+      I0 => ring(4),
+      O => ring(5)
+    );
+\P1_gen_ro[5].gate_inst\: unisim.vcomponents.LUT1
+    generic map(
+      INIT => X"2"
+    )
+        port map (
+      I0 => ring(5),
+      O => ring(6)
+    );
+\P1_gen_ro[6].gate_inst\: unisim.vcomponents.LUT1
+    generic map(
+      INIT => X"2"
+    )
+        port map (
+      I0 => ring(6),
+      O => ring(7)
+    );
+\P1_gen_ro[7].gate_inst\: unisim.vcomponents.LUT1
+    generic map(
+      INIT => X"2"
+    )
+        port map (
+      I0 => ring(7),
+      O => ring(8)
+    );
+\P1_gen_ro[8].gate_inst\: unisim.vcomponents.LUT1
     generic map(
       INIT => X"2"
     )
@@ -4921,7 +4830,7 @@ begin
       I0 => ring(8),
       O => ring(9)
     );
-\P2_gen_ro[9].gate\: unisim.vcomponents.LUT1
+\P1_gen_ro[9].gate_inst\: unisim.vcomponents.LUT1
     generic map(
       INIT => X"2"
     )
@@ -4962,35 +4871,22 @@ architecture STRUCTURE of mesure_All_Ro_out_0_0_Ro_B_26 is
   attribute ALLOW_COMBINATORIAL_LOOPS of ring : signal is std.standard.true;
   attribute DONT_TOUCH : boolean;
   attribute DONT_TOUCH of ring : signal is std.standard.true;
-  attribute LOCK_PINS : string;
-  attribute LOCK_PINS of \P1_gen_ro[0].gate\ : label is "I0:A1";
   attribute box_type : string;
-  attribute box_type of \P1_gen_ro[0].gate\ : label is "PRIMITIVE";
-  attribute LOCK_PINS of \P1_gen_ro[1].gate\ : label is "I0:A1";
-  attribute box_type of \P1_gen_ro[1].gate\ : label is "PRIMITIVE";
-  attribute LOCK_PINS of \P1_gen_ro[2].gate\ : label is "I0:A1";
-  attribute box_type of \P1_gen_ro[2].gate\ : label is "PRIMITIVE";
-  attribute LOCK_PINS of \P1_gen_ro[3].gate\ : label is "I0:A1";
-  attribute box_type of \P1_gen_ro[3].gate\ : label is "PRIMITIVE";
-  attribute LOCK_PINS of \P1_gen_ro[4].gate\ : label is "I0:A1";
-  attribute box_type of \P1_gen_ro[4].gate\ : label is "PRIMITIVE";
-  attribute LOCK_PINS of \P1_gen_ro[5].gate\ : label is "I0:A1";
-  attribute box_type of \P1_gen_ro[5].gate\ : label is "PRIMITIVE";
-  attribute LOCK_PINS of \P1_gen_ro[6].gate\ : label is "I0:A1";
-  attribute box_type of \P1_gen_ro[6].gate\ : label is "PRIMITIVE";
-  attribute LOCK_PINS of \P1_gen_ro[7].gate\ : label is "I0:A1";
-  attribute box_type of \P1_gen_ro[7].gate\ : label is "PRIMITIVE";
-  attribute LOCK_PINS of \P2_gen_ro[10].gate\ : label is "I0:A1";
-  attribute box_type of \P2_gen_ro[10].gate\ : label is "PRIMITIVE";
-  attribute LOCK_PINS of \P2_gen_ro[11].gate\ : label is "I0:A1";
-  attribute box_type of \P2_gen_ro[11].gate\ : label is "PRIMITIVE";
-  attribute LOCK_PINS of \P2_gen_ro[8].gate\ : label is "I0:A1";
-  attribute box_type of \P2_gen_ro[8].gate\ : label is "PRIMITIVE";
-  attribute LOCK_PINS of \P2_gen_ro[9].gate\ : label is "I0:A1";
-  attribute box_type of \P2_gen_ro[9].gate\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[0].gate_inst\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[10].gate_inst\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[11].gate_inst\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[1].gate_inst\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[2].gate_inst\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[3].gate_inst\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[4].gate_inst\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[5].gate_inst\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[6].gate_inst\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[7].gate_inst\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[8].gate_inst\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[9].gate_inst\ : label is "PRIMITIVE";
 begin
   \out\(0) <= ring(12);
-\P1_gen_ro[0].gate\: unisim.vcomponents.LUT1
+\P1_gen_ro[0].gate_inst\: unisim.vcomponents.LUT1
     generic map(
       INIT => X"2"
     )
@@ -4998,63 +4894,7 @@ begin
       I0 => ring(0),
       O => ring(1)
     );
-\P1_gen_ro[1].gate\: unisim.vcomponents.LUT1
-    generic map(
-      INIT => X"2"
-    )
-        port map (
-      I0 => ring(1),
-      O => ring(2)
-    );
-\P1_gen_ro[2].gate\: unisim.vcomponents.LUT1
-    generic map(
-      INIT => X"2"
-    )
-        port map (
-      I0 => ring(2),
-      O => ring(3)
-    );
-\P1_gen_ro[3].gate\: unisim.vcomponents.LUT1
-    generic map(
-      INIT => X"2"
-    )
-        port map (
-      I0 => ring(3),
-      O => ring(4)
-    );
-\P1_gen_ro[4].gate\: unisim.vcomponents.LUT1
-    generic map(
-      INIT => X"2"
-    )
-        port map (
-      I0 => ring(4),
-      O => ring(5)
-    );
-\P1_gen_ro[5].gate\: unisim.vcomponents.LUT1
-    generic map(
-      INIT => X"2"
-    )
-        port map (
-      I0 => ring(5),
-      O => ring(6)
-    );
-\P1_gen_ro[6].gate\: unisim.vcomponents.LUT1
-    generic map(
-      INIT => X"2"
-    )
-        port map (
-      I0 => ring(6),
-      O => ring(7)
-    );
-\P1_gen_ro[7].gate\: unisim.vcomponents.LUT1
-    generic map(
-      INIT => X"2"
-    )
-        port map (
-      I0 => ring(7),
-      O => ring(8)
-    );
-\P2_gen_ro[10].gate\: unisim.vcomponents.LUT1
+\P1_gen_ro[10].gate_inst\: unisim.vcomponents.LUT1
     generic map(
       INIT => X"2"
     )
@@ -5062,7 +4902,7 @@ begin
       I0 => ring(10),
       O => ring(11)
     );
-\P2_gen_ro[11].gate\: unisim.vcomponents.LUT1
+\P1_gen_ro[11].gate_inst\: unisim.vcomponents.LUT1
     generic map(
       INIT => X"2"
     )
@@ -5070,7 +4910,63 @@ begin
       I0 => ring(11),
       O => ring(12)
     );
-\P2_gen_ro[8].gate\: unisim.vcomponents.LUT1
+\P1_gen_ro[1].gate_inst\: unisim.vcomponents.LUT1
+    generic map(
+      INIT => X"2"
+    )
+        port map (
+      I0 => ring(1),
+      O => ring(2)
+    );
+\P1_gen_ro[2].gate_inst\: unisim.vcomponents.LUT1
+    generic map(
+      INIT => X"2"
+    )
+        port map (
+      I0 => ring(2),
+      O => ring(3)
+    );
+\P1_gen_ro[3].gate_inst\: unisim.vcomponents.LUT1
+    generic map(
+      INIT => X"2"
+    )
+        port map (
+      I0 => ring(3),
+      O => ring(4)
+    );
+\P1_gen_ro[4].gate_inst\: unisim.vcomponents.LUT1
+    generic map(
+      INIT => X"2"
+    )
+        port map (
+      I0 => ring(4),
+      O => ring(5)
+    );
+\P1_gen_ro[5].gate_inst\: unisim.vcomponents.LUT1
+    generic map(
+      INIT => X"2"
+    )
+        port map (
+      I0 => ring(5),
+      O => ring(6)
+    );
+\P1_gen_ro[6].gate_inst\: unisim.vcomponents.LUT1
+    generic map(
+      INIT => X"2"
+    )
+        port map (
+      I0 => ring(6),
+      O => ring(7)
+    );
+\P1_gen_ro[7].gate_inst\: unisim.vcomponents.LUT1
+    generic map(
+      INIT => X"2"
+    )
+        port map (
+      I0 => ring(7),
+      O => ring(8)
+    );
+\P1_gen_ro[8].gate_inst\: unisim.vcomponents.LUT1
     generic map(
       INIT => X"2"
     )
@@ -5078,7 +4974,7 @@ begin
       I0 => ring(8),
       O => ring(9)
     );
-\P2_gen_ro[9].gate\: unisim.vcomponents.LUT1
+\P1_gen_ro[9].gate_inst\: unisim.vcomponents.LUT1
     generic map(
       INIT => X"2"
     )
@@ -5119,35 +5015,22 @@ architecture STRUCTURE of mesure_All_Ro_out_0_0_Ro_B_27 is
   attribute ALLOW_COMBINATORIAL_LOOPS of ring : signal is std.standard.true;
   attribute DONT_TOUCH : boolean;
   attribute DONT_TOUCH of ring : signal is std.standard.true;
-  attribute LOCK_PINS : string;
-  attribute LOCK_PINS of \P1_gen_ro[0].gate\ : label is "I0:A1";
   attribute box_type : string;
-  attribute box_type of \P1_gen_ro[0].gate\ : label is "PRIMITIVE";
-  attribute LOCK_PINS of \P1_gen_ro[1].gate\ : label is "I0:A1";
-  attribute box_type of \P1_gen_ro[1].gate\ : label is "PRIMITIVE";
-  attribute LOCK_PINS of \P1_gen_ro[2].gate\ : label is "I0:A1";
-  attribute box_type of \P1_gen_ro[2].gate\ : label is "PRIMITIVE";
-  attribute LOCK_PINS of \P1_gen_ro[3].gate\ : label is "I0:A1";
-  attribute box_type of \P1_gen_ro[3].gate\ : label is "PRIMITIVE";
-  attribute LOCK_PINS of \P1_gen_ro[4].gate\ : label is "I0:A1";
-  attribute box_type of \P1_gen_ro[4].gate\ : label is "PRIMITIVE";
-  attribute LOCK_PINS of \P1_gen_ro[5].gate\ : label is "I0:A1";
-  attribute box_type of \P1_gen_ro[5].gate\ : label is "PRIMITIVE";
-  attribute LOCK_PINS of \P1_gen_ro[6].gate\ : label is "I0:A1";
-  attribute box_type of \P1_gen_ro[6].gate\ : label is "PRIMITIVE";
-  attribute LOCK_PINS of \P1_gen_ro[7].gate\ : label is "I0:A1";
-  attribute box_type of \P1_gen_ro[7].gate\ : label is "PRIMITIVE";
-  attribute LOCK_PINS of \P2_gen_ro[10].gate\ : label is "I0:A1";
-  attribute box_type of \P2_gen_ro[10].gate\ : label is "PRIMITIVE";
-  attribute LOCK_PINS of \P2_gen_ro[11].gate\ : label is "I0:A1";
-  attribute box_type of \P2_gen_ro[11].gate\ : label is "PRIMITIVE";
-  attribute LOCK_PINS of \P2_gen_ro[8].gate\ : label is "I0:A1";
-  attribute box_type of \P2_gen_ro[8].gate\ : label is "PRIMITIVE";
-  attribute LOCK_PINS of \P2_gen_ro[9].gate\ : label is "I0:A1";
-  attribute box_type of \P2_gen_ro[9].gate\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[0].gate_inst\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[10].gate_inst\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[11].gate_inst\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[1].gate_inst\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[2].gate_inst\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[3].gate_inst\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[4].gate_inst\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[5].gate_inst\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[6].gate_inst\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[7].gate_inst\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[8].gate_inst\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[9].gate_inst\ : label is "PRIMITIVE";
 begin
   \out\(0) <= ring(12);
-\P1_gen_ro[0].gate\: unisim.vcomponents.LUT1
+\P1_gen_ro[0].gate_inst\: unisim.vcomponents.LUT1
     generic map(
       INIT => X"2"
     )
@@ -5155,63 +5038,7 @@ begin
       I0 => ring(0),
       O => ring(1)
     );
-\P1_gen_ro[1].gate\: unisim.vcomponents.LUT1
-    generic map(
-      INIT => X"2"
-    )
-        port map (
-      I0 => ring(1),
-      O => ring(2)
-    );
-\P1_gen_ro[2].gate\: unisim.vcomponents.LUT1
-    generic map(
-      INIT => X"2"
-    )
-        port map (
-      I0 => ring(2),
-      O => ring(3)
-    );
-\P1_gen_ro[3].gate\: unisim.vcomponents.LUT1
-    generic map(
-      INIT => X"2"
-    )
-        port map (
-      I0 => ring(3),
-      O => ring(4)
-    );
-\P1_gen_ro[4].gate\: unisim.vcomponents.LUT1
-    generic map(
-      INIT => X"2"
-    )
-        port map (
-      I0 => ring(4),
-      O => ring(5)
-    );
-\P1_gen_ro[5].gate\: unisim.vcomponents.LUT1
-    generic map(
-      INIT => X"2"
-    )
-        port map (
-      I0 => ring(5),
-      O => ring(6)
-    );
-\P1_gen_ro[6].gate\: unisim.vcomponents.LUT1
-    generic map(
-      INIT => X"2"
-    )
-        port map (
-      I0 => ring(6),
-      O => ring(7)
-    );
-\P1_gen_ro[7].gate\: unisim.vcomponents.LUT1
-    generic map(
-      INIT => X"2"
-    )
-        port map (
-      I0 => ring(7),
-      O => ring(8)
-    );
-\P2_gen_ro[10].gate\: unisim.vcomponents.LUT1
+\P1_gen_ro[10].gate_inst\: unisim.vcomponents.LUT1
     generic map(
       INIT => X"2"
     )
@@ -5219,7 +5046,7 @@ begin
       I0 => ring(10),
       O => ring(11)
     );
-\P2_gen_ro[11].gate\: unisim.vcomponents.LUT1
+\P1_gen_ro[11].gate_inst\: unisim.vcomponents.LUT1
     generic map(
       INIT => X"2"
     )
@@ -5227,7 +5054,63 @@ begin
       I0 => ring(11),
       O => ring(12)
     );
-\P2_gen_ro[8].gate\: unisim.vcomponents.LUT1
+\P1_gen_ro[1].gate_inst\: unisim.vcomponents.LUT1
+    generic map(
+      INIT => X"2"
+    )
+        port map (
+      I0 => ring(1),
+      O => ring(2)
+    );
+\P1_gen_ro[2].gate_inst\: unisim.vcomponents.LUT1
+    generic map(
+      INIT => X"2"
+    )
+        port map (
+      I0 => ring(2),
+      O => ring(3)
+    );
+\P1_gen_ro[3].gate_inst\: unisim.vcomponents.LUT1
+    generic map(
+      INIT => X"2"
+    )
+        port map (
+      I0 => ring(3),
+      O => ring(4)
+    );
+\P1_gen_ro[4].gate_inst\: unisim.vcomponents.LUT1
+    generic map(
+      INIT => X"2"
+    )
+        port map (
+      I0 => ring(4),
+      O => ring(5)
+    );
+\P1_gen_ro[5].gate_inst\: unisim.vcomponents.LUT1
+    generic map(
+      INIT => X"2"
+    )
+        port map (
+      I0 => ring(5),
+      O => ring(6)
+    );
+\P1_gen_ro[6].gate_inst\: unisim.vcomponents.LUT1
+    generic map(
+      INIT => X"2"
+    )
+        port map (
+      I0 => ring(6),
+      O => ring(7)
+    );
+\P1_gen_ro[7].gate_inst\: unisim.vcomponents.LUT1
+    generic map(
+      INIT => X"2"
+    )
+        port map (
+      I0 => ring(7),
+      O => ring(8)
+    );
+\P1_gen_ro[8].gate_inst\: unisim.vcomponents.LUT1
     generic map(
       INIT => X"2"
     )
@@ -5235,7 +5118,7 @@ begin
       I0 => ring(8),
       O => ring(9)
     );
-\P2_gen_ro[9].gate\: unisim.vcomponents.LUT1
+\P1_gen_ro[9].gate_inst\: unisim.vcomponents.LUT1
     generic map(
       INIT => X"2"
     )
@@ -5276,35 +5159,22 @@ architecture STRUCTURE of mesure_All_Ro_out_0_0_Ro_B_3 is
   attribute ALLOW_COMBINATORIAL_LOOPS of ring : signal is std.standard.true;
   attribute DONT_TOUCH : boolean;
   attribute DONT_TOUCH of ring : signal is std.standard.true;
-  attribute LOCK_PINS : string;
-  attribute LOCK_PINS of \P1_gen_ro[0].gate\ : label is "I0:A1";
   attribute box_type : string;
-  attribute box_type of \P1_gen_ro[0].gate\ : label is "PRIMITIVE";
-  attribute LOCK_PINS of \P1_gen_ro[1].gate\ : label is "I0:A1";
-  attribute box_type of \P1_gen_ro[1].gate\ : label is "PRIMITIVE";
-  attribute LOCK_PINS of \P1_gen_ro[2].gate\ : label is "I0:A1";
-  attribute box_type of \P1_gen_ro[2].gate\ : label is "PRIMITIVE";
-  attribute LOCK_PINS of \P1_gen_ro[3].gate\ : label is "I0:A1";
-  attribute box_type of \P1_gen_ro[3].gate\ : label is "PRIMITIVE";
-  attribute LOCK_PINS of \P1_gen_ro[4].gate\ : label is "I0:A1";
-  attribute box_type of \P1_gen_ro[4].gate\ : label is "PRIMITIVE";
-  attribute LOCK_PINS of \P1_gen_ro[5].gate\ : label is "I0:A1";
-  attribute box_type of \P1_gen_ro[5].gate\ : label is "PRIMITIVE";
-  attribute LOCK_PINS of \P1_gen_ro[6].gate\ : label is "I0:A1";
-  attribute box_type of \P1_gen_ro[6].gate\ : label is "PRIMITIVE";
-  attribute LOCK_PINS of \P1_gen_ro[7].gate\ : label is "I0:A1";
-  attribute box_type of \P1_gen_ro[7].gate\ : label is "PRIMITIVE";
-  attribute LOCK_PINS of \P2_gen_ro[10].gate\ : label is "I0:A1";
-  attribute box_type of \P2_gen_ro[10].gate\ : label is "PRIMITIVE";
-  attribute LOCK_PINS of \P2_gen_ro[11].gate\ : label is "I0:A1";
-  attribute box_type of \P2_gen_ro[11].gate\ : label is "PRIMITIVE";
-  attribute LOCK_PINS of \P2_gen_ro[8].gate\ : label is "I0:A1";
-  attribute box_type of \P2_gen_ro[8].gate\ : label is "PRIMITIVE";
-  attribute LOCK_PINS of \P2_gen_ro[9].gate\ : label is "I0:A1";
-  attribute box_type of \P2_gen_ro[9].gate\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[0].gate_inst\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[10].gate_inst\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[11].gate_inst\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[1].gate_inst\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[2].gate_inst\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[3].gate_inst\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[4].gate_inst\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[5].gate_inst\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[6].gate_inst\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[7].gate_inst\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[8].gate_inst\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[9].gate_inst\ : label is "PRIMITIVE";
 begin
   \out\(0) <= ring(12);
-\P1_gen_ro[0].gate\: unisim.vcomponents.LUT1
+\P1_gen_ro[0].gate_inst\: unisim.vcomponents.LUT1
     generic map(
       INIT => X"2"
     )
@@ -5312,63 +5182,7 @@ begin
       I0 => ring(0),
       O => ring(1)
     );
-\P1_gen_ro[1].gate\: unisim.vcomponents.LUT1
-    generic map(
-      INIT => X"2"
-    )
-        port map (
-      I0 => ring(1),
-      O => ring(2)
-    );
-\P1_gen_ro[2].gate\: unisim.vcomponents.LUT1
-    generic map(
-      INIT => X"2"
-    )
-        port map (
-      I0 => ring(2),
-      O => ring(3)
-    );
-\P1_gen_ro[3].gate\: unisim.vcomponents.LUT1
-    generic map(
-      INIT => X"2"
-    )
-        port map (
-      I0 => ring(3),
-      O => ring(4)
-    );
-\P1_gen_ro[4].gate\: unisim.vcomponents.LUT1
-    generic map(
-      INIT => X"2"
-    )
-        port map (
-      I0 => ring(4),
-      O => ring(5)
-    );
-\P1_gen_ro[5].gate\: unisim.vcomponents.LUT1
-    generic map(
-      INIT => X"2"
-    )
-        port map (
-      I0 => ring(5),
-      O => ring(6)
-    );
-\P1_gen_ro[6].gate\: unisim.vcomponents.LUT1
-    generic map(
-      INIT => X"2"
-    )
-        port map (
-      I0 => ring(6),
-      O => ring(7)
-    );
-\P1_gen_ro[7].gate\: unisim.vcomponents.LUT1
-    generic map(
-      INIT => X"2"
-    )
-        port map (
-      I0 => ring(7),
-      O => ring(8)
-    );
-\P2_gen_ro[10].gate\: unisim.vcomponents.LUT1
+\P1_gen_ro[10].gate_inst\: unisim.vcomponents.LUT1
     generic map(
       INIT => X"2"
     )
@@ -5376,7 +5190,7 @@ begin
       I0 => ring(10),
       O => ring(11)
     );
-\P2_gen_ro[11].gate\: unisim.vcomponents.LUT1
+\P1_gen_ro[11].gate_inst\: unisim.vcomponents.LUT1
     generic map(
       INIT => X"2"
     )
@@ -5384,7 +5198,63 @@ begin
       I0 => ring(11),
       O => ring(12)
     );
-\P2_gen_ro[8].gate\: unisim.vcomponents.LUT1
+\P1_gen_ro[1].gate_inst\: unisim.vcomponents.LUT1
+    generic map(
+      INIT => X"2"
+    )
+        port map (
+      I0 => ring(1),
+      O => ring(2)
+    );
+\P1_gen_ro[2].gate_inst\: unisim.vcomponents.LUT1
+    generic map(
+      INIT => X"2"
+    )
+        port map (
+      I0 => ring(2),
+      O => ring(3)
+    );
+\P1_gen_ro[3].gate_inst\: unisim.vcomponents.LUT1
+    generic map(
+      INIT => X"2"
+    )
+        port map (
+      I0 => ring(3),
+      O => ring(4)
+    );
+\P1_gen_ro[4].gate_inst\: unisim.vcomponents.LUT1
+    generic map(
+      INIT => X"2"
+    )
+        port map (
+      I0 => ring(4),
+      O => ring(5)
+    );
+\P1_gen_ro[5].gate_inst\: unisim.vcomponents.LUT1
+    generic map(
+      INIT => X"2"
+    )
+        port map (
+      I0 => ring(5),
+      O => ring(6)
+    );
+\P1_gen_ro[6].gate_inst\: unisim.vcomponents.LUT1
+    generic map(
+      INIT => X"2"
+    )
+        port map (
+      I0 => ring(6),
+      O => ring(7)
+    );
+\P1_gen_ro[7].gate_inst\: unisim.vcomponents.LUT1
+    generic map(
+      INIT => X"2"
+    )
+        port map (
+      I0 => ring(7),
+      O => ring(8)
+    );
+\P1_gen_ro[8].gate_inst\: unisim.vcomponents.LUT1
     generic map(
       INIT => X"2"
     )
@@ -5392,7 +5262,7 @@ begin
       I0 => ring(8),
       O => ring(9)
     );
-\P2_gen_ro[9].gate\: unisim.vcomponents.LUT1
+\P1_gen_ro[9].gate_inst\: unisim.vcomponents.LUT1
     generic map(
       INIT => X"2"
     )
@@ -5433,35 +5303,22 @@ architecture STRUCTURE of mesure_All_Ro_out_0_0_Ro_B_4 is
   attribute ALLOW_COMBINATORIAL_LOOPS of ring : signal is std.standard.true;
   attribute DONT_TOUCH : boolean;
   attribute DONT_TOUCH of ring : signal is std.standard.true;
-  attribute LOCK_PINS : string;
-  attribute LOCK_PINS of \P1_gen_ro[0].gate\ : label is "I0:A1";
   attribute box_type : string;
-  attribute box_type of \P1_gen_ro[0].gate\ : label is "PRIMITIVE";
-  attribute LOCK_PINS of \P1_gen_ro[1].gate\ : label is "I0:A1";
-  attribute box_type of \P1_gen_ro[1].gate\ : label is "PRIMITIVE";
-  attribute LOCK_PINS of \P1_gen_ro[2].gate\ : label is "I0:A1";
-  attribute box_type of \P1_gen_ro[2].gate\ : label is "PRIMITIVE";
-  attribute LOCK_PINS of \P1_gen_ro[3].gate\ : label is "I0:A1";
-  attribute box_type of \P1_gen_ro[3].gate\ : label is "PRIMITIVE";
-  attribute LOCK_PINS of \P1_gen_ro[4].gate\ : label is "I0:A1";
-  attribute box_type of \P1_gen_ro[4].gate\ : label is "PRIMITIVE";
-  attribute LOCK_PINS of \P1_gen_ro[5].gate\ : label is "I0:A1";
-  attribute box_type of \P1_gen_ro[5].gate\ : label is "PRIMITIVE";
-  attribute LOCK_PINS of \P1_gen_ro[6].gate\ : label is "I0:A1";
-  attribute box_type of \P1_gen_ro[6].gate\ : label is "PRIMITIVE";
-  attribute LOCK_PINS of \P1_gen_ro[7].gate\ : label is "I0:A1";
-  attribute box_type of \P1_gen_ro[7].gate\ : label is "PRIMITIVE";
-  attribute LOCK_PINS of \P2_gen_ro[10].gate\ : label is "I0:A1";
-  attribute box_type of \P2_gen_ro[10].gate\ : label is "PRIMITIVE";
-  attribute LOCK_PINS of \P2_gen_ro[11].gate\ : label is "I0:A1";
-  attribute box_type of \P2_gen_ro[11].gate\ : label is "PRIMITIVE";
-  attribute LOCK_PINS of \P2_gen_ro[8].gate\ : label is "I0:A1";
-  attribute box_type of \P2_gen_ro[8].gate\ : label is "PRIMITIVE";
-  attribute LOCK_PINS of \P2_gen_ro[9].gate\ : label is "I0:A1";
-  attribute box_type of \P2_gen_ro[9].gate\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[0].gate_inst\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[10].gate_inst\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[11].gate_inst\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[1].gate_inst\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[2].gate_inst\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[3].gate_inst\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[4].gate_inst\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[5].gate_inst\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[6].gate_inst\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[7].gate_inst\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[8].gate_inst\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[9].gate_inst\ : label is "PRIMITIVE";
 begin
   \out\(0) <= ring(12);
-\P1_gen_ro[0].gate\: unisim.vcomponents.LUT1
+\P1_gen_ro[0].gate_inst\: unisim.vcomponents.LUT1
     generic map(
       INIT => X"2"
     )
@@ -5469,63 +5326,7 @@ begin
       I0 => ring(0),
       O => ring(1)
     );
-\P1_gen_ro[1].gate\: unisim.vcomponents.LUT1
-    generic map(
-      INIT => X"2"
-    )
-        port map (
-      I0 => ring(1),
-      O => ring(2)
-    );
-\P1_gen_ro[2].gate\: unisim.vcomponents.LUT1
-    generic map(
-      INIT => X"2"
-    )
-        port map (
-      I0 => ring(2),
-      O => ring(3)
-    );
-\P1_gen_ro[3].gate\: unisim.vcomponents.LUT1
-    generic map(
-      INIT => X"2"
-    )
-        port map (
-      I0 => ring(3),
-      O => ring(4)
-    );
-\P1_gen_ro[4].gate\: unisim.vcomponents.LUT1
-    generic map(
-      INIT => X"2"
-    )
-        port map (
-      I0 => ring(4),
-      O => ring(5)
-    );
-\P1_gen_ro[5].gate\: unisim.vcomponents.LUT1
-    generic map(
-      INIT => X"2"
-    )
-        port map (
-      I0 => ring(5),
-      O => ring(6)
-    );
-\P1_gen_ro[6].gate\: unisim.vcomponents.LUT1
-    generic map(
-      INIT => X"2"
-    )
-        port map (
-      I0 => ring(6),
-      O => ring(7)
-    );
-\P1_gen_ro[7].gate\: unisim.vcomponents.LUT1
-    generic map(
-      INIT => X"2"
-    )
-        port map (
-      I0 => ring(7),
-      O => ring(8)
-    );
-\P2_gen_ro[10].gate\: unisim.vcomponents.LUT1
+\P1_gen_ro[10].gate_inst\: unisim.vcomponents.LUT1
     generic map(
       INIT => X"2"
     )
@@ -5533,7 +5334,7 @@ begin
       I0 => ring(10),
       O => ring(11)
     );
-\P2_gen_ro[11].gate\: unisim.vcomponents.LUT1
+\P1_gen_ro[11].gate_inst\: unisim.vcomponents.LUT1
     generic map(
       INIT => X"2"
     )
@@ -5541,7 +5342,63 @@ begin
       I0 => ring(11),
       O => ring(12)
     );
-\P2_gen_ro[8].gate\: unisim.vcomponents.LUT1
+\P1_gen_ro[1].gate_inst\: unisim.vcomponents.LUT1
+    generic map(
+      INIT => X"2"
+    )
+        port map (
+      I0 => ring(1),
+      O => ring(2)
+    );
+\P1_gen_ro[2].gate_inst\: unisim.vcomponents.LUT1
+    generic map(
+      INIT => X"2"
+    )
+        port map (
+      I0 => ring(2),
+      O => ring(3)
+    );
+\P1_gen_ro[3].gate_inst\: unisim.vcomponents.LUT1
+    generic map(
+      INIT => X"2"
+    )
+        port map (
+      I0 => ring(3),
+      O => ring(4)
+    );
+\P1_gen_ro[4].gate_inst\: unisim.vcomponents.LUT1
+    generic map(
+      INIT => X"2"
+    )
+        port map (
+      I0 => ring(4),
+      O => ring(5)
+    );
+\P1_gen_ro[5].gate_inst\: unisim.vcomponents.LUT1
+    generic map(
+      INIT => X"2"
+    )
+        port map (
+      I0 => ring(5),
+      O => ring(6)
+    );
+\P1_gen_ro[6].gate_inst\: unisim.vcomponents.LUT1
+    generic map(
+      INIT => X"2"
+    )
+        port map (
+      I0 => ring(6),
+      O => ring(7)
+    );
+\P1_gen_ro[7].gate_inst\: unisim.vcomponents.LUT1
+    generic map(
+      INIT => X"2"
+    )
+        port map (
+      I0 => ring(7),
+      O => ring(8)
+    );
+\P1_gen_ro[8].gate_inst\: unisim.vcomponents.LUT1
     generic map(
       INIT => X"2"
     )
@@ -5549,7 +5406,7 @@ begin
       I0 => ring(8),
       O => ring(9)
     );
-\P2_gen_ro[9].gate\: unisim.vcomponents.LUT1
+\P1_gen_ro[9].gate_inst\: unisim.vcomponents.LUT1
     generic map(
       INIT => X"2"
     )
@@ -5590,35 +5447,22 @@ architecture STRUCTURE of mesure_All_Ro_out_0_0_Ro_B_9 is
   attribute ALLOW_COMBINATORIAL_LOOPS of ring : signal is std.standard.true;
   attribute DONT_TOUCH : boolean;
   attribute DONT_TOUCH of ring : signal is std.standard.true;
-  attribute LOCK_PINS : string;
-  attribute LOCK_PINS of \P1_gen_ro[0].gate\ : label is "I0:A1";
   attribute box_type : string;
-  attribute box_type of \P1_gen_ro[0].gate\ : label is "PRIMITIVE";
-  attribute LOCK_PINS of \P1_gen_ro[1].gate\ : label is "I0:A1";
-  attribute box_type of \P1_gen_ro[1].gate\ : label is "PRIMITIVE";
-  attribute LOCK_PINS of \P1_gen_ro[2].gate\ : label is "I0:A1";
-  attribute box_type of \P1_gen_ro[2].gate\ : label is "PRIMITIVE";
-  attribute LOCK_PINS of \P1_gen_ro[3].gate\ : label is "I0:A1";
-  attribute box_type of \P1_gen_ro[3].gate\ : label is "PRIMITIVE";
-  attribute LOCK_PINS of \P1_gen_ro[4].gate\ : label is "I0:A1";
-  attribute box_type of \P1_gen_ro[4].gate\ : label is "PRIMITIVE";
-  attribute LOCK_PINS of \P1_gen_ro[5].gate\ : label is "I0:A1";
-  attribute box_type of \P1_gen_ro[5].gate\ : label is "PRIMITIVE";
-  attribute LOCK_PINS of \P1_gen_ro[6].gate\ : label is "I0:A1";
-  attribute box_type of \P1_gen_ro[6].gate\ : label is "PRIMITIVE";
-  attribute LOCK_PINS of \P1_gen_ro[7].gate\ : label is "I0:A1";
-  attribute box_type of \P1_gen_ro[7].gate\ : label is "PRIMITIVE";
-  attribute LOCK_PINS of \P2_gen_ro[10].gate\ : label is "I0:A1";
-  attribute box_type of \P2_gen_ro[10].gate\ : label is "PRIMITIVE";
-  attribute LOCK_PINS of \P2_gen_ro[11].gate\ : label is "I0:A1";
-  attribute box_type of \P2_gen_ro[11].gate\ : label is "PRIMITIVE";
-  attribute LOCK_PINS of \P2_gen_ro[8].gate\ : label is "I0:A1";
-  attribute box_type of \P2_gen_ro[8].gate\ : label is "PRIMITIVE";
-  attribute LOCK_PINS of \P2_gen_ro[9].gate\ : label is "I0:A1";
-  attribute box_type of \P2_gen_ro[9].gate\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[0].gate_inst\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[10].gate_inst\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[11].gate_inst\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[1].gate_inst\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[2].gate_inst\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[3].gate_inst\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[4].gate_inst\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[5].gate_inst\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[6].gate_inst\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[7].gate_inst\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[8].gate_inst\ : label is "PRIMITIVE";
+  attribute box_type of \P1_gen_ro[9].gate_inst\ : label is "PRIMITIVE";
 begin
   \out\(0) <= ring(12);
-\P1_gen_ro[0].gate\: unisim.vcomponents.LUT1
+\P1_gen_ro[0].gate_inst\: unisim.vcomponents.LUT1
     generic map(
       INIT => X"2"
     )
@@ -5626,63 +5470,7 @@ begin
       I0 => ring(0),
       O => ring(1)
     );
-\P1_gen_ro[1].gate\: unisim.vcomponents.LUT1
-    generic map(
-      INIT => X"2"
-    )
-        port map (
-      I0 => ring(1),
-      O => ring(2)
-    );
-\P1_gen_ro[2].gate\: unisim.vcomponents.LUT1
-    generic map(
-      INIT => X"2"
-    )
-        port map (
-      I0 => ring(2),
-      O => ring(3)
-    );
-\P1_gen_ro[3].gate\: unisim.vcomponents.LUT1
-    generic map(
-      INIT => X"2"
-    )
-        port map (
-      I0 => ring(3),
-      O => ring(4)
-    );
-\P1_gen_ro[4].gate\: unisim.vcomponents.LUT1
-    generic map(
-      INIT => X"2"
-    )
-        port map (
-      I0 => ring(4),
-      O => ring(5)
-    );
-\P1_gen_ro[5].gate\: unisim.vcomponents.LUT1
-    generic map(
-      INIT => X"2"
-    )
-        port map (
-      I0 => ring(5),
-      O => ring(6)
-    );
-\P1_gen_ro[6].gate\: unisim.vcomponents.LUT1
-    generic map(
-      INIT => X"2"
-    )
-        port map (
-      I0 => ring(6),
-      O => ring(7)
-    );
-\P1_gen_ro[7].gate\: unisim.vcomponents.LUT1
-    generic map(
-      INIT => X"2"
-    )
-        port map (
-      I0 => ring(7),
-      O => ring(8)
-    );
-\P2_gen_ro[10].gate\: unisim.vcomponents.LUT1
+\P1_gen_ro[10].gate_inst\: unisim.vcomponents.LUT1
     generic map(
       INIT => X"2"
     )
@@ -5690,7 +5478,7 @@ begin
       I0 => ring(10),
       O => ring(11)
     );
-\P2_gen_ro[11].gate\: unisim.vcomponents.LUT1
+\P1_gen_ro[11].gate_inst\: unisim.vcomponents.LUT1
     generic map(
       INIT => X"2"
     )
@@ -5698,7 +5486,63 @@ begin
       I0 => ring(11),
       O => ring(12)
     );
-\P2_gen_ro[8].gate\: unisim.vcomponents.LUT1
+\P1_gen_ro[1].gate_inst\: unisim.vcomponents.LUT1
+    generic map(
+      INIT => X"2"
+    )
+        port map (
+      I0 => ring(1),
+      O => ring(2)
+    );
+\P1_gen_ro[2].gate_inst\: unisim.vcomponents.LUT1
+    generic map(
+      INIT => X"2"
+    )
+        port map (
+      I0 => ring(2),
+      O => ring(3)
+    );
+\P1_gen_ro[3].gate_inst\: unisim.vcomponents.LUT1
+    generic map(
+      INIT => X"2"
+    )
+        port map (
+      I0 => ring(3),
+      O => ring(4)
+    );
+\P1_gen_ro[4].gate_inst\: unisim.vcomponents.LUT1
+    generic map(
+      INIT => X"2"
+    )
+        port map (
+      I0 => ring(4),
+      O => ring(5)
+    );
+\P1_gen_ro[5].gate_inst\: unisim.vcomponents.LUT1
+    generic map(
+      INIT => X"2"
+    )
+        port map (
+      I0 => ring(5),
+      O => ring(6)
+    );
+\P1_gen_ro[6].gate_inst\: unisim.vcomponents.LUT1
+    generic map(
+      INIT => X"2"
+    )
+        port map (
+      I0 => ring(6),
+      O => ring(7)
+    );
+\P1_gen_ro[7].gate_inst\: unisim.vcomponents.LUT1
+    generic map(
+      INIT => X"2"
+    )
+        port map (
+      I0 => ring(7),
+      O => ring(8)
+    );
+\P1_gen_ro[8].gate_inst\: unisim.vcomponents.LUT1
     generic map(
       INIT => X"2"
     )
@@ -5706,7 +5550,7 @@ begin
       I0 => ring(8),
       O => ring(9)
     );
-\P2_gen_ro[9].gate\: unisim.vcomponents.LUT1
+\P1_gen_ro[9].gate_inst\: unisim.vcomponents.LUT1
     generic map(
       INIT => X"2"
     )
@@ -6312,42 +6156,42 @@ architecture STRUCTURE of mesure_All_Ro_out_0_0_Ro_bench is
   attribute DONT_TOUCH : boolean;
   attribute DONT_TOUCH of S_Ro_int : signal is std.standard.true;
 begin
-\I_Ro_B[0].I_Ro_B\: entity work.mesure_All_Ro_out_0_0_Ro_B
+\I_RO_B[0].Inst_Ro_B\: entity work.mesure_All_Ro_out_0_0_Ro_B
      port map (
       Mode(0) => Mode(0),
       Reset_RO(0) => Reset_RO(0),
       Stress(0) => Stress(0),
       \out\(0) => S_Ro_int(0)
     );
-\I_Ro_B[1].I_Ro_B\: entity work.mesure_All_Ro_out_0_0_Ro_B_3
+\I_RO_B[1].Inst_Ro_B\: entity work.mesure_All_Ro_out_0_0_Ro_B_3
      port map (
       Mode(0) => Mode(1),
       Reset_RO(0) => Reset_RO(1),
       Stress(0) => Stress(0),
       \out\(0) => S_Ro_int(1)
     );
-\I_Ro_B[2].I_Ro_B\: entity work.mesure_All_Ro_out_0_0_Ro_B_4
+\I_RO_B[2].Inst_Ro_B\: entity work.mesure_All_Ro_out_0_0_Ro_B_4
      port map (
       Mode(0) => Mode(2),
       Reset_RO(0) => Reset_RO(2),
       Stress(0) => Stress(0),
       \out\(0) => S_Ro_int(2)
     );
-\I_Ro_path[0].I_Ro_path\: entity work.mesure_All_Ro_out_0_0_Ro_path
+\I_RO_PATH[0].Inst_Ro_path\: entity work.mesure_All_Ro_out_0_0_Ro_path
      port map (
       Mode(0) => Mode(3),
       Reset_RO(0) => Reset_RO(3),
       Stress(0) => Stress(0),
       \out\(0) => S_Ro_int(3)
     );
-\I_Ro_path[1].I_Ro_path\: entity work.mesure_All_Ro_out_0_0_Ro_path_5
+\I_RO_PATH[1].Inst_Ro_path\: entity work.mesure_All_Ro_out_0_0_Ro_path_5
      port map (
       Mode(0) => Mode(4),
       Reset_RO(0) => Reset_RO(4),
       Stress(0) => Stress(0),
       \out\(0) => S_Ro_int(4)
     );
-\I_Ro_path[2].I_Ro_path\: entity work.mesure_All_Ro_out_0_0_Ro_path_6
+\I_RO_PATH[2].Inst_Ro_path\: entity work.mesure_All_Ro_out_0_0_Ro_path_6
      port map (
       Mode(0) => Mode(5),
       Reset_RO(0) => Reset_RO(5),
@@ -6402,42 +6246,42 @@ architecture STRUCTURE of mesure_All_Ro_out_0_0_Ro_bench_16 is
   attribute DONT_TOUCH : boolean;
   attribute DONT_TOUCH of S_Ro_int : signal is std.standard.true;
 begin
-\I_Ro_B[0].I_Ro_B\: entity work.mesure_All_Ro_out_0_0_Ro_B_17
+\I_RO_B[0].Inst_Ro_B\: entity work.mesure_All_Ro_out_0_0_Ro_B_17
      port map (
       Mode(0) => Mode(0),
       Reset_RO(0) => Reset_RO(0),
       Stress(0) => Stress(0),
       \out\(0) => S_Ro_int(0)
     );
-\I_Ro_B[1].I_Ro_B\: entity work.mesure_All_Ro_out_0_0_Ro_B_18
+\I_RO_B[1].Inst_Ro_B\: entity work.mesure_All_Ro_out_0_0_Ro_B_18
      port map (
       Mode(0) => Mode(1),
       Reset_RO(0) => Reset_RO(1),
       Stress(0) => Stress(0),
       \out\(0) => S_Ro_int(1)
     );
-\I_Ro_B[2].I_Ro_B\: entity work.mesure_All_Ro_out_0_0_Ro_B_19
+\I_RO_B[2].Inst_Ro_B\: entity work.mesure_All_Ro_out_0_0_Ro_B_19
      port map (
       Mode(0) => Mode(2),
       Reset_RO(0) => Reset_RO(2),
       Stress(0) => Stress(0),
       \out\(0) => S_Ro_int(2)
     );
-\I_Ro_path[0].I_Ro_path\: entity work.mesure_All_Ro_out_0_0_Ro_path_20
+\I_RO_PATH[0].Inst_Ro_path\: entity work.mesure_All_Ro_out_0_0_Ro_path_20
      port map (
       Mode(0) => Mode(3),
       Reset_RO(0) => Reset_RO(3),
       Stress(0) => Stress(0),
       \out\(0) => S_Ro_int(3)
     );
-\I_Ro_path[1].I_Ro_path\: entity work.mesure_All_Ro_out_0_0_Ro_path_21
+\I_RO_PATH[1].Inst_Ro_path\: entity work.mesure_All_Ro_out_0_0_Ro_path_21
      port map (
       Mode(0) => Mode(4),
       Reset_RO(0) => Reset_RO(4),
       Stress(0) => Stress(0),
       \out\(0) => S_Ro_int(4)
     );
-\I_Ro_path[2].I_Ro_path\: entity work.mesure_All_Ro_out_0_0_Ro_path_22
+\I_RO_PATH[2].Inst_Ro_path\: entity work.mesure_All_Ro_out_0_0_Ro_path_22
      port map (
       Mode(0) => Mode(5),
       Reset_RO(0) => Reset_RO(5),
@@ -6492,42 +6336,42 @@ architecture STRUCTURE of mesure_All_Ro_out_0_0_Ro_bench_24 is
   attribute DONT_TOUCH : boolean;
   attribute DONT_TOUCH of S_Ro_int : signal is std.standard.true;
 begin
-\I_Ro_B[0].I_Ro_B\: entity work.mesure_All_Ro_out_0_0_Ro_B_25
+\I_RO_B[0].Inst_Ro_B\: entity work.mesure_All_Ro_out_0_0_Ro_B_25
      port map (
       Mode(0) => Mode(0),
       Reset_RO(0) => Reset_RO(0),
       Stress(0) => Stress(0),
       \out\(0) => S_Ro_int(0)
     );
-\I_Ro_B[1].I_Ro_B\: entity work.mesure_All_Ro_out_0_0_Ro_B_26
+\I_RO_B[1].Inst_Ro_B\: entity work.mesure_All_Ro_out_0_0_Ro_B_26
      port map (
       Mode(0) => Mode(1),
       Reset_RO(0) => Reset_RO(1),
       Stress(0) => Stress(0),
       \out\(0) => S_Ro_int(1)
     );
-\I_Ro_B[2].I_Ro_B\: entity work.mesure_All_Ro_out_0_0_Ro_B_27
+\I_RO_B[2].Inst_Ro_B\: entity work.mesure_All_Ro_out_0_0_Ro_B_27
      port map (
       Mode(0) => Mode(2),
       Reset_RO(0) => Reset_RO(2),
       Stress(0) => Stress(0),
       \out\(0) => S_Ro_int(2)
     );
-\I_Ro_path[0].I_Ro_path\: entity work.mesure_All_Ro_out_0_0_Ro_path_28
+\I_RO_PATH[0].Inst_Ro_path\: entity work.mesure_All_Ro_out_0_0_Ro_path_28
      port map (
       Mode(0) => Mode(3),
       Reset_RO(0) => Reset_RO(3),
       Stress(0) => Stress(0),
       \out\(0) => S_Ro_int(3)
     );
-\I_Ro_path[1].I_Ro_path\: entity work.mesure_All_Ro_out_0_0_Ro_path_29
+\I_RO_PATH[1].Inst_Ro_path\: entity work.mesure_All_Ro_out_0_0_Ro_path_29
      port map (
       Mode(0) => Mode(4),
       Reset_RO(0) => Reset_RO(4),
       Stress(0) => Stress(0),
       \out\(0) => S_Ro_int(4)
     );
-\I_Ro_path[2].I_Ro_path\: entity work.mesure_All_Ro_out_0_0_Ro_path_30
+\I_RO_PATH[2].Inst_Ro_path\: entity work.mesure_All_Ro_out_0_0_Ro_path_30
      port map (
       Mode(0) => Mode(5),
       Reset_RO(0) => Reset_RO(5),
@@ -6582,42 +6426,42 @@ architecture STRUCTURE of mesure_All_Ro_out_0_0_Ro_bench_8 is
   attribute DONT_TOUCH : boolean;
   attribute DONT_TOUCH of S_Ro_int : signal is std.standard.true;
 begin
-\I_Ro_B[0].I_Ro_B\: entity work.mesure_All_Ro_out_0_0_Ro_B_9
+\I_RO_B[0].Inst_Ro_B\: entity work.mesure_All_Ro_out_0_0_Ro_B_9
      port map (
       Mode(0) => Mode(0),
       Reset_RO(0) => Reset_RO(0),
       Stress(0) => Stress(0),
       \out\(0) => S_Ro_int(0)
     );
-\I_Ro_B[1].I_Ro_B\: entity work.mesure_All_Ro_out_0_0_Ro_B_10
+\I_RO_B[1].Inst_Ro_B\: entity work.mesure_All_Ro_out_0_0_Ro_B_10
      port map (
       Mode(0) => Mode(1),
       Reset_RO(0) => Reset_RO(1),
       Stress(0) => Stress(0),
       \out\(0) => S_Ro_int(1)
     );
-\I_Ro_B[2].I_Ro_B\: entity work.mesure_All_Ro_out_0_0_Ro_B_11
+\I_RO_B[2].Inst_Ro_B\: entity work.mesure_All_Ro_out_0_0_Ro_B_11
      port map (
       Mode(0) => Mode(2),
       Reset_RO(0) => Reset_RO(2),
       Stress(0) => Stress(0),
       \out\(0) => S_Ro_int(2)
     );
-\I_Ro_path[0].I_Ro_path\: entity work.mesure_All_Ro_out_0_0_Ro_path_12
+\I_RO_PATH[0].Inst_Ro_path\: entity work.mesure_All_Ro_out_0_0_Ro_path_12
      port map (
       Mode(0) => Mode(3),
       Reset_RO(0) => Reset_RO(3),
       Stress(0) => Stress(0),
       \out\(0) => S_Ro_int(3)
     );
-\I_Ro_path[1].I_Ro_path\: entity work.mesure_All_Ro_out_0_0_Ro_path_13
+\I_RO_PATH[1].Inst_Ro_path\: entity work.mesure_All_Ro_out_0_0_Ro_path_13
      port map (
       Mode(0) => Mode(4),
       Reset_RO(0) => Reset_RO(4),
       Stress(0) => Stress(0),
       \out\(0) => S_Ro_int(4)
     );
-\I_Ro_path[2].I_Ro_path\: entity work.mesure_All_Ro_out_0_0_Ro_path_14
+\I_RO_PATH[2].Inst_Ro_path\: entity work.mesure_All_Ro_out_0_0_Ro_path_14
      port map (
       Mode(0) => Mode(5),
       Reset_RO(0) => Reset_RO(5),
@@ -6819,7 +6663,7 @@ end mesure_All_Ro_out_0_0_All_Ro_out;
 architecture STRUCTURE of mesure_All_Ro_out_0_0_All_Ro_out is
   signal Reset : STD_LOGIC;
 begin
-\I_Ro_out[0].I_Ro_out\: entity work.mesure_All_Ro_out_0_0_Ro_out
+\I_Ro_out[0].Inst_Ro_out\: entity work.mesure_All_Ro_out_0_0_Ro_out
      port map (
       CE_1Hz => CE_1Hz,
       Data(31 downto 0) => Data(31 downto 0),
@@ -6829,7 +6673,7 @@ begin
       Ro_sel(2 downto 0) => Ro_sel(2 downto 0),
       Stress(0) => Stress(0)
     );
-\I_Ro_out[1].I_Ro_out\: entity work.mesure_All_Ro_out_0_0_Ro_out_0
+\I_Ro_out[1].Inst_Ro_out\: entity work.mesure_All_Ro_out_0_0_Ro_out_0
      port map (
       CE_1Hz => CE_1Hz,
       Data(31 downto 0) => Data(63 downto 32),
@@ -6839,7 +6683,7 @@ begin
       Ro_sel(2 downto 0) => Ro_sel(2 downto 0),
       Stress(0) => Stress(1)
     );
-\I_Ro_out[2].I_Ro_out\: entity work.mesure_All_Ro_out_0_0_Ro_out_1
+\I_Ro_out[2].Inst_Ro_out\: entity work.mesure_All_Ro_out_0_0_Ro_out_1
      port map (
       CE_1Hz => CE_1Hz,
       Data(31 downto 0) => Data(95 downto 64),
@@ -6849,7 +6693,7 @@ begin
       Ro_sel(2 downto 0) => Ro_sel(2 downto 0),
       Stress(0) => Stress(2)
     );
-\I_Ro_out[3].I_Ro_out\: entity work.mesure_All_Ro_out_0_0_Ro_out_2
+\I_Ro_out[3].Inst_Ro_out\: entity work.mesure_All_Ro_out_0_0_Ro_out_2
      port map (
       CE_1Hz => CE_1Hz,
       Data(31 downto 0) => Data(127 downto 96),
@@ -6869,8 +6713,8 @@ entity mesure_All_Ro_out_0_0 is
     CE_1Hz : in STD_LOGIC;
     Mode : in STD_LOGIC_VECTOR ( 5 downto 0 );
     Reset_RO : in STD_LOGIC_VECTOR ( 5 downto 0 );
-    Stress : in STD_LOGIC_VECTOR ( 3 downto 0 );
     Ro_sel : in STD_LOGIC_VECTOR ( 2 downto 0 );
+    Stress : in STD_LOGIC_VECTOR ( 3 downto 0 );
     Data : out STD_LOGIC_VECTOR ( 127 downto 0 )
   );
   attribute NotValidForBitStream : boolean;

@@ -1,0 +1,64 @@
+#include <stdio.h>
+#include <string.h>
+#include "xparameters.h"
+#include "xil_io.h"
+#include "sleep.h"
+#include "ff.h"
+#include "xstatus.h"
+
+#define BASE_ADDR XPAR_IP_CONVERSION_AXI_0_S00_AXI_BASEADDR
+
+int main() {
+    // ... (Initialisation SD identique au code précédent) ...
+
+    while(1) {
+        // Calcul du temps (Un cycle complet = 6 modes * 50s + 300s pause = 600s)
+        total_sec = cycle * 600;
+        sprintf(buffer_sd, "%d;%02d:%02d:%02d", cycle, total_sec/3600, (total_sec%3600)/60, total_sec%60);
+
+        // --- BOUCLE DES 6 MODES (k de 0 à 5) ---
+        for (int k = 0; k < 6; k++) {
+
+            // --- BOUCLE DES 4 RO PAR MODE ---
+            for (int i = 0; i < 4; i++) {
+
+                // 1. Attendre que le FPGA envoie une donnée (Signal 'Send')
+                // Ton VHDL envoie un 'Send' par RO (24 fois par cycle total)
+                while ((Xil_In32(BASE_ADDR + 4) & 0x01) == 0);
+
+                u32 ro_32bit = 0;
+                // 2. Lecture des 4 octets pour reconstituer la fréquence
+                for (int byte = 0; byte < 4; byte++) {
+                    // Attente octet prêt
+                    while ((Xil_In32(BASE_ADDR + 4) & 0x01) == 0);
+
+                    brute_val = (Xil_In32(BASE_ADDR + 0) & 0xFF);
+                    ro_32bit |= (brute_val << (byte * 8));
+
+                    // Handshake DONE (pour passer à l'octet suivant)
+                    Xil_Out32(BASE_ADDR + 8, 1);
+                    Xil_Out32(BASE_ADDR + 8, 0);
+                }
+
+                freq_mhz = (float)ro_32bit / 1000000.0f;
+
+                // 3. Stockage dans le buffer (On remplit la ligne au fur et à mesure)
+                // Cela créera : Cycle;Temps;RO_0;RO_1;RO_2;RO_3 (Mode 0) ; RO_4... (Mode 1) etc.
+                sprintf(buffer_sd + strlen(buffer_sd), ";%.3f", freq_mhz);
+
+                printf("Mode %d | RO %d | Freq: %.3f MHz\n", k, i, freq_mhz);
+            }
+        }
+
+        // 4. Fin de la ligne et écriture sur SD
+        strcat(buffer_sd, "\n");
+        res = f_open(&myFile, "STRESS.CSV", FA_OPEN_APPEND | FA_WRITE);
+        if (res == FR_OK) {
+            f_write(&myFile, buffer_sd, strlen(buffer_sd), &bw);
+            f_close(&myFile);
+        }
+
+        cycle++;
+    }
+    return 0;
+}

@@ -1,0 +1,8 @@
+//arch = zynqmp; split = false; format = BIN
+the_ROM_image:
+{
+	[fsbl_config]a53_x64
+	[bootloader]C:\Users\cmbouba\Mes_projets_pour_le_stage\Circuit_de_mesure_de_3_Ros\Circuit_de_mesure_de_3_Ros.sdk\FSBL\Debug\FSBL.elf
+	[destination_device = pl]C:\Users\cmbouba\Mes_projets_pour_le_stage\Circuit_de_mesure_de_3_Ros\Circuit_de_mesure_de_3_Ros.sdk\mesure_wrapper_hw_platform_0\mesure_wrapper.bit
+	[destination_cpu = a53-0]C:\Users\cmbouba\Mes_projets_pour_le_stage\Circuit_de_mesure_de_3_Ros\Circuit_de_mesure_de_3_Ros.sdk\mesure_24_Ros\Debug\mesure_24_Ros.elf
+}

@@ -1,22 +1,29 @@
 ----------------------------------------------------------------------------------
--- Company: Université de Bordeaux
--- Engineer: Consolé MBOUBA
+-- Company:          Université de Bordeaux
+-- Engineer:         Consolé MBOUBA
+-- 
+-- Create Date:      11.03.2026 15:08:09
+-- Design Name:      Circuit de mesure de 3 ROs
+-- Module Name:      Mux_data - Behavioral
+-- Project Name:     Circuit de mesure de 3 ROs
+-- Target Devices:   Zynq UltraScale+
+-- Tool Versions:    Vivado 2018.3
 --
--- Create Date: 11.03.2026 15:08:09
--- Design Name: Circuit de mesure de 3 ROs
--- Module Name: Mux_data - Behavioral
--- Project Name: Circuit de mesure de 3 ROs
--- Target Devices: Zynq UltraScale+
--- Tool Versions: Vivado 2018.3
--- Description: Ce module reçoit le vecteur de données provenant des 4 ROs correspondant aux 4 stress
---              et extrait l'octet spécifié par le signal Sel (5 bits). 
---              L'octet de sortie est envoyé sur l'interface AXI.
+-- Description:      
+--    Ce module multiplexeur permet d'extraire un octet spécifique (8 bits) 
+--    à partir du large vecteur de données 'Data_in' regroupant les mesures.
+--    
+--    Fonctionnement :
+--    1. Reçoit le vecteur concaténé de tous les RO (ex: 4 stress * 32 bits = 128 bits).
+--    2. Utilise le signal 'Sel' (5 bits) comme index d'octet (de 0 à 15 pour 128 bits).
+--    3. Extrait la tranche correspondante pour l'envoyer vers l'interface de sortie.
 --
--- Dependencies: Select_Data, All_Ro_Out
---
--- Revision: Version 1.0
--- Additional Comments: Indexation basée sur un signal Sel de 5 bits (0 à 31).
---                      L'extraction est découpée en tranches de 8 bits (octets).
+-- Dependencies:     All_Ro_out, Select_data
+-- 
+-- Revision:         Version 1.0 - Logique d'extraction par octet
+-- Additional Comments: 
+--    L'indexation est purement combinatoire pour minimiser la latence 
+--    avant l'envoi sur le bus AXI.
 ----------------------------------------------------------------------------------
 
 library IEEE;

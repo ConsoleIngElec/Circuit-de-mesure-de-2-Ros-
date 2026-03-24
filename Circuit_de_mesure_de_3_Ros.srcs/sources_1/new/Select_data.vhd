@@ -33,19 +33,21 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.NUMERIC_STD.ALL;
 
-entity Select_data is
+entity Select_Data is
     generic(
-        Stress_Number : integer := 4  
+        Stress_Number : positive := 4   
+    );  
+    Port ( 
+        Clk   : in  STD_LOGIC;      
+        Reset : in  STD_LOGIC;      
+        Done  : in  STD_LOGIC;        
+        Send  : in  STD_LOGIC;       
+        Sel   : out STD_LOGIC_VECTOR (4 downto 0); 
+        Allow : out STD_LOGIC         
     );
-    Port ( Clk : in STD_LOGIC;
-           Reset : in STD_LOGIC;
-           Done : in STD_LOGIC;
-           Send : in STD_LOGIC;
-           Sel : out STD_LOGIC_VECTOR (4 downto 0);
-           Allow : out STD_LOGIC);
-end Select_data;
+end Select_Data;
 
-architecture Behavioral of Select_data is
+architecture Behavioral of Select_Data is
 
     --------------------------------------------------------------------------
     -- Définition des états de la FSM
@@ -151,10 +153,11 @@ begin
     --------------------------------------------------------------------------
     -- LOGIQUE DE SORTIE
     --------------------------------------------------------------------------
--- Allow reste à '1' tant qu'on n'a pas reçu l'acquittement 'Done'
+-- Allow reste à '1' tant qu'on n'a pas reçu l'acquittement 'Done' du processeur
+
 Allow <= '1' when (Etat = Envoi or Etat = Attendre) else '0';
 
     -- Conversion de l'index J en vecteur 5 bits
     Sel <= std_logic_vector(to_unsigned(J, 5));
 
-end Behavioral;
+end Behavioral;  

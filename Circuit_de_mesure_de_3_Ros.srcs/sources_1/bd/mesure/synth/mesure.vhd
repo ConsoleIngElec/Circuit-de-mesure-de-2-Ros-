@@ -1,7 +1,7 @@
 --Copyright 1986-2018 Xilinx, Inc. All Rights Reserved.
 ----------------------------------------------------------------------------------
 --Tool Version: Vivado v.2018.3 (win64) Build 2405991 Thu Dec  6 23:38:27 MST 2018
---Date        : Fri Mar 13 15:26:17 2026
+--Date        : Tue Mar 24 09:32:51 2026
 --Host        : poste-16 running 64-bit major release  (build 9200)
 --Command     : generate_target mesure.bd
 --Design      : mesure
@@ -771,40 +771,12 @@ library UNISIM;
 use UNISIM.VCOMPONENTS.ALL;
 entity mesure is
   attribute CORE_GENERATION_INFO : string;
-  attribute CORE_GENERATION_INFO of mesure : entity is "mesure,IP_Integrator,{x_ipVendor=xilinx.com,x_ipLibrary=BlockDiagram,x_ipName=mesure,x_ipVersion=1.00.a,x_ipLanguage=VHDL,numBlks=13,numReposBlks=11,numNonXlnxBlks=1,numHierBlks=2,maxHierDepth=0,numSysgenBlks=0,numHlsBlks=0,numHdlrefBlks=5,numPkgbdBlks=0,bdsource=USER,da_axi4_cnt=2,da_clkrst_cnt=6,da_zynq_ultra_ps_e_cnt=2,synth_mode=OOC_per_IP}";
+  attribute CORE_GENERATION_INFO of mesure : entity is "mesure,IP_Integrator,{x_ipVendor=xilinx.com,x_ipLibrary=BlockDiagram,x_ipName=mesure,x_ipVersion=1.00.a,x_ipLanguage=VHDL,numBlks=13,numReposBlks=11,numNonXlnxBlks=1,numHierBlks=2,maxHierDepth=0,numSysgenBlks=0,numHlsBlks=0,numHdlrefBlks=5,numPkgbdBlks=0,bdsource=USER,da_axi4_cnt=2,da_clkrst_cnt=11,da_zynq_ultra_ps_e_cnt=2,synth_mode=OOC_per_IP}";
   attribute HW_HANDOFF : string;
   attribute HW_HANDOFF of mesure : entity is "mesure.hwdef";
 end mesure;
 
 architecture STRUCTURE of mesure is
-  component mesure_Gen_mode_0_0 is
-  port (
-    Clk : in STD_LOGIC;
-    Reset : in STD_LOGIC;
-    CE_1Hz : out STD_LOGIC;
-    Mode : out STD_LOGIC_VECTOR ( 5 downto 0 );
-    Reset_RO : out STD_LOGIC_VECTOR ( 5 downto 0 );
-    RO_sel : out STD_LOGIC_VECTOR ( 2 downto 0 );
-    Send : out STD_LOGIC
-  );
-  end component mesure_Gen_mode_0_0;
-  component mesure_Mux_data_0_0 is
-  port (
-    Data_in : in STD_LOGIC_VECTOR ( 127 downto 0 );
-    Sel : in STD_LOGIC_VECTOR ( 4 downto 0 );
-    Data_out : out STD_LOGIC_VECTOR ( 7 downto 0 )
-  );
-  end component mesure_Mux_data_0_0;
-  component mesure_Select_data_0_0 is
-  port (
-    Clk : in STD_LOGIC;
-    Reset : in STD_LOGIC;
-    Done : in STD_LOGIC;
-    Send : in STD_LOGIC;
-    Sel : out STD_LOGIC_VECTOR ( 4 downto 0 );
-    Allow : out STD_LOGIC
-  );
-  end component mesure_Select_data_0_0;
   component mesure_IP_Conversion_Axi_0_0 is
   port (
     Data : in STD_LOGIC_VECTOR ( 7 downto 0 );
@@ -906,27 +878,55 @@ architecture STRUCTURE of mesure is
     peripheral_aresetn : out STD_LOGIC_VECTOR ( 0 to 0 )
   );
   end component mesure_rst_ps8_0_100M_1;
+  component mesure_Mux_data_0_0 is
+  port (
+    Data_in : in STD_LOGIC_VECTOR ( 127 downto 0 );
+    Sel : in STD_LOGIC_VECTOR ( 4 downto 0 );
+    Data_out : out STD_LOGIC_VECTOR ( 7 downto 0 )
+  );
+  end component mesure_Mux_data_0_0;
+  component mesure_Gen_mode_0_1 is
+  port (
+    Clk : in STD_LOGIC;
+    Reset : in STD_LOGIC;
+    CE_1Hz : out STD_LOGIC;
+    Mode : out STD_LOGIC_VECTOR ( 5 downto 0 );
+    Reset_RO : out STD_LOGIC_VECTOR ( 5 downto 0 );
+    Ro_sel : out STD_LOGIC_VECTOR ( 2 downto 0 );
+    Send : out STD_LOGIC
+  );
+  end component mesure_Gen_mode_0_1;
+  component mesure_Select_Data_0_1 is
+  port (
+    Clk : in STD_LOGIC;
+    Reset : in STD_LOGIC;
+    Done : in STD_LOGIC;
+    Send : in STD_LOGIC;
+    Sel : out STD_LOGIC_VECTOR ( 4 downto 0 );
+    Allow : out STD_LOGIC
+  );
+  end component mesure_Select_Data_0_1;
   component mesure_All_Ro_out_0_0 is
   port (
     CE_1Hz : in STD_LOGIC;
     Mode : in STD_LOGIC_VECTOR ( 5 downto 0 );
     Reset_RO : in STD_LOGIC_VECTOR ( 5 downto 0 );
-    Stress : in STD_LOGIC_VECTOR ( 3 downto 0 );
     Ro_sel : in STD_LOGIC_VECTOR ( 2 downto 0 );
+    Stress : in STD_LOGIC_VECTOR ( 3 downto 0 );
     Data : out STD_LOGIC_VECTOR ( 127 downto 0 )
   );
   end component mesure_All_Ro_out_0_0;
   signal All_Ro_out_0_Data : STD_LOGIC_VECTOR ( 127 downto 0 );
   signal Gen_mode_0_CE_1Hz : STD_LOGIC;
   signal Gen_mode_0_Mode : STD_LOGIC_VECTOR ( 5 downto 0 );
-  signal Gen_mode_0_RO_sel : STD_LOGIC_VECTOR ( 2 downto 0 );
   signal Gen_mode_0_Reset_RO : STD_LOGIC_VECTOR ( 5 downto 0 );
+  signal Gen_mode_0_Ro_sel : STD_LOGIC_VECTOR ( 2 downto 0 );
   signal Gen_mode_0_Send : STD_LOGIC;
   signal Gen_stress_0_Stress : STD_LOGIC_VECTOR ( 3 downto 0 );
   signal IP_Conversion_Axi_0_Done : STD_LOGIC;
   signal Mux_data_0_Data_out : STD_LOGIC_VECTOR ( 7 downto 0 );
-  signal Select_data_0_Allow : STD_LOGIC;
-  signal Select_data_0_Sel : STD_LOGIC_VECTOR ( 4 downto 0 );
+  signal Select_Data_0_Allow : STD_LOGIC;
+  signal Select_Data_0_Sel : STD_LOGIC_VECTOR ( 4 downto 0 );
   signal ps8_0_axi_periph_M00_AXI_ARADDR : STD_LOGIC_VECTOR ( 39 downto 0 );
   signal ps8_0_axi_periph_M00_AXI_ARPROT : STD_LOGIC_VECTOR ( 2 downto 0 );
   signal ps8_0_axi_periph_M00_AXI_ARREADY : STD_LOGIC;
@@ -1000,17 +1000,17 @@ All_Ro_out_0: component mesure_All_Ro_out_0_0
       Data(127 downto 0) => All_Ro_out_0_Data(127 downto 0),
       Mode(5 downto 0) => Gen_mode_0_Mode(5 downto 0),
       Reset_RO(5 downto 0) => Gen_mode_0_Reset_RO(5 downto 0),
-      Ro_sel(2 downto 0) => Gen_mode_0_RO_sel(2 downto 0),
+      Ro_sel(2 downto 0) => Gen_mode_0_Ro_sel(2 downto 0),
       Stress(3 downto 0) => Gen_stress_0_Stress(3 downto 0)
     );
-Gen_mode_0: component mesure_Gen_mode_0_0
+Gen_mode_0: component mesure_Gen_mode_0_1
      port map (
       CE_1Hz => Gen_mode_0_CE_1Hz,
       Clk => zynq_ultra_ps_e_0_pl_clk0,
       Mode(5 downto 0) => Gen_mode_0_Mode(5 downto 0),
-      RO_sel(2 downto 0) => Gen_mode_0_RO_sel(2 downto 0),
       Reset => util_vector_logic_0_Res(0),
       Reset_RO(5 downto 0) => Gen_mode_0_Reset_RO(5 downto 0),
+      Ro_sel(2 downto 0) => Gen_mode_0_Ro_sel(2 downto 0),
       Send => Gen_mode_0_Send
     );
 Gen_stress_0: component mesure_Gen_stress_0_1
@@ -1021,7 +1021,7 @@ Gen_stress_0: component mesure_Gen_stress_0_1
     );
 IP_Conversion_Axi_0: component mesure_IP_Conversion_Axi_0_0
      port map (
-      Allow => Select_data_0_Allow,
+      Allow => Select_Data_0_Allow,
       Data(7 downto 0) => Mux_data_0_Data_out(7 downto 0),
       Done => IP_Conversion_Axi_0_Done,
       s00_axi_aclk => zynq_ultra_ps_e_0_pl_clk0,
@@ -1050,15 +1050,15 @@ Mux_data_0: component mesure_Mux_data_0_0
      port map (
       Data_in(127 downto 0) => All_Ro_out_0_Data(127 downto 0),
       Data_out(7 downto 0) => Mux_data_0_Data_out(7 downto 0),
-      Sel(4 downto 0) => Select_data_0_Sel(4 downto 0)
+      Sel(4 downto 0) => Select_Data_0_Sel(4 downto 0)
     );
-Select_data_0: component mesure_Select_data_0_0
+Select_Data_0: component mesure_Select_Data_0_1
      port map (
-      Allow => Select_data_0_Allow,
+      Allow => Select_Data_0_Allow,
       Clk => zynq_ultra_ps_e_0_pl_clk0,
       Done => IP_Conversion_Axi_0_Done,
       Reset => util_vector_logic_0_Res(0),
-      Sel(4 downto 0) => Select_data_0_Sel(4 downto 0),
+      Sel(4 downto 0) => Select_Data_0_Sel(4 downto 0),
       Send => Gen_mode_0_Send
     );
 ps8_0_axi_periph: entity work.mesure_ps8_0_axi_periph_1

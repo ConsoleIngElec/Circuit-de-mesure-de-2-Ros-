@@ -1,0 +1,112 @@
+#include <stdio.h>
+#include <string.h>
+#include "platform.h"
+#include "xparameters.h"
+#include "xil_io.h"
+#include "xsdps.h"
+#include "ff.h"
+#include "xtime_l.h"
+#include "sleep.h"
+
+#define BASE_ADDR          XPAR_IP_CONVERSION_AXI_0_S00_AXI_BASEADDR
+#define REG_DATA_OFFSET    0
+#define REG_ALLOW_OFFSET   4
+#define REG_DONE_OFFSET    8
+
+static FATFS fatfs;
+// VERIFIE BIEN L'EXTENSION ICI : .CSV
+char *log_file = "Veillissement_des_transistors.csv";
+int sd_was_present = 0;
+
+void write_to_sd(char *data) {
+    FIL fil;
+    UINT bw;
+    FRESULT res;
+
+    // Tentative d'ouverture
+    res = f_open(&fil, log_file, FA_WRITE | FA_OPEN_APPEND);
+
+    if (res == FR_OK) {
+        if (sd_was_present == 0) {
+            printf("\n  [INFO] Flux SD retabli. Ecriture en cours...\n");
+            sd_was_present = 1;
+        }
+        f_write(&fil, data, strlen(data), &bw);
+        f_sync(&fil); // FORCE l'ecriture physique sur la carte (Tres important !)
+        f_close(&fil);
+    } else {
+        if (sd_was_present == 1) {
+            printf("\n  [!!! ERREUR SD !!!] Impossible d'ecrire. Carte retiree ?\n");
+            sd_was_present = 0;
+            f_mount(NULL, "0:/", 0); // Demontage forcé pour nettoyer les erreurs
+        }
+    }
+}
+
+int main() {
+    init_platform();
+    u32 byte_read, frequency_32bit;
+    int k, ro_idx, b;
+    int cycle_count = 1;
+    char buffer[512], time_str[40], mode_label[20];
+    XTime tStart, tNow;
+
+    printf("\n--- INITIALISATION SYSTEME BORDEAUX ---\n");
+
+    // Premier montage
+    if (f_mount(&fatfs, "0:/", 1) == FR_OK) {
+        sd_was_present = 1;
+        write_to_sd("Cycle;Temps_Texte;Temps_Sec;Mode;Label;RO_Global_ID;Freq_MHz\n");
+        printf("[SD] Carte prete.\n");
+    }
+
+    XTime_GetTime(&tStart);
+
+    while(1) {
+        printf("\n>>> CYCLE %06d\n", cycle_count);
+
+        for (k = 0; k < 6; k++) {
+            // Si la carte a été retirée, on essaie de la remonter avant chaque mode
+            if (sd_was_present == 0) {
+                f_mount(&fatfs, "0:/", 1);
+            }
+
+            while ((Xil_In32(BASE_ADDR + REG_ALLOW_OFFSET) & 0x01) == 0);
+
+            XTime_GetTime(&tNow);
+            double elapsed = (double)(tNow - tStart) / COUNTS_PER_SECOND;
+            format_time(elapsed, time_str);
+
+            if (k < 3) sprintf(mode_label, "RO_B %d", k + 1);
+            else       sprintf(mode_label, "RO_LP %d", k - 2);
+
+            printf("\n  CAPTURE %s | Mode %d: %s\n", time_str, k + 1, mode_label);
+
+            for (ro_idx = 0; ro_idx < 4; ro_idx++) {
+                frequency_32bit = 0;
+                for (b = 0; b < 4; b++) {
+                    byte_read = Xil_In32(BASE_ADDR + REG_DATA_OFFSET) & 0xFF;
+                    frequency_32bit |= (byte_read << (b * 8));
+                    Xil_Out32(BASE_ADDR + REG_DONE_OFFSET, 1);
+                    Xil_Out32(BASE_ADDR + REG_DONE_OFFSET, 0);
+                    for(volatile int d = 0; d < 500; d++);
+                }
+
+                float freq_mhz = (float)frequency_32bit / 1000000.0;
+                int global_id = (k * 4) + ro_idx + 1;
+
+                // Affichage Console toujours prioritaire
+                printf("    RO %d : %.3f MHz\n", global_id, freq_mhz);
+
+                // Écriture sécurisée
+                sprintf(buffer, "%d;%s;%.0f;Mode %d;%s;RO %d;%.3f\n",
+                        cycle_count, time_str, elapsed, k + 1, mode_label, global_id, freq_mhz);
+                write_to_sd(buffer);
+            }
+            while ((Xil_In32(BASE_ADDR + REG_ALLOW_OFFSET) & 0x01) == 1);
+        }
+        cycle_count++;
+        sleep(1); // Petite pause pour stabiliser le CPU
+    }
+    return 0;
+}

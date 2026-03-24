@@ -1,24 +1,32 @@
 ----------------------------------------------------------------------------------
--- Company: Université de Bordeaux
--- Engineer: Consolé MBOUBA
+-- Company:          Université de Bordeaux
+-- Engineer:         Consolé MBOUBA
 -- 
--- Create Date: 11.03.2026 12:02:42
--- Design Name: Circuit de mesure de 3 Ros
--- Module Name: Ro_out - Behavioral
--- Project Name: Circuit de mesure de 3 Ros
--- Target Devices: Zynq UltraScale +
--- Tool Versions: Vivado 2018.3
--- Description: Module de haut niveau (Top-level) qui regroupe un banc d'oscillateurs 
---               en anneau (RO), un multiplexeur pour la sélection, et un bloc de 
---               mesure de fréquence via un compteur.
+-- Create Date:      11.03.2026 12:02:42
+-- Design Name:      Circuit de mesure de 3 Ros
+-- Module Name:      Ro_out - Behavioral
+-- Project Name:     Circuit de mesure de 3 Ros
+-- Target Devices:   Zynq UltraScale +
+-- Tool Versions:    Vivado 2018.3
+--
+-- Description:      
+--    Module de haut niveau (Top-level) du système de caractérisation des 
+--    Oscillateurs en Anneau (RO). Ce bloc réalise l'interface entre le matériel 
+--    et la mesure de fréquence.
+--    
+--    Fonctionnement :
+--    1. Instancie un banc de ROs (Ro_bench) paramétrable.
+--    2. Sélectionne un RO spécifique via un Multiplexeur (Mux_Ro).
+--    3. Mesure la fréquence du RO sélectionné en utilisant ses oscillations 
+--       comme horloge de comptage pendant une fenêtre de temps précise (1s).
+--
+-- Dependencies:     Ro_bench, Mux_Ro, Measure_F_Ro
 -- 
--- Dependencies: Ro_bench, Mux_Ro, Measure_F_Ro
--- 
--- Revision: Version 1.0
--- Revision 0.01 - File Created
--- Additional Comments: Le signal CE_1Hz nous sert de Enable pour la mésure de la fréquence
--- et la sortie S_RO nous sert de Clock pour la mésure de la fréquence, car c'est la fréquence
--- du Ro qu'on mésure
+-- Revision:         Version 1.0 - Structure de base validée
+-- Additional Comments: 
+--    - Le signal CE_1Hz définit la fenêtre temporelle de mesure.
+--    - La sortie S_int du multiplexeur est utilisée comme signal d'horloge (Clk) 
+--      pour le bloc Measure_F_Ro.
 ----------------------------------------------------------------------------------
 
 
@@ -31,85 +39,101 @@ entity Ro_out is
         Architecture_number : integer := 2; 
         RO_by_architecture  : integer := 3
     );
-    Port ( Reset : in STD_LOGIC;
-           CE_1Hz : in STD_LOGIC;
-           RO_sel : in STD_LOGIC_VECTOR(2 downto 0);
-           Mode : in STD_LOGIC_VECTOR(Architecture_number * RO_by_architecture - 1 downto 0);
-           Stress : in STD_LOGIC;
-           Reset_RO : in STD_LOGIC_VECTOR(Architecture_number * RO_by_architecture - 1 downto 0);
-           F_Ro : out STD_LOGIC_VECTOR (31 downto 0));
+    Port ( 
+        Reset    : in  std_logic;
+        CE_1Hz   : in  std_logic; 
+        RO_sel   : in  std_logic_vector(2 downto 0);
+        Mode     : in  std_logic_vector(Architecture_number * RO_by_architecture - 1 downto 0);
+        Stress   : in  std_logic;
+        Reset_RO : in  std_logic_vector(Architecture_number * RO_by_architecture - 1 downto 0);
+        F_Ro     : out std_logic_vector(31 downto 0)
+    );
 end Ro_out;
 
 architecture Behavioral of Ro_out is
 
-Component Ro_bench is
-    generic(
-        Architecture_number : integer := 2; 
-        RO_by_architecture  : integer := 3
+   -- ==========================================================================
+    -- DÉCLARATION DES COMPOSANTS
+    -- ==========================================================================
+
+    -- Banc d'oscillateurs : génère les signaux oscillants
+    component Ro_bench is
+        generic(
+            Architecture_number : integer; 
+            RO_by_architecture  : integer
         );
-    Port ( Stress : in STD_LOGIC;
-           Mode : in STD_LOGIC_VECTOR(Architecture_number * RO_by_architecture - 1 downto 0);
-           Reset_RO : in STD_LOGIC_VECTOR(Architecture_number * RO_by_architecture - 1 downto 0);
-           S_Ro : out STD_LOGIC_VECTOR(Architecture_number * RO_by_architecture - 1 downto 0));
-end component;
-
-Component Mux_Ro is
-    generic(
-        Architecture_number : integer := 2; 
-        RO_by_architecture  : integer := 3
+        Port ( 
+            Stress   : in  std_logic;
+            Mode     : in  std_logic_vector(Architecture_number * RO_by_architecture - 1 downto 0);
+            Reset_RO : in  std_logic_vector(Architecture_number * RO_by_architecture - 1 downto 0);
+            S_Ro     : out std_logic_vector(Architecture_number * RO_by_architecture - 1 downto 0)
         );
-    Port ( S_Ro : in STD_LOGIC_VECTOR(Architecture_number * RO_by_architecture - 1 downto 0);
-           Ro_sel : in STD_LOGIC_VECTOR (2 downto 0);
-           S : out STD_LOGIC);
-end component;
+    end component;
 
- component Measure_F_Ro is
-    Port ( Clk : in STD_LOGIC;
-           Reset : in STD_LOGIC;
-           Enable : in STD_LOGIC;
-           Count : out STD_LOGIC_VECTOR (31 downto 0));
-end component;
+    -- Multiplexeur : aiguille un seul signal RO vers la sortie
+    component Mux_Ro is
+        generic(
+            Architecture_number : integer; 
+            RO_by_architecture  : integer
+        );
+        Port ( 
+            S_Ro   : in  std_logic_vector(Architecture_number * RO_by_architecture - 1 downto 0);
+            Ro_sel : in  std_logic_vector(2 downto 0);
+            S      : out std_logic
+        );
+    end component;
 
-signal S_Ro_int : STD_LOGIC_VECTOR(Architecture_number * RO_by_architecture - 1 downto 0);
-signal S_int : STD_LOGIC;
+    -- Fréquencemètre : compte les fronts montants du RO sélectionné
+    component Measure_F_Ro is
+        Port ( 
+           Clk    : in  STD_LOGIC;  -- Horloge de comptage (Signal du RO)
+           Reset  : in  STD_LOGIC;  
+           Enable : in  STD_LOGIC;  -- Fenêtre temporelle (Gate)
+           Count  : out STD_LOGIC_VECTOR (31 downto 0)
+        );
+    end component;
+
+    -- ==========================================================================
+    -- SIGNAUX INTERNES
+    -- ==========================================================================
+    signal S_Ro_int : std_logic_vector(Architecture_number * RO_by_architecture - 1 downto 0);
+    signal S_int    : std_logic; -- Signal sélectionné issu du MUX
 
 begin
 
-I_Ro_bench :Ro_bench 
-generic map
-(
-    Architecture_number => Architecture_number, 
-    RO_by_architecture => RO_by_architecture
-)
-port map
-(
-    Stress => Stress,
-    Mode => Mode,
-    Reset_RO => Reset_RO,
-    S_Ro => S_Ro_int
-);
+    -- 1. Instance du banc de ROs : Génération de l'ensemble des fréquences
+    I_Ro_bench : Ro_bench 
+    generic map (
+        Architecture_number => Architecture_number, 
+        RO_by_architecture  => RO_by_architecture
+    )
+    port map (
+        Stress   => Stress,
+        Mode     => Mode,
+        Reset_RO => Reset_RO,
+        S_Ro     => S_Ro_int
+    );
 
-I_Mux_Ro : Mux_Ro 
-generic map
-(
-    Architecture_number => Architecture_number, 
-    RO_by_architecture => RO_by_architecture
-)
-port map 
-(
-      S_Ro =>  S_Ro_int,
-       Ro_sel => Ro_sel,
-       S => S_int
-);
+    -- 2. Instance du Multiplexeur : Sélection logicielle du RO à mesurer
+    I_Mux_Ro : Mux_Ro 
+    generic map (
+        Architecture_number => Architecture_number, 
+        RO_by_architecture  => RO_by_architecture
+    )
+    port map (
+        S_Ro   => S_Ro_int,
+        Ro_sel => Ro_sel,
+        S      => S_int
+    );
 
-I_Measure_F_Ro : Measure_F_Ro 
-port map 
-(
-    Clk => S_int,
-    Reset => Reset,
-    Enable => CE_1Hz,
-    Count  =>F_Ro
-);
-
+    -- 3. Instance du bloc de mesure : Conversion fréquence -> valeur numérique
+    -- NOTE : On injecte S_int sur le port Clk car on veut compter les oscillations du RO.
+    I_Measure_F_Ro : Measure_F_Ro 
+    port map (
+        Clk    => S_int,   
+        Reset  => Reset,
+        Enable => CE_1Hz,   
+        Count  => F_Ro     -- Valeur finale de la fréquence
+    );
 
 end Behavioral;
