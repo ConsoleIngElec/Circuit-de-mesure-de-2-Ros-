@@ -1,7 +1,7 @@
 --Copyright 1986-2018 Xilinx, Inc. All Rights Reserved.
 ----------------------------------------------------------------------------------
 --Tool Version: Vivado v.2018.3 (win64) Build 2405991 Thu Dec  6 23:38:27 MST 2018
---Date        : Thu Mar 26 17:42:21 2026
+--Date        : Fri Mar 27 12:21:43 2026
 --Host        : poste-16 running 64-bit major release  (build 9200)
 --Command     : generate_target mesure.bd
 --Design      : mesure
@@ -1004,56 +1004,6 @@ architecture STRUCTURE of mesure is
     peripheral_aresetn : out STD_LOGIC_VECTOR ( 0 to 0 )
   );
   end component mesure_rst_ps8_0_100M_1;
-  component mesure_Gen_mode_0_1 is
-  port (
-    Clk : in STD_LOGIC;
-    Reset : in STD_LOGIC;
-    CE_1Hz : out STD_LOGIC;
-    Mode : out STD_LOGIC_VECTOR ( 5 downto 0 );
-    Reset_RO : out STD_LOGIC_VECTOR ( 5 downto 0 );
-    Ro_sel : out STD_LOGIC_VECTOR ( 2 downto 0 );
-    Send : out STD_LOGIC
-  );
-  end component mesure_Gen_mode_0_1;
-  component mesure_Gen_stress_0_1 is
-  port (
-    Clk : in STD_LOGIC;
-    Reset : in STD_LOGIC;
-    Stress : out STD_LOGIC_VECTOR ( 3 downto 0 )
-  );
-  end component mesure_Gen_stress_0_1;
-  component mesure_Select_Data_0_1 is
-  port (
-    Clk : in STD_LOGIC;
-    Reset : in STD_LOGIC;
-    Done : in STD_LOGIC;
-    Send : in STD_LOGIC;
-    Sel : out STD_LOGIC_VECTOR ( 4 downto 0 );
-    Allow : out STD_LOGIC
-  );
-  end component mesure_Select_Data_0_1;
-  component mesure_De_Mux_0_0 is
-  port (
-    Clk : in STD_LOGIC;
-    Reset : in STD_LOGIC;
-    ED1 : in STD_LOGIC_VECTOR ( 15 downto 0 );
-    Sel : in STD_LOGIC_VECTOR ( 5 downto 0 );
-    Enable : in STD_LOGIC;
-    SD1 : out STD_LOGIC_VECTOR ( 15 downto 0 );
-    SD2 : out STD_LOGIC_VECTOR ( 15 downto 0 );
-    SS1 : out STD_LOGIC;
-    SS2 : out STD_LOGIC
-  );
-  end component mesure_De_Mux_0_0;
-  component mesure_Mux_data_0_0 is
-  port (
-    Data_in : in STD_LOGIC_VECTOR ( 127 downto 0 );
-    Temp2 : in STD_LOGIC_VECTOR ( 15 downto 0 );
-    Voltage2 : in STD_LOGIC_VECTOR ( 15 downto 0 );
-    Sel : in STD_LOGIC_VECTOR ( 4 downto 0 );
-    Data_out : out STD_LOGIC_VECTOR ( 7 downto 0 )
-  );
-  end component mesure_Mux_data_0_0;
   component mesure_IP_Conversion_Axi_0_0 is
   port (
     Data : in STD_LOGIC_VECTOR ( 7 downto 0 );
@@ -1096,6 +1046,67 @@ architecture STRUCTURE of mesure is
     Data : out STD_LOGIC_VECTOR ( 127 downto 0 )
   );
   end component mesure_All_Ro_out_0_0;
+  component mesure_Mux_data_0_0 is
+  port (
+    Data_in : in STD_LOGIC_VECTOR ( 127 downto 0 );
+    Temp2 : in STD_LOGIC_VECTOR ( 15 downto 0 );
+    Voltage2 : in STD_LOGIC_VECTOR ( 15 downto 0 );
+    Sel : in STD_LOGIC_VECTOR ( 4 downto 0 );
+    Data_out : out STD_LOGIC_VECTOR ( 7 downto 0 )
+  );
+  end component mesure_Mux_data_0_0;
+  component mesure_Gen_stress_0_1 is
+  port (
+    Clk : in STD_LOGIC;
+    Reset : in STD_LOGIC;
+    Stress : out STD_LOGIC_VECTOR ( 3 downto 0 )
+  );
+  end component mesure_Gen_stress_0_1;
+  component mesure_Gen_mode_0_1 is
+  port (
+    Clk : in STD_LOGIC;
+    Reset : in STD_LOGIC;
+    CE_1Hz : out STD_LOGIC;
+    Mode : out STD_LOGIC_VECTOR ( 5 downto 0 );
+    Reset_RO : out STD_LOGIC_VECTOR ( 5 downto 0 );
+    Ro_sel : out STD_LOGIC_VECTOR ( 2 downto 0 );
+    Send : out STD_LOGIC
+  );
+  end component mesure_Gen_mode_0_1;
+  component mesure_Select_Data_0_1 is
+  port (
+    Clk : in STD_LOGIC;
+    Reset : in STD_LOGIC;
+    Done : in STD_LOGIC;
+    Send : in STD_LOGIC;
+    Sel : out STD_LOGIC_VECTOR ( 4 downto 0 );
+    Allow : out STD_LOGIC
+  );
+  end component mesure_Select_Data_0_1;
+  component mesure_De_Mux_0_0 is
+  port (
+    Clk : in STD_LOGIC;
+    Reset : in STD_LOGIC;
+    ED1 : in STD_LOGIC_VECTOR ( 15 downto 0 );
+    Sel : in STD_LOGIC_VECTOR ( 5 downto 0 );
+    Enable : in STD_LOGIC;
+    SD1 : out STD_LOGIC_VECTOR ( 15 downto 0 );
+    SD2 : out STD_LOGIC_VECTOR ( 15 downto 0 );
+    SS1 : out STD_LOGIC;
+    SS2 : out STD_LOGIC
+  );
+  end component mesure_De_Mux_0_0;
+  component mesure_Hardware_Watchdog_0_0 is
+  port (
+    Clk : in STD_LOGIC;
+    Reset : in STD_LOGIC;
+    Temp1 : in STD_LOGIC_VECTOR ( 15 downto 0 );
+    Voltage1 : in STD_LOGIC_VECTOR ( 15 downto 0 );
+    Emergency_Stop : out STD_LOGIC;
+    Alarm_Temp : out STD_LOGIC;
+    Alarm_Volt : out STD_LOGIC
+  );
+  end component mesure_Hardware_Watchdog_0_0;
   component mesure_Temp_Voltage_Avarage_0_0 is
   port (
     Clk : in STD_LOGIC;
@@ -1118,17 +1129,6 @@ architecture STRUCTURE of mesure is
     PWM_Out : out STD_LOGIC
   );
   end component mesure_PWM_Motor_0_0;
-  component mesure_Hardware_Watchdog_0_0 is
-  port (
-    Clk : in STD_LOGIC;
-    Reset : in STD_LOGIC;
-    Temp1 : in STD_LOGIC_VECTOR ( 15 downto 0 );
-    Voltage1 : in STD_LOGIC_VECTOR ( 15 downto 0 );
-    Emergency_Stop : out STD_LOGIC;
-    Alarm_Temp : out STD_LOGIC;
-    Alarm_Volt : out STD_LOGIC
-  );
-  end component mesure_Hardware_Watchdog_0_0;
   signal All_Ro_out_0_Data : STD_LOGIC_VECTOR ( 127 downto 0 );
   signal De_Mux_0_SD1 : STD_LOGIC_VECTOR ( 15 downto 0 );
   signal De_Mux_0_SD2 : STD_LOGIC_VECTOR ( 15 downto 0 );

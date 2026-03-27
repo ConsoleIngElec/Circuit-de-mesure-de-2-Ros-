@@ -8,11 +8,22 @@
 #include "xtime_l.h"
 #include "sleep.h"
 
-#define BASE_ADDR          XPAR_IP_CONVERSION_AXI_0_S00_AXI_BASEADDR
-#define REG_DATA_OFFSET    0
-#define REG_ALLOW_OFFSET   4
-#define REG_DONE_OFFSET    8
+// --- ADRESSES DE BASE DE L'IP ---
+#define BASE_ADDR            XPAR_IP_CONVERSION_AXI_0_S00_AXI_BASEADDR
 
+// --- OFFSETS DES REGISTRES (Basés sur ton VHDL) ---
+#define REG_DATA_ALLOW_OFFSET  0   // slv_reg0 : Data et signal Allow
+#define REG_TEMP_VOLT_OFFSET   4   // slv_reg1 : Capteurs Temp et Tension
+#define REG_DONE_OFFSET        8   // slv_reg2 : Signal de validation Done
+#define REG_DUTY_CYCLE_OFFSET  12  // slv_reg3 : Contrôle du moteur (PWM)
+
+// --- MASQUES DE BITS (Pour isoler les données) ---
+#define MASK_DATA              0xFF     // Les 8 premiers bits
+#define MASK_ALLOW             0x100    // Le 9ème bit (2^8 = 256)
+#define MASK_TEMP              0xFFFF   // Les 16 premiers bits (0x4)
+#define MASK_VOLT              0xFFFF0000 // Les 16 derniers bits (0x4)
+
+           ///// Les stress
 const char *stress_label[4] = {
     "DC:  0",
     "DC:  1",
@@ -224,7 +235,7 @@ int main() {
 
             check_sd_card();
 
-            while ((Xil_In32(BASE_ADDR + REG_ALLOW_OFFSET) & 0x01) == 0);
+            while ((Xil_In32(BASE_ADDR + REG_DATA_ALLOW_OFFSET) & MASK_ALLOW) == 0);
 
             XTime_GetTime(&tNow);
             double elapsed = (double)(tNow - tStart) / COUNTS_PER_SECOND;
@@ -248,7 +259,7 @@ int main() {
                 frequency_32bit = 0;
 
                 for (b = 0; b < 4; b++) {
-                    byte_read = Xil_In32(BASE_ADDR + REG_DATA_OFFSET) & 0xFF;
+                    byte_read = Xil_In32(BASE_ADDR + REG_DATA_ALLOW_OFFSET) & 0xFF;
                     frequency_32bit |= (byte_read << (b * 8));
 
                     Xil_Out32(BASE_ADDR + REG_DONE_OFFSET, 1);
@@ -274,7 +285,7 @@ int main() {
 
             printf("\n");
 
-            while ((Xil_In32(BASE_ADDR + REG_ALLOW_OFFSET) & 0x01) == 1);
+            while ((Xil_In32(BASE_ADDR + REG_DATA_ALLOW_OFFSET) & MASK_ALLOW) != 0);
         }
 
         write_data_line(cycle_count);
