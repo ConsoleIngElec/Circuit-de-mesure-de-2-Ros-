@@ -608,5 +608,16 @@ set_property ALLOW_COMBINATORIAL_LOOPS true [get_nets {mesure_i/All_Ro_out_0/U0/
 
 
 # Sortie PWM sur le connecteur Low Speed Pin 23 (GPIO-G)
-set_property PACKAGE_PIN B9 [get_ports pwm_out_moteur]
-set_property IOSTANDARD LVCMOS18 [get_ports pwm_out_moteur]
+set_property PACKAGE_PIN B9 [get_ports PWM_Out]
+set_property IOSTANDARD LVCMOS18 [get_ports PWM_Out]
+
+
+# 1. Autoriser les boucles (sinon erreur critique)
+set_property ALLOW_COMBINATIONAL_LOOPS TRUE [get_nets -hierarchical -filter {NAME =~ *ring*}]
+
+# 2. Dire à Vivado d'ignorer le timing de All_Ro_out_0
+# Cela permet de finir l'implémentation en quelques minutes au lieu de plusieurs heures
+set_false_path -through [get_cells -hierarchical -filter {NAME =~ *All_Ro_out_0*}]
+
+# 3. Désactiver l'optimisation poussée qui cherche à supprimer les boucles
+set_property SEVERITY {Warning} [get_drc_checks LUTLP-1]
