@@ -19,7 +19,7 @@
 --    3. Le multiplexage temporel : Alternance entre la mesure de 6 ROs (50s chacun) 
 --       et une phase de pause thermique/stress de 5 minutes (300s).
 --
--- Dépendances :     Aucune (Code matériel RTL standard)
+-- Dépendances :    None
 -- 
 -- Révision :        Version 1.1 - Optimisation du pulse 'Send' (10ns)
 -- Commentaires additionnels : 
@@ -174,10 +174,16 @@ begin
     ------------------------------------------------------------------
     -- 3. GÉNÉRATION DE L'IMPULSION DE SORTIE (10ns)
     ------------------------------------------------------------------
-    -- On génère Send uniquement au début (front montant) de pulse_1s
-    -- et seulement si la FSM a levé le drapeau send_request.
+    -- [Send] Impulsion de capture calibrée sur une période d'horloge (10 ns).
+    -- La FSM lève le drapeau interne 'send_request' uniquement à T=25s (MESURE_RO).
+    -- Ce signal synchronisé indique à l'AXI_Lite que la mesure est stable pour le PS.
     
     Send <= '1' when (pulse_1s = '1' and timer_sec = 25 and current_state = MESURE_RO) else '0';
+    
+    
+    --------------------------------------------------------------------------
+    -- 4. AUTRES SORTIES DES DONNÉES
+    --------------------------------------------------------------------------
 
     -- Affectation des autres sorties
     Ro_sel <= std_logic_vector(to_unsigned(k, 3));

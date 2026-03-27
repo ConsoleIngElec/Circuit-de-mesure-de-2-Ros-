@@ -20,7 +20,7 @@
 --
 -- Dependencies:     Ro_B, Ro_path, Gen_stress
 -- 
--- Revision:         Version 1.0 - Instanciation paramétrable
+-- Revision:         Version 1.0
 -- Additional Comments: 
 --    L'attribut DONT_TOUCH est appliqué sur les sorties pour empêcher Vivado 
 --    de supprimer les inverseurs en cascade lors de la synthèse.

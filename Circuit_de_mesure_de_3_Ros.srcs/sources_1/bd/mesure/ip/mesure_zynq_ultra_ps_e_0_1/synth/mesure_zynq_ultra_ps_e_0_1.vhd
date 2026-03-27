@@ -95,6 +95,8 @@ ENTITY mesure_zynq_ultra_ps_e_0_1 IS
     maxigp0_rready : OUT STD_LOGIC;
     maxigp0_awqos : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
     maxigp0_arqos : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
+    pl_ps_irq0 : IN STD_LOGIC_VECTOR(0 DOWNTO 0);
+    pl_ps_irq1 : IN STD_LOGIC_VECTOR(0 DOWNTO 0);
     pl_resetn0 : OUT STD_LOGIC;
     pl_clk0 : OUT STD_LOGIC
   );
@@ -1647,6 +1649,10 @@ ARCHITECTURE mesure_zynq_ultra_ps_e_0_1_arch OF mesure_zynq_ultra_ps_e_0_1 IS
   ATTRIBUTE X_INTERFACE_INFO OF pl_clk0: SIGNAL IS "xilinx.com:signal:clock:1.0 PL_CLK0 CLK";
   ATTRIBUTE X_INTERFACE_PARAMETER OF pl_resetn0: SIGNAL IS "XIL_INTERFACENAME PL_RESETN0, POLARITY ACTIVE_LOW, INSERT_VIP 0";
   ATTRIBUTE X_INTERFACE_INFO OF pl_resetn0: SIGNAL IS "xilinx.com:signal:reset:1.0 PL_RESETN0 RST";
+  ATTRIBUTE X_INTERFACE_PARAMETER OF pl_ps_irq1: SIGNAL IS "XIL_INTERFACENAME PL_PS_IRQ1, SENSITIVITY LEVEL_HIGH, PortWidth 1";
+  ATTRIBUTE X_INTERFACE_INFO OF pl_ps_irq1: SIGNAL IS "xilinx.com:signal:interrupt:1.0 PL_PS_IRQ1 INTERRUPT";
+  ATTRIBUTE X_INTERFACE_PARAMETER OF pl_ps_irq0: SIGNAL IS "XIL_INTERFACENAME PL_PS_IRQ0, SENSITIVITY LEVEL_HIGH, PortWidth 1";
+  ATTRIBUTE X_INTERFACE_INFO OF pl_ps_irq0: SIGNAL IS "xilinx.com:signal:interrupt:1.0 PL_PS_IRQ0 INTERRUPT";
   ATTRIBUTE X_INTERFACE_INFO OF maxigp0_arqos: SIGNAL IS "xilinx.com:interface:aximm:1.0 M_AXI_HPM0_FPD ARQOS";
   ATTRIBUTE X_INTERFACE_INFO OF maxigp0_awqos: SIGNAL IS "xilinx.com:interface:aximm:1.0 M_AXI_HPM0_FPD AWQOS";
   ATTRIBUTE X_INTERFACE_INFO OF maxigp0_rready: SIGNAL IS "xilinx.com:interface:aximm:1.0 M_AXI_HPM0_FPD RREADY";
@@ -2268,8 +2274,8 @@ BEGIN
       pl_ps_trigack_2 => '0',
       pl_ps_trigack_3 => '0',
       ftm_gpi => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 32)),
-      pl_ps_irq0 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 1)),
-      pl_ps_irq1 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 1)),
+      pl_ps_irq0 => pl_ps_irq0,
+      pl_ps_irq1 => pl_ps_irq1,
       pl_resetn0 => pl_resetn0,
       pl_pmu_gpi => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 32)),
       aib_pmu_afifm_fpd_ack => '0',

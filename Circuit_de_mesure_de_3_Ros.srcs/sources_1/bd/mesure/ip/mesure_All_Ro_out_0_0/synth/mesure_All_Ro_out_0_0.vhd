@@ -56,6 +56,7 @@ USE ieee.numeric_std.ALL;
 ENTITY mesure_All_Ro_out_0_0 IS
   PORT (
     CE_1Hz : IN STD_LOGIC;
+    Emergency_Stop : IN STD_LOGIC;
     Mode : IN STD_LOGIC_VECTOR(5 DOWNTO 0);
     Reset_RO : IN STD_LOGIC_VECTOR(5 DOWNTO 0);
     Ro_sel : IN STD_LOGIC_VECTOR(2 DOWNTO 0);
@@ -75,6 +76,7 @@ ARCHITECTURE mesure_All_Ro_out_0_0_arch OF mesure_All_Ro_out_0_0 IS
     );
     PORT (
       CE_1Hz : IN STD_LOGIC;
+      Emergency_Stop : IN STD_LOGIC;
       Mode : IN STD_LOGIC_VECTOR(5 DOWNTO 0);
       Reset_RO : IN STD_LOGIC_VECTOR(5 DOWNTO 0);
       Ro_sel : IN STD_LOGIC_VECTOR(2 DOWNTO 0);
@@ -99,6 +101,7 @@ BEGIN
     )
     PORT MAP (
       CE_1Hz => CE_1Hz,
+      Emergency_Stop => Emergency_Stop,
       Mode => Mode,
       Reset_RO => Reset_RO,
       Ro_sel => Ro_sel,

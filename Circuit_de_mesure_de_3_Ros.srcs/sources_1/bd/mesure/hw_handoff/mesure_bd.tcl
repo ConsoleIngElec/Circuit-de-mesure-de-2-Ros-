@@ -40,7 +40,7 @@ if { [string first $scripts_vivado_version $current_vivado_version] == -1 } {
 
 # The design that will be created by this Tcl script contains the following 
 # module references:
-# All_Ro_out, Gen_mode, Gen_stress, Mux_data, Select_Data
+# All_Ro_out, De_Mux, Gen_mode, Gen_stress, Hardware_Watchdog, Mux_data, PWM_Motor, Select_Data, Temp_Voltage_Avarage
 
 # Please add the sources of those modules before sourcing this Tcl script.
 
@@ -129,6 +129,151 @@ if { $nRet != 0 } {
 ##################################################################
 
 
+# Hierarchical cell: adress
+proc create_hier_cell_adress { parentCell nameHier } {
+
+  variable script_folder
+
+  if { $parentCell eq "" || $nameHier eq "" } {
+     catch {common::send_msg_id "BD_TCL-102" "ERROR" "create_hier_cell_adress() - Empty argument(s)!"}
+     return
+  }
+
+  # Get object for parentCell
+  set parentObj [get_bd_cells $parentCell]
+  if { $parentObj == "" } {
+     catch {common::send_msg_id "BD_TCL-100" "ERROR" "Unable to find parent cell <$parentCell>!"}
+     return
+  }
+
+  # Make sure parentObj is hier blk
+  set parentType [get_property TYPE $parentObj]
+  if { $parentType ne "hier" } {
+     catch {common::send_msg_id "BD_TCL-101" "ERROR" "Parent <$parentObj> has TYPE = <$parentType>. Expected to be <hier>."}
+     return
+  }
+
+  # Save current instance; Restore later
+  set oldCurInst [current_bd_instance .]
+
+  # Set parent object as current
+  current_bd_instance $parentObj
+
+  # Create cell and set as current instance
+  set hier_obj [create_bd_cell -type hier $nameHier]
+  current_bd_instance $hier_obj
+
+  # Create interface pins
+
+  # Create pins
+  create_bd_pin -dir I -from 5 -to 0 In0
+  create_bd_pin -dir O -from 7 -to 0 dout
+
+  # Create instance: xlconcat_0, and set properties
+  set xlconcat_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:xlconcat:2.1 xlconcat_0 ]
+  set_property -dict [ list \
+   CONFIG.IN0_WIDTH {6} \
+   CONFIG.IN1_WIDTH {2} \
+ ] $xlconcat_0
+
+  # Create instance: xlconstant_2, and set properties
+  set xlconstant_2 [ create_bd_cell -type ip -vlnv xilinx.com:ip:xlconstant:1.1 xlconstant_2 ]
+  set_property -dict [ list \
+   CONFIG.CONST_VAL {0} \
+   CONFIG.CONST_WIDTH {2} \
+ ] $xlconstant_2
+
+  # Create port connections
+  connect_bd_net -net system_management_wiz_0_channel_out [get_bd_pins In0] [get_bd_pins xlconcat_0/In0]
+  connect_bd_net -net xlconcat_0_dout [get_bd_pins dout] [get_bd_pins xlconcat_0/dout]
+  connect_bd_net -net xlconstant_2_dout [get_bd_pins xlconcat_0/In1] [get_bd_pins xlconstant_2/dout]
+
+  # Restore current instance
+  current_bd_instance $oldCurInst
+}
+
+# Hierarchical cell: Sysmon
+proc create_hier_cell_Sysmon { parentCell nameHier } {
+
+  variable script_folder
+
+  if { $parentCell eq "" || $nameHier eq "" } {
+     catch {common::send_msg_id "BD_TCL-102" "ERROR" "create_hier_cell_Sysmon() - Empty argument(s)!"}
+     return
+  }
+
+  # Get object for parentCell
+  set parentObj [get_bd_cells $parentCell]
+  if { $parentObj == "" } {
+     catch {common::send_msg_id "BD_TCL-100" "ERROR" "Unable to find parent cell <$parentCell>!"}
+     return
+  }
+
+  # Make sure parentObj is hier blk
+  set parentType [get_property TYPE $parentObj]
+  if { $parentType ne "hier" } {
+     catch {common::send_msg_id "BD_TCL-101" "ERROR" "Parent <$parentObj> has TYPE = <$parentType>. Expected to be <hier>."}
+     return
+  }
+
+  # Save current instance; Restore later
+  set oldCurInst [current_bd_instance .]
+
+  # Set parent object as current
+  current_bd_instance $parentObj
+
+  # Create cell and set as current instance
+  set hier_obj [create_bd_cell -type hier $nameHier]
+  current_bd_instance $hier_obj
+
+  # Create interface pins
+
+  # Create pins
+  create_bd_pin -dir I Clk
+  create_bd_pin -dir O -from 15 -to 0 Dout
+  create_bd_pin -dir O Enable
+  create_bd_pin -dir I Reset
+  create_bd_pin -dir O -from 5 -to 0 Sel
+
+  # Create instance: adress
+  create_hier_cell_adress $hier_obj adress
+
+  # Create instance: system_management_wiz_0, and set properties
+  set system_management_wiz_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:system_management_wiz:1.3 system_management_wiz_0 ]
+  set_property -dict [ list \
+   CONFIG.ENABLE_RESET {true} \
+   CONFIG.INTERFACE_SELECTION {Enable_DRP} \
+ ] $system_management_wiz_0
+
+  # Create instance: xlconstant_0, and set properties
+  set xlconstant_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:xlconstant:1.1 xlconstant_0 ]
+  set_property -dict [ list \
+   CONFIG.CONST_VAL {0} \
+   CONFIG.CONST_WIDTH {16} \
+ ] $xlconstant_0
+
+  # Create instance: xlconstant_1, and set properties
+  set xlconstant_1 [ create_bd_cell -type ip -vlnv xilinx.com:ip:xlconstant:1.1 xlconstant_1 ]
+  set_property -dict [ list \
+   CONFIG.CONST_VAL {0} \
+   CONFIG.CONST_WIDTH {1} \
+ ] $xlconstant_1
+
+  # Create port connections
+  connect_bd_net -net adress_dout [get_bd_pins adress/dout] [get_bd_pins system_management_wiz_0/daddr_in]
+  connect_bd_net -net dclk_in_0_1 [get_bd_pins Clk] [get_bd_pins system_management_wiz_0/dclk_in]
+  connect_bd_net -net reset_in_0_1 [get_bd_pins Reset] [get_bd_pins system_management_wiz_0/reset_in]
+  connect_bd_net -net system_management_wiz_0_channel_out [get_bd_pins Sel] [get_bd_pins adress/In0] [get_bd_pins system_management_wiz_0/channel_out]
+  connect_bd_net -net system_management_wiz_0_do_out [get_bd_pins Dout] [get_bd_pins system_management_wiz_0/do_out]
+  connect_bd_net -net system_management_wiz_0_drdy_out [get_bd_pins Enable] [get_bd_pins system_management_wiz_0/drdy_out]
+  connect_bd_net -net system_management_wiz_0_eoc_out [get_bd_pins system_management_wiz_0/den_in] [get_bd_pins system_management_wiz_0/eoc_out]
+  connect_bd_net -net xlconstant_0_dout [get_bd_pins system_management_wiz_0/di_in] [get_bd_pins xlconstant_0/dout]
+  connect_bd_net -net xlconstant_1_dout [get_bd_pins system_management_wiz_0/dwe_in] [get_bd_pins xlconstant_1/dout]
+
+  # Restore current instance
+  current_bd_instance $oldCurInst
+}
+
 
 # Procedure to create entire design; Provide argument to make
 # procedure reusable. If parentCell is "", will use root.
@@ -165,6 +310,7 @@ proc create_root_design { parentCell } {
   # Create interface ports
 
   # Create ports
+  set PWM_Out [ create_bd_port -dir O PWM_Out ]
 
   # Create instance: All_Ro_out_0, and set properties
   set block_name All_Ro_out
@@ -173,6 +319,17 @@ proc create_root_design { parentCell } {
      catch {common::send_msg_id "BD_TCL-105" "ERROR" "Unable to add referenced block <$block_name>. Please add the files for ${block_name}'s definition into the project."}
      return 1
    } elseif { $All_Ro_out_0 eq "" } {
+     catch {common::send_msg_id "BD_TCL-106" "ERROR" "Unable to referenced block <$block_name>. Please add the files for ${block_name}'s definition into the project."}
+     return 1
+   }
+  
+  # Create instance: De_Mux_0, and set properties
+  set block_name De_Mux
+  set block_cell_name De_Mux_0
+  if { [catch {set De_Mux_0 [create_bd_cell -type module -reference $block_name $block_cell_name] } errmsg] } {
+     catch {common::send_msg_id "BD_TCL-105" "ERROR" "Unable to add referenced block <$block_name>. Please add the files for ${block_name}'s definition into the project."}
+     return 1
+   } elseif { $De_Mux_0 eq "" } {
      catch {common::send_msg_id "BD_TCL-106" "ERROR" "Unable to referenced block <$block_name>. Please add the files for ${block_name}'s definition into the project."}
      return 1
    }
@@ -199,6 +356,17 @@ proc create_root_design { parentCell } {
      return 1
    }
   
+  # Create instance: Hardware_Watchdog_0, and set properties
+  set block_name Hardware_Watchdog
+  set block_cell_name Hardware_Watchdog_0
+  if { [catch {set Hardware_Watchdog_0 [create_bd_cell -type module -reference $block_name $block_cell_name] } errmsg] } {
+     catch {common::send_msg_id "BD_TCL-105" "ERROR" "Unable to add referenced block <$block_name>. Please add the files for ${block_name}'s definition into the project."}
+     return 1
+   } elseif { $Hardware_Watchdog_0 eq "" } {
+     catch {common::send_msg_id "BD_TCL-106" "ERROR" "Unable to referenced block <$block_name>. Please add the files for ${block_name}'s definition into the project."}
+     return 1
+   }
+  
   # Create instance: IP_Conversion_Axi_0, and set properties
   set IP_Conversion_Axi_0 [ create_bd_cell -type ip -vlnv IMS.bordeaux:user:IP_Conversion_Axi:1.0 IP_Conversion_Axi_0 ]
 
@@ -213,6 +381,17 @@ proc create_root_design { parentCell } {
      return 1
    }
   
+  # Create instance: PWM_Motor_0, and set properties
+  set block_name PWM_Motor
+  set block_cell_name PWM_Motor_0
+  if { [catch {set PWM_Motor_0 [create_bd_cell -type module -reference $block_name $block_cell_name] } errmsg] } {
+     catch {common::send_msg_id "BD_TCL-105" "ERROR" "Unable to add referenced block <$block_name>. Please add the files for ${block_name}'s definition into the project."}
+     return 1
+   } elseif { $PWM_Motor_0 eq "" } {
+     catch {common::send_msg_id "BD_TCL-106" "ERROR" "Unable to referenced block <$block_name>. Please add the files for ${block_name}'s definition into the project."}
+     return 1
+   }
+  
   # Create instance: Select_Data_0, and set properties
   set block_name Select_Data
   set block_cell_name Select_Data_0
@@ -220,6 +399,20 @@ proc create_root_design { parentCell } {
      catch {common::send_msg_id "BD_TCL-105" "ERROR" "Unable to add referenced block <$block_name>. Please add the files for ${block_name}'s definition into the project."}
      return 1
    } elseif { $Select_Data_0 eq "" } {
+     catch {common::send_msg_id "BD_TCL-106" "ERROR" "Unable to referenced block <$block_name>. Please add the files for ${block_name}'s definition into the project."}
+     return 1
+   }
+  
+  # Create instance: Sysmon
+  create_hier_cell_Sysmon [current_bd_instance .] Sysmon
+
+  # Create instance: Temp_Voltage_Avarage_0, and set properties
+  set block_name Temp_Voltage_Avarage
+  set block_cell_name Temp_Voltage_Avarage_0
+  if { [catch {set Temp_Voltage_Avarage_0 [create_bd_cell -type module -reference $block_name $block_cell_name] } errmsg] } {
+     catch {common::send_msg_id "BD_TCL-105" "ERROR" "Unable to add referenced block <$block_name>. Please add the files for ${block_name}'s definition into the project."}
+     return 1
+   } elseif { $Temp_Voltage_Avarage_0 eq "" } {
      catch {common::send_msg_id "BD_TCL-106" "ERROR" "Unable to referenced block <$block_name>. Please add the files for ${block_name}'s definition into the project."}
      return 1
    }
@@ -856,7 +1049,8 @@ proc create_root_design { parentCell } {
    CONFIG.PSU__USB3_1__PERIPHERAL__IO {GT Lane3} \
    CONFIG.PSU__USB__RESET__MODE {Boot Pin} \
    CONFIG.PSU__USB__RESET__POLARITY {Active Low} \
-   CONFIG.PSU__USE__IRQ0 {0} \
+   CONFIG.PSU__USE__IRQ0 {1} \
+   CONFIG.PSU__USE__IRQ1 {1} \
    CONFIG.PSU__USE__M_AXI_GP0 {1} \
    CONFIG.PSU__USE__M_AXI_GP1 {0} \
    CONFIG.PSU__USE__M_AXI_GP2 {0} \
@@ -869,19 +1063,35 @@ proc create_root_design { parentCell } {
 
   # Create port connections
   connect_bd_net -net All_Ro_out_0_Data [get_bd_pins All_Ro_out_0/Data] [get_bd_pins Mux_data_0/Data_in]
+  connect_bd_net -net De_Mux_0_SD1 [get_bd_pins De_Mux_0/SD1] [get_bd_pins Temp_Voltage_Avarage_0/SD1]
+  connect_bd_net -net De_Mux_0_SD2 [get_bd_pins De_Mux_0/SD2] [get_bd_pins Temp_Voltage_Avarage_0/SD2]
+  connect_bd_net -net De_Mux_0_SS1 [get_bd_pins De_Mux_0/SS1] [get_bd_pins Temp_Voltage_Avarage_0/SS1]
+  connect_bd_net -net De_Mux_0_SS2 [get_bd_pins De_Mux_0/SS2] [get_bd_pins Temp_Voltage_Avarage_0/SS2]
   connect_bd_net -net Gen_mode_0_CE_1Hz [get_bd_pins All_Ro_out_0/CE_1Hz] [get_bd_pins Gen_mode_0/CE_1Hz]
   connect_bd_net -net Gen_mode_0_Mode [get_bd_pins All_Ro_out_0/Mode] [get_bd_pins Gen_mode_0/Mode]
   connect_bd_net -net Gen_mode_0_Reset_RO [get_bd_pins All_Ro_out_0/Reset_RO] [get_bd_pins Gen_mode_0/Reset_RO]
   connect_bd_net -net Gen_mode_0_Ro_sel [get_bd_pins All_Ro_out_0/Ro_sel] [get_bd_pins Gen_mode_0/Ro_sel]
   connect_bd_net -net Gen_mode_0_Send [get_bd_pins Gen_mode_0/Send] [get_bd_pins Select_Data_0/Send]
   connect_bd_net -net Gen_stress_0_Stress [get_bd_pins All_Ro_out_0/Stress] [get_bd_pins Gen_stress_0/Stress]
+  connect_bd_net -net Hardware_Watchdog_0_Alarm_Temp [get_bd_pins Hardware_Watchdog_0/Alarm_Temp] [get_bd_pins zynq_ultra_ps_e_0/pl_ps_irq0]
+  connect_bd_net -net Hardware_Watchdog_0_Alarm_Volt [get_bd_pins Hardware_Watchdog_0/Alarm_Volt] [get_bd_pins zynq_ultra_ps_e_0/pl_ps_irq1]
+  connect_bd_net -net Hardware_Watchdog_0_Emergency_Stop [get_bd_pins All_Ro_out_0/Emergency_Stop] [get_bd_pins Hardware_Watchdog_0/Emergency_Stop]
   connect_bd_net -net IP_Conversion_Axi_0_Done [get_bd_pins IP_Conversion_Axi_0/Done] [get_bd_pins Select_Data_0/Done]
+  connect_bd_net -net IP_Conversion_Axi_0_Duty_cycle [get_bd_pins IP_Conversion_Axi_0/Duty_cycle] [get_bd_pins PWM_Motor_0/Duty]
   connect_bd_net -net Mux_data_0_Data_out [get_bd_pins IP_Conversion_Axi_0/Data] [get_bd_pins Mux_data_0/Data_out]
+  connect_bd_net -net PWM_Motor_0_PWM_Out [get_bd_ports PWM_Out] [get_bd_pins PWM_Motor_0/PWM_Out]
   connect_bd_net -net Select_Data_0_Allow [get_bd_pins IP_Conversion_Axi_0/Allow] [get_bd_pins Select_Data_0/Allow]
   connect_bd_net -net Select_Data_0_Sel [get_bd_pins Mux_data_0/Sel] [get_bd_pins Select_Data_0/Sel]
+  connect_bd_net -net Sysmon_Dout [get_bd_pins De_Mux_0/ED1] [get_bd_pins Sysmon/Dout]
+  connect_bd_net -net Sysmon_Enable [get_bd_pins De_Mux_0/Enable] [get_bd_pins Sysmon/Enable]
+  connect_bd_net -net Sysmon_Sel [get_bd_pins De_Mux_0/Sel] [get_bd_pins Sysmon/Sel]
+  connect_bd_net -net Temp_Voltage_Avarage_0_Temp1 [get_bd_pins Hardware_Watchdog_0/Temp1] [get_bd_pins IP_Conversion_Axi_0/Temp1] [get_bd_pins Temp_Voltage_Avarage_0/Temp1]
+  connect_bd_net -net Temp_Voltage_Avarage_0_Temp2 [get_bd_pins Mux_data_0/Temp2] [get_bd_pins Temp_Voltage_Avarage_0/Temp2]
+  connect_bd_net -net Temp_Voltage_Avarage_0_Voltage1 [get_bd_pins Hardware_Watchdog_0/Voltage1] [get_bd_pins IP_Conversion_Axi_0/Voltage1] [get_bd_pins Temp_Voltage_Avarage_0/Voltage1]
+  connect_bd_net -net Temp_Voltage_Avarage_0_Voltage2 [get_bd_pins Mux_data_0/Voltage2] [get_bd_pins Temp_Voltage_Avarage_0/Voltage2]
   connect_bd_net -net rst_ps8_0_100M_peripheral_aresetn [get_bd_pins IP_Conversion_Axi_0/s00_axi_aresetn] [get_bd_pins ps8_0_axi_periph/ARESETN] [get_bd_pins ps8_0_axi_periph/M00_ARESETN] [get_bd_pins ps8_0_axi_periph/S00_ARESETN] [get_bd_pins rst_ps8_0_100M/peripheral_aresetn]
-  connect_bd_net -net util_vector_logic_0_Res [get_bd_pins Gen_mode_0/Reset] [get_bd_pins Gen_stress_0/Reset] [get_bd_pins Select_Data_0/Reset] [get_bd_pins util_vector_logic_0/Res]
-  connect_bd_net -net zynq_ultra_ps_e_0_pl_clk0 [get_bd_pins Gen_mode_0/Clk] [get_bd_pins Gen_stress_0/Clk] [get_bd_pins IP_Conversion_Axi_0/s00_axi_aclk] [get_bd_pins Select_Data_0/Clk] [get_bd_pins ps8_0_axi_periph/ACLK] [get_bd_pins ps8_0_axi_periph/M00_ACLK] [get_bd_pins ps8_0_axi_periph/S00_ACLK] [get_bd_pins rst_ps8_0_100M/slowest_sync_clk] [get_bd_pins zynq_ultra_ps_e_0/maxihpm0_fpd_aclk] [get_bd_pins zynq_ultra_ps_e_0/pl_clk0]
+  connect_bd_net -net util_vector_logic_0_Res [get_bd_pins De_Mux_0/Reset] [get_bd_pins Gen_mode_0/Reset] [get_bd_pins Gen_stress_0/Reset] [get_bd_pins Hardware_Watchdog_0/Reset] [get_bd_pins PWM_Motor_0/Reset] [get_bd_pins Select_Data_0/Reset] [get_bd_pins Sysmon/Reset] [get_bd_pins Temp_Voltage_Avarage_0/Reset] [get_bd_pins util_vector_logic_0/Res]
+  connect_bd_net -net zynq_ultra_ps_e_0_pl_clk0 [get_bd_pins De_Mux_0/Clk] [get_bd_pins Gen_mode_0/Clk] [get_bd_pins Gen_stress_0/Clk] [get_bd_pins Hardware_Watchdog_0/Clk] [get_bd_pins IP_Conversion_Axi_0/s00_axi_aclk] [get_bd_pins PWM_Motor_0/Clk] [get_bd_pins Select_Data_0/Clk] [get_bd_pins Sysmon/Clk] [get_bd_pins Temp_Voltage_Avarage_0/Clk] [get_bd_pins ps8_0_axi_periph/ACLK] [get_bd_pins ps8_0_axi_periph/M00_ACLK] [get_bd_pins ps8_0_axi_periph/S00_ACLK] [get_bd_pins rst_ps8_0_100M/slowest_sync_clk] [get_bd_pins zynq_ultra_ps_e_0/maxihpm0_fpd_aclk] [get_bd_pins zynq_ultra_ps_e_0/pl_clk0]
   connect_bd_net -net zynq_ultra_ps_e_0_pl_resetn0 [get_bd_pins rst_ps8_0_100M/ext_reset_in] [get_bd_pins util_vector_logic_0/Op1] [get_bd_pins zynq_ultra_ps_e_0/pl_resetn0]
 
   # Create address segments

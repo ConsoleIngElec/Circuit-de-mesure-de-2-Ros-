@@ -47,7 +47,7 @@
 -- DO NOT MODIFY THIS FILE.
 
 -- IP VLNV: IMS.bordeaux:user:IP_Conversion_Axi:1.0
--- IP Revision: 2
+-- IP Revision: 3
 
 LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
@@ -57,7 +57,10 @@ ENTITY mesure_IP_Conversion_Axi_0_0 IS
   PORT (
     Data : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
     Allow : IN STD_LOGIC;
+    Temp1 : IN STD_LOGIC_VECTOR(15 DOWNTO 0);
+    Voltage1 : IN STD_LOGIC_VECTOR(15 DOWNTO 0);
     Done : OUT STD_LOGIC;
+    Duty_cycle : OUT STD_LOGIC_VECTOR(15 DOWNTO 0);
     s00_axi_awaddr : IN STD_LOGIC_VECTOR(3 DOWNTO 0);
     s00_axi_awprot : IN STD_LOGIC_VECTOR(2 DOWNTO 0);
     s00_axi_awvalid : IN STD_LOGIC;
@@ -93,7 +96,10 @@ ARCHITECTURE mesure_IP_Conversion_Axi_0_0_arch OF mesure_IP_Conversion_Axi_0_0 I
     PORT (
       Data : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
       Allow : IN STD_LOGIC;
+      Temp1 : IN STD_LOGIC_VECTOR(15 DOWNTO 0);
+      Voltage1 : IN STD_LOGIC_VECTOR(15 DOWNTO 0);
       Done : OUT STD_LOGIC;
+      Duty_cycle : OUT STD_LOGIC_VECTOR(15 DOWNTO 0);
       s00_axi_awaddr : IN STD_LOGIC_VECTOR(3 DOWNTO 0);
       s00_axi_awprot : IN STD_LOGIC_VECTOR(2 DOWNTO 0);
       s00_axi_awvalid : IN STD_LOGIC;
@@ -157,7 +163,10 @@ BEGIN
     PORT MAP (
       Data => Data,
       Allow => Allow,
+      Temp1 => Temp1,
+      Voltage1 => Voltage1,
       Done => Done,
+      Duty_cycle => Duty_cycle,
       s00_axi_awaddr => s00_axi_awaddr,
       s00_axi_awprot => s00_axi_awprot,
       s00_axi_awvalid => s00_axi_awvalid,

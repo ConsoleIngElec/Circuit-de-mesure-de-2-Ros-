@@ -78,7 +78,7 @@ architecture Behavioral of Select_Data is
 begin
 
     --------------------------------------------------------------------------
-    -- Détection combinatoire du front montant
+    -- Détection du handshake (PS -> FPGA)
     --------------------------------------------------------------------------
     Done_Front <= Done and (not Done_Precedent);
 
@@ -106,7 +106,7 @@ begin
                 case Etat is 
 
                     ------------------------------------------------------------------
-                    -- ÉTAT 1 : Attente du déclenchement
+                    -- ÉTAT 1 : Attente du déclenchement (Pulse Send de 10ns)
                     ------------------------------------------------------------------
                     when Eteint => 
                         if Send = '1' then 
@@ -125,23 +125,23 @@ begin
 
 
                     ------------------------------------------------------------------
-                    -- ÉTAT 3 : Attente de l'acquittement Done
+                    -- ÉTAT 3 : Attente de l'acquittement Done provenant du processeur
                     ------------------------------------------------------------------
                     when Attendre => 
 
-                        -- Temporisation de sécurité (10 cycles)
+                        -- Temporisation de sécurité (10 cycles) pour laisser le Mux_data se stabiliser
                         if I < 10 then
                             I <= I + 1; 
 
                         else
-                            -- Si front montant sur Done
+                            -- Si le PS acquitte la lecture (front montant)
                             if J < (Max_Bytes - 1) and Done_Front = '1' then 
-                                J <= J + 1;       -- Octet suivant
+                                J <= J + 1;       -- Passage à l'octet suivant
                                 Etat <= Envoi;
 
-                            -- Si dernier octet validé
+                            -- Si c'était le dernier octet de la série
                             elsif J = (Max_Bytes - 1) and Done_Front = '1' then
-                                Etat <= Eteint;   -- Fin de séquence
+                                Etat <= Eteint;   -- Fin de séquence, retour au répos
                             end if;
                         end if;
 
@@ -153,11 +153,12 @@ begin
     --------------------------------------------------------------------------
     -- LOGIQUE DE SORTIE
     --------------------------------------------------------------------------
--- Allow reste à '1' tant qu'on n'a pas reçu l'acquittement 'Done' du processeur
+    -- [Allow] Indique au module AXI que l'octet sur le bus est prêt à être lue.
+    -- Reste actif durant toute la phase de transmission d'un octet.
 
-Allow <= '1' when (Etat = Envoi or Etat = Attendre) else '0';
+    Allow <= '1' when (Etat = Envoi or Etat = Attendre) else '0';
 
-    -- Conversion de l'index J en vecteur 5 bits
+    -- [Sel] Pilotage du multiplexeur pour sélectionner l'octet à envoyer.
     Sel <= std_logic_vector(to_unsigned(J, 5));
 
 end Behavioral;  

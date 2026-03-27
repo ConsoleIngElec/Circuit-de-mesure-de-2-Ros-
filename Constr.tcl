@@ -12,8 +12,7 @@ if {[get_design -quiet] == ""} {
     return
 }
 
-# 3. NETTOYAGE PRÉALABLE RADICAL (Pour éviter l'erreur LOCK_PINS)
-# J'ai utilisé deux méthodes, la méthode manuelle et celle avec le script 
+# 3. NETTOYAGE PRÉALABLE RADICAL (Pour éviter l'erreur LOCK_PINS) 
 puts "--- NETTOYAGE : Déblocage des anciennes contraintes ---"
 set all_prims [get_cells -hierarchical -filter "IS_PRIMITIVE && NAME =~ $cell_prefix/I_Ro_out\[*\]*"]
 

@@ -69,7 +69,7 @@ ARCHITECTURE mesure_Select_Data_0_1_arch OF mesure_Select_Data_0_1 IS
   ATTRIBUTE DowngradeIPIdentifiedWarnings OF mesure_Select_Data_0_1_arch: ARCHITECTURE IS "yes";
   COMPONENT Select_Data IS
     GENERIC (
-      Rout_Number : INTEGER
+      Stress_Number : INTEGER
     );
     PORT (
       Clk : IN STD_LOGIC;
@@ -91,7 +91,7 @@ ARCHITECTURE mesure_Select_Data_0_1_arch OF mesure_Select_Data_0_1 IS
 BEGIN
   U0 : Select_Data
     GENERIC MAP (
-      Rout_Number => 4
+      Stress_Number => 4
     )
     PORT MAP (
       Clk => Clk,

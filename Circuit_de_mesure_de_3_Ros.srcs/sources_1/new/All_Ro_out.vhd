@@ -17,16 +17,19 @@
 --    Fonctionnalités clés :
 --    1. Génération structurelle : Utilise une boucle 'generate' pour créer N 
 --       instances (N = Stress_Number), chacune associée à un signal de stress spécifique.
---    2. Gestion du Reset : Le signal interne Reset_int est piloté par l'état du 
---       vecteur Mode. Si aucun mode n'est actif (Mode = 0), le système est en 
---       Reset (Repos). Dès qu'un bit de Mode est activé, le Reset est relâché 
---       pour permettre la mesure.
+--   2. GESTION DU RESET ET SÉCURITÉ :
+--      Le signal interne Reset_int pilote l'activation des mesures. 
+--      Le système est maintenu en état de Reset (Repos/Arrêt) si :
+--        - Aucun mode n'est actif (Vecteur Mode = 0).
+--        - OU si l'Arrêt d'Urgence est pressé (Emergency_Stop = '1').
+--      Dès qu'un bit de Mode est activé ET que la sécurité est relâchée, 
+--      le Reset passe à '0' pour autoriser le comptage des fréquences.
 --    3. Agrégation des données : Concatène les sorties de fréquence (32 bits) de 
 --       chaque bloc RO dans un vecteur de sortie large unique 'Data'.
 -- 
 -- Dependencies:     Ro_out
 -- 
--- Revision:         Version 1.0 - Top-level agrégateur validé
+-- Revision:         Version 1.0
 -- Additional Comments: 
 --    Reset_Int est généré par l'inverse du signal Mode. Lorsque le mode est actif 
 --    (Mode /= 0), Reset passe à 0 pour autoriser les mesures de fréquence.
@@ -43,6 +46,7 @@ entity All_Ro_out is
     );
     Port ( 
         CE_1Hz   : in  STD_LOGIC; 
+        Emergency_Stop : in  STD_LOGIC; -- Arrêt d'urgence (priorité haute, actif à '1')
         Mode     : in  STD_LOGIC_VECTOR(Architecture_number * RO_by_architecture - 1 downto 0);
         Reset_RO : in  STD_LOGIC_VECTOR(Architecture_number * RO_by_architecture - 1 downto 0);
         Ro_sel   : in  STD_LOGIC_VECTOR(2 downto 0); -- Sélection du RO pour la mesure
@@ -75,12 +79,14 @@ architecture Behavioral of All_Ro_out is
 
 begin
 
+--------------------------------------------------------------------------
+    -- LOGIQUE DE CONTRÔLE DU RESET ET SÉCURITÉ MATÉRIELLE
     --------------------------------------------------------------------------
-    -- LOGIQUE DE CONTRÔLE DU RESET
-    --------------------------------------------------------------------------
-    -- Reset_int est actif ('1') si tous les bits du vecteur Mode sont à '0'.
-    -- Dès qu'une architecture est activée (Mode /= 0), Reset_int passe à '0'.
-    Reset_int <= '1' when (Mode = (Mode'range => '0')) else '0';
+    -- Le signal Reset_int est actif ('1') dans deux cas :
+    -- 1. Mode = 0 : Le système est au repos (aucune architecture sélectionnée).
+    -- 2. Emergency_Stop = '1' : Une interruption de sécurité est demandée.
+    -- Cette logique garantit que les oscillateurs s'arrêtent immédiatement.
+    Reset_int <= '1' when (Mode = (Mode'range => '0') or Emergency_Stop = '1') else '0';
 
     --------------------------------------------------------------------------
     -- GÉNÉRATION STRUCTURELLE DES INSTANCES

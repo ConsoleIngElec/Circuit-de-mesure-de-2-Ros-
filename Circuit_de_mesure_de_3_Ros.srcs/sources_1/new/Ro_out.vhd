@@ -22,7 +22,7 @@
 --
 -- Dependencies:     Ro_bench, Mux_Ro, Measure_F_Ro
 -- 
--- Revision:         Version 1.0 - Structure de base validée
+-- Revision:         Version 1.0
 -- Additional Comments: 
 --    - Le signal CE_1Hz définit la fenêtre temporelle de mesure.
 --    - La sortie S_int du multiplexeur est utilisée comme signal d'horloge (Clk) 

@@ -605,3 +605,8 @@ set_property BEL A6LUT [get_cells {mesure_i/All_Ro_out_0/U0/I_Ro_out[3].Inst_Ro_
 set_property LOC SLICE_X44Y178 [get_cells {mesure_i/All_Ro_out_0/U0/I_Ro_out[3].Inst_Ro_out/I_Ro_bench/I_RO_PATH[2].Inst_Ro_path/S1}]
 set_property LOCK_PINS {I0:A6} [get_cells {mesure_i/All_Ro_out_0/U0/I_Ro_out[3].Inst_Ro_out/I_Ro_bench/I_RO_PATH[2].Inst_Ro_path/S1}]
 set_property ALLOW_COMBINATORIAL_LOOPS true [get_nets {mesure_i/All_Ro_out_0/U0/I_Ro_out[3].Inst_Ro_out/I_Ro_bench/I_RO_PATH[2].Inst_Ro_path/*}]
+
+
+# Sortie PWM sur le connecteur Low Speed Pin 23 (GPIO-G)
+set_property PACKAGE_PIN B9 [get_ports pwm_out_moteur]
+set_property IOSTANDARD LVCMOS18 [get_ports pwm_out_moteur]

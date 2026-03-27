@@ -17,6 +17,12 @@
 --       dans un registre de stockage (R) puis S est remis à zéro.
 --    5. Le résultat final est exporté sur 32 bits (Count).
 --
+-- Gestion du Reset (Reset) :
+--    - Ce signal est piloté par le niveau supérieur (All_Ro_out) via Reset_int.
+--    - Reset = '1' : Réinitialise les bascules de synchronisation du signal Enable,
+--      met à zéro le compteur de mesure (S) et efface le registre de sortie (R).
+--    - Reset = '0' : Autorise la synchronisation et le comptage des oscillations.
+--
 -- Dépendances : Ro_bench, Mux_Ro 
 -- 
 -- Révision : version 1.0
@@ -30,10 +36,10 @@ use IEEE.NUMERIC_STD.ALL;
 
 entity Measure_F_Ro is
     Port ( 
-        Clk    : in  STD_LOGIC;  
-        Reset  : in  STD_LOGIC; 
-        Enable : in  STD_LOGIC;  
-        Count  : out STD_LOGIC_VECTOR (31 downto 0) 
+        Clk    : in  STD_LOGIC;  -- Horloge issue du Ring Oscillator (RO)
+        Reset  : in  STD_LOGIC;  -- Reset global (Actif à '1', forcé si Mode = 0)
+        Enable : in  STD_LOGIC;  -- Fenêtre de mesure (généralement 1 Hz / 1 seconde)
+        Count  : out STD_LOGIC_VECTOR (31 downto 0) -- Fréquence mesurée en Hz
     );
 end Measure_F_Ro;
 
@@ -43,11 +49,12 @@ architecture Behavioral of Measure_F_Ro is
     -- SIGNAUX INTERNES
     -- ==========================================================================
     
-    -- Signaux pour le comptage
+    -- Signaux pour le comptage (conversion finale en 32 bits)
     signal S : integer := 0; -- Compteur d'oscillations en temps réel
-    signal R : integer := 0; -- Registre de stockage (résultat stabilisé)
+    signal R : integer := 0; -- Registre de stockage (résultat stabilisé après 1s)
 
     -- Chaîne de bascules pour la synchronisation du signal Enable (Domaine Clk_RO)
+    -- Nécessaire car 'Enable' est asynchrone par rapport à la fréquence du RO.
     signal Enable_Decal_1 : STD_LOGIC;
     signal Enable_Decal_2 : STD_LOGIC;
     signal Enable_Decal_3 : STD_LOGIC;
@@ -64,10 +71,10 @@ architecture Behavioral of Measure_F_Ro is
 begin
 
     --------------------------------------------------------------------------
-    -- 1. SYNCHRONISATION DU SIGNAL ENABLE
+    -- 1. SYNCHRONISATION DU SIGNAL ENABLE & GESTION DU RESET
     --------------------------------------------------------------------------
-    -- Comme 'Enable' vient du domaine 100MHz et 'Clk' est le RO, 
-    -- on synchronise 'Enable' pour éviter les violations de setup/hold.
+    -- Le Reset réinitialise la chaîne de synchronisation. 
+    -- Tant que Reset = '1', le signal Enable ne peut pas traverser les bascules.
     --------------------------------------------------------------------------
     process (Clk, Reset)
     begin
@@ -100,24 +107,25 @@ begin
     end process;
             
     --------------------------------------------------------------------------
-    -- 3. LOGIQUE DU COMPTEUR DE FRÉQUENCE
+    -- 3. LOGIQUE DU COMPTEUR DE FRÉQUENCE AVEC RESET PRIORITAIRE
     --------------------------------------------------------------------------
-    -- S compte les fronts du RO. Quand la fenêtre se ferme (Enable_Int_Sync), 
-    -- on transfert la valeur vers R pour la sortie et on repart à zéro.
+    -- S compte les fronts du RO. 
+    -- Si Reset = '1' : Le compteur est bloqué à 0.
+    -- Si Enable_Int_Sync = '1' : La mesure est terminée, on sauvegarde dans R.
     --------------------------------------------------------------------------
     process (Clk) 
     begin
         if rising_edge(Clk) then
             if Reset = '1' then    
-                S <= 0;
-                R <= 0;
+                S <= 0; -- Réinitialisation du compteur de travail
+                R <= 0; -- Réinitialisation de la valeur de sortie
             else
-                -- Fin de la fenêtre de 1 seconde : Capture et Reset
+                -- Fin de la fenêtre de 1 seconde : Capture de la fréquence et Reset de S
                 if Enable_Int_Sync = '1' then
                     R <= S;
                     S <= 0;
                 else 
-                    -- En cours de mesure : Incrémentation continue
+                    -- En cours de mesure : Incrémentation à chaque cycle d'horloge RO
                     S <= S + 1;
                 end if;
             end if;          
@@ -127,7 +135,7 @@ begin
     --------------------------------------------------------------------------
     -- 4. SORTIE DES DONNÉES
     --------------------------------------------------------------------------
-    -- Conversion de l'entier R en vecteur 32 bits pour l'interface système.
+    -- Conversion de l'entier R (stocké) en vecteur 32 bits pour le bus de sortie.
     Count <= std_logic_vector(to_unsigned(R, 32));    
 
 end Behavioral;

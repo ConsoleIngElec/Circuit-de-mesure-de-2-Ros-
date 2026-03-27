@@ -105,6 +105,8 @@ mesure_zynq_ultra_ps_e_0_1::mesure_zynq_ultra_ps_e_0_1(const sc_module_name& nm)
 
   // initialize pins
   mp_impl->maxihpm0_fpd_aclk(maxihpm0_fpd_aclk);
+  mp_impl->pl_ps_irq0(pl_ps_irq0);
+  mp_impl->pl_ps_irq1(pl_ps_irq1);
   mp_impl->pl_resetn0(pl_resetn0);
   mp_impl->pl_clk0(pl_clk0);
 

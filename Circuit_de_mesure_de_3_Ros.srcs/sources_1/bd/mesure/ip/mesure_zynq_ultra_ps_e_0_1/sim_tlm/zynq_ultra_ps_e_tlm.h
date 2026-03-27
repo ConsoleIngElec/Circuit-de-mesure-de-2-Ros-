@@ -153,6 +153,8 @@ class zynq_ultra_ps_e_tlm : public sc_core::sc_module   {
     public:
     // Non-AXI ports are declared here
     sc_core::sc_in<bool> maxihpm0_fpd_aclk;
+    sc_core::sc_in<sc_dt::sc_bv<1> >  pl_ps_irq0;
+    sc_core::sc_in<sc_dt::sc_bv<1> >  pl_ps_irq1;
     sc_core::sc_out<bool> pl_resetn0;
     sc_core::sc_out<bool> pl_clk0;
      
@@ -173,6 +175,8 @@ class zynq_ultra_ps_e_tlm : public sc_core::sc_module   {
     zynq_ultra_ps_e_tlm(sc_core::sc_module_name name,
     xsc::common::properties&): sc_module(name)//registering module name with parent
         ,maxihpm0_fpd_aclk("maxihpm0_fpd_aclk")
+        ,pl_ps_irq0("pl_ps_irq0")
+        ,pl_ps_irq1("pl_ps_irq1")
         ,pl_resetn0("pl_resetn0")
         ,pl_clk0("pl_clk0")
         ,pl_clk0_clk("pl_clk0_clk", sc_time(10.0,sc_core::SC_NS))//clock period in nanoseconds = 1000/freq(in MZ)
@@ -209,6 +213,16 @@ class zynq_ultra_ps_e_tlm : public sc_core::sc_module   {
         m_tlm2xtlm[0]->target_socket.bind(*m_zynqmp_tlm_model->s_axi_hpm_fpd[0]);
 
         m_zynqmp_tlm_model->tie_off();
+
+ 
+        SC_METHOD(pl_ps_irq0_method);
+        sensitive << pl_ps_irq0 ;
+        dont_initialize();
+
+ 
+        SC_METHOD(pl_ps_irq1_method);
+        sensitive << pl_ps_irq1 ;
+        dont_initialize();
 
         SC_METHOD(trigger_pl_clk0_pin);
         sensitive << pl_clk0_clk;
@@ -263,6 +277,28 @@ class zynq_ultra_ps_e_tlm : public sc_core::sc_module   {
         pl_clk0.write(pl_clk0_clk.read());
     }
 
+    void pl_ps_irq0_method()    {
+        int irq = ((pl_ps_irq0.read().to_uint()) & 0xFF);
+        for(int i = 0; i <8; i++)   {
+            if(irq & (0x1<<i))  {
+                m_zynqmp_tlm_model->pl2ps_irq[i].write(true);
+            }
+            else{
+                m_zynqmp_tlm_model->pl2ps_irq[i].write(false);
+            }
+        }
+    }
+    void pl_ps_irq1_method()    {
+        int irq = ((pl_ps_irq1.read().to_uint()) & 0xFF);
+        for(int i = 0; i <8; i++)   {
+            if(irq & (0x1<<i))  {
+                m_zynqmp_tlm_model->pl2ps_irq[i+16].write(true);
+            }
+            else    {
+                m_zynqmp_tlm_model->pl2ps_irq[i+16].write(false);
+            }
+        }
+    }
     //pl_resetn0 output reset pin get toggle when emio bank 2's 31th signal gets toggled
     //EMIO[2] bank 31th(GPIO[95] signal)acts as reset signal to the PL(refer Zynq UltraScale+ TRM, page no:761)
     void pl_resetn0_trigger()   {

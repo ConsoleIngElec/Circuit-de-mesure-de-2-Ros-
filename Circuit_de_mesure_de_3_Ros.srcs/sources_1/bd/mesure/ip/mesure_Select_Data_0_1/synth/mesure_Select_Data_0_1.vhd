@@ -69,7 +69,7 @@ ARCHITECTURE mesure_Select_Data_0_1_arch OF mesure_Select_Data_0_1 IS
   ATTRIBUTE DowngradeIPIdentifiedWarnings OF mesure_Select_Data_0_1_arch: ARCHITECTURE IS "yes";
   COMPONENT Select_Data IS
     GENERIC (
-      Rout_Number : INTEGER
+      Stress_Number : INTEGER
     );
     PORT (
       Clk : IN STD_LOGIC;
@@ -85,7 +85,7 @@ ARCHITECTURE mesure_Select_Data_0_1_arch OF mesure_Select_Data_0_1 IS
   ATTRIBUTE CHECK_LICENSE_TYPE : STRING;
   ATTRIBUTE CHECK_LICENSE_TYPE OF mesure_Select_Data_0_1_arch : ARCHITECTURE IS "mesure_Select_Data_0_1,Select_Data,{}";
   ATTRIBUTE CORE_GENERATION_INFO : STRING;
-  ATTRIBUTE CORE_GENERATION_INFO OF mesure_Select_Data_0_1_arch: ARCHITECTURE IS "mesure_Select_Data_0_1,Select_Data,{x_ipProduct=Vivado 2018.3,x_ipVendor=xilinx.com,x_ipLibrary=module_ref,x_ipName=Select_Data,x_ipVersion=1.0,x_ipCoreRevision=1,x_ipLanguage=VHDL,x_ipSimLanguage=MIXED,Rout_Number=4}";
+  ATTRIBUTE CORE_GENERATION_INFO OF mesure_Select_Data_0_1_arch: ARCHITECTURE IS "mesure_Select_Data_0_1,Select_Data,{x_ipProduct=Vivado 2018.3,x_ipVendor=xilinx.com,x_ipLibrary=module_ref,x_ipName=Select_Data,x_ipVersion=1.0,x_ipCoreRevision=1,x_ipLanguage=VHDL,x_ipSimLanguage=MIXED,Stress_Number=4}";
   ATTRIBUTE IP_DEFINITION_SOURCE : STRING;
   ATTRIBUTE IP_DEFINITION_SOURCE OF mesure_Select_Data_0_1_arch: ARCHITECTURE IS "module_ref";
   ATTRIBUTE X_INTERFACE_INFO : STRING;
@@ -97,7 +97,7 @@ ARCHITECTURE mesure_Select_Data_0_1_arch OF mesure_Select_Data_0_1 IS
 BEGIN
   U0 : Select_Data
     GENERIC MAP (
-      Rout_Number => 4
+      Stress_Number => 4
     )
     PORT MAP (
       Clk => Clk,

@@ -15,7 +15,7 @@
 --              Stress_Out(3) : Haute fréquence (100 MHz - Horloge directe)
 -- Dependencies: Stress_100Hz
 -- 
--- Revision: Version 1
+-- Revision: Version 1.0
 -- Revision 0.01 - File Created
 -- Additional Comments:
 -- 1. Stratégie de Stress : Ce module centralise les différentes conditions de stress 

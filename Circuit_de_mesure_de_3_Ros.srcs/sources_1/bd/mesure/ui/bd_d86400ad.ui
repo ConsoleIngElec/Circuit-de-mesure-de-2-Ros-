@@ -2,38 +2,61 @@
    "ExpandedHierarchyInLayout":"",
    "guistr":"# # String gsaved with Nlview 6.8.11  2018-08-07 bk=1.4403 VDI=40 GEI=35 GUI=JA:9.0 non-TLS
 #  -string -flagsOSRD
-preplace inst Gen_mode_0 -pg 1 -lvl 3 -y 50 -defaultsOSRD
-preplace inst ps8_0_axi_periph -pg 1 -lvl 3 -y 450 -defaultsOSRD
-preplace inst zynq_ultra_ps_e_0 -pg 1 -lvl 1 -y 110 -defaultsOSRD
-preplace inst IP_Conversion_Axi_0 -pg 1 -lvl 6 -y 340 -defaultsOSRD
-preplace inst All_Ro_out_0 -pg 1 -lvl 4 -y 80 -defaultsOSRD
-preplace inst util_vector_logic_0 -pg 1 -lvl 2 -y 110 -defaultsOSRD
-preplace inst Gen_stress_0 -pg 1 -lvl 3 -y 250 -defaultsOSRD
-preplace inst Mux_data_0 -pg 1 -lvl 5 -y 110 -defaultsOSRD
-preplace inst rst_ps8_0_100M -pg 1 -lvl 2 -y -60 -defaultsOSRD
-preplace inst Select_Data_0 -pg 1 -lvl 4 -y 250 -defaultsOSRD
-preplace netloc Select_Data_0_Allow 1 4 2 N 260 1970J
-preplace netloc Gen_mode_0_Ro_sel 1 3 1 1340
-preplace netloc Gen_mode_0_CE_1Hz 1 3 1 1370
-preplace netloc zynq_ultra_ps_e_0_pl_clk0 1 0 6 10 200 610 40 990 170 1310 350 1660J 360 NJ
-preplace netloc Gen_mode_0_Mode 1 3 1 1360
-preplace netloc All_Ro_out_0_Data 1 4 1 1670
-preplace netloc zynq_ultra_ps_e_0_M_AXI_HPM0_FPD 1 1 2 620J 170 980
-preplace netloc util_vector_logic_0_Res 1 2 2 1000 180 1320
-preplace netloc Mux_data_0_Data_out 1 5 1 1980
-preplace netloc Select_Data_0_Sel 1 4 1 1670
-preplace netloc IP_Conversion_Axi_0_Done 1 3 4 1360 360 1650J 440 NJ 440 2210
-preplace netloc rst_ps8_0_100M_peripheral_aresetn 1 2 4 970 330 1300J 340 NJ 340 1960J
-preplace netloc ps8_0_axi_periph_M00_AXI 1 3 3 1340 370 1670J 300 NJ
-preplace netloc zynq_ultra_ps_e_0_pl_resetn0 1 1 1 630J
-preplace netloc Gen_stress_0_Stress 1 3 1 1360J
-preplace netloc Gen_mode_0_Send 1 3 1 1330
-preplace netloc Gen_mode_0_Reset_RO 1 3 1 1350
-levelinfo -pg 1 -10 310 800 1150 1510 1820 2100 2230 -top -390 -bot 570
+preplace port PWM_Out -pg 1 -y 610 -defaultsOSRD
+preplace inst Hardware_Watchdog_0 -pg 1 -lvl 5 -y 430 -defaultsOSRD
+preplace inst IP_Conversion_Axi_0 -pg 1 -lvl 8 -y 720 -defaultsOSRD
+preplace inst De_Mux_0 -pg 1 -lvl 3 -y 890 -defaultsOSRD
+preplace inst Gen_mode_0 -pg 1 -lvl 5 -y 120 -defaultsOSRD
+preplace inst ps8_0_axi_periph -pg 1 -lvl 7 -y 470 -defaultsOSRD
+preplace inst zynq_ultra_ps_e_0 -pg 1 -lvl 6 -y 430 -defaultsOSRD
+preplace inst PWM_Motor_0 -pg 1 -lvl 9 -y 610 -defaultsOSRD
+preplace inst All_Ro_out_0 -pg 1 -lvl 6 -y 110 -defaultsOSRD
+preplace inst Sysmon -pg 1 -lvl 2 -y 910 -defaultsOSRD
+preplace inst util_vector_logic_0 -pg 1 -lvl 1 -y 940 -defaultsOSRD
+preplace inst Gen_stress_0 -pg 1 -lvl 5 -y 270 -defaultsOSRD
+preplace inst Mux_data_0 -pg 1 -lvl 7 -y 680 -defaultsOSRD
+preplace inst rst_ps8_0_100M -pg 1 -lvl 6 -y 1010 -defaultsOSRD
+preplace inst Temp_Voltage_Avarage_0 -pg 1 -lvl 4 -y 870 -defaultsOSRD
+preplace inst Select_Data_0 -pg 1 -lvl 6 -y 680 -defaultsOSRD
+preplace netloc De_Mux_0_SS2 1 3 1 N
+preplace netloc Sysmon_Dout 1 2 1 N
+preplace netloc PWM_Motor_0_PWM_Out 1 9 1 N
+preplace netloc Sysmon_Sel 1 2 1 520
+preplace netloc Hardware_Watchdog_0_Alarm_Temp 1 5 1 N
+preplace netloc Select_Data_0_Allow 1 6 2 2020 770 2370J
+preplace netloc Gen_mode_0_Ro_sel 1 5 1 N
+preplace netloc Gen_mode_0_CE_1Hz 1 5 1 1360
+preplace netloc zynq_ultra_ps_e_0_pl_clk0 1 1 8 320 830 500 790 760 400 1030 340 1380 340 2040 350 2380 580 2710J
+preplace netloc Hardware_Watchdog_0_Alarm_Volt 1 5 1 N
+preplace netloc Gen_mode_0_Mode 1 5 1 N
+preplace netloc All_Ro_out_0_Data 1 6 1 2060
+preplace netloc zynq_ultra_ps_e_0_M_AXI_HPM0_FPD 1 6 1 N
+preplace netloc util_vector_logic_0_Res 1 1 8 320 980 510 990 770 590 1040 590 1390 590 NJ 590 NJ 590 2700
+preplace netloc Mux_data_0_Data_out 1 7 1 N
+preplace netloc Select_Data_0_Sel 1 6 1 2030
+preplace netloc IP_Conversion_Axi_0_Done 1 5 4 1390 780 NJ 780 2360J 600 2690
+preplace netloc rst_ps8_0_100M_peripheral_aresetn 1 6 2 2050 810 2410J
+preplace netloc IP_Conversion_Axi_0_Duty_cycle 1 8 1 2710
+preplace netloc ps8_0_axi_periph_M00_AXI 1 7 1 2370
+preplace netloc Temp_Voltage_Avarage_0_Voltage1 1 4 4 1050 800 NJ 800 NJ 800 2400
+preplace netloc zynq_ultra_ps_e_0_pl_resetn0 1 0 7 20 1000 NJ 1000 NJ 1000 NJ 1000 NJ 1000 1390 910 2010
+preplace netloc Gen_stress_0_Stress 1 5 1 1380
+preplace netloc Temp_Voltage_Avarage_0_Voltage2 1 4 3 NJ 900 NJ 900 2060
+preplace netloc Temp_Voltage_Avarage_0_Temp1 1 4 4 1030 790 NJ 790 NJ 790 2390
+preplace netloc De_Mux_0_SD1 1 3 1 N
+preplace netloc Sysmon_Enable 1 2 1 500
+preplace netloc Temp_Voltage_Avarage_0_Temp2 1 4 3 1060J 580 NJ 580 2040
+preplace netloc De_Mux_0_SD2 1 3 1 N
+preplace netloc Hardware_Watchdog_0_Emergency_Stop 1 5 1 1370
+preplace netloc De_Mux_0_SS1 1 3 1 N
+preplace netloc Gen_mode_0_Send 1 5 1 1360
+preplace netloc Gen_mode_0_Reset_RO 1 5 1 N
+levelinfo -pg 1 0 170 410 640 900 1210 1710 2210 2550 2830 2970 -top 0 -bot 1110
 "
 }
 {
    "da_axi4_cnt":"2",
-   "da_clkrst_cnt":"11",
+   "da_clkrst_cnt":"15",
+   "da_sys_mgmt_wiz_cnt":"1",
    "da_zynq_ultra_ps_e_cnt":"2"
 }

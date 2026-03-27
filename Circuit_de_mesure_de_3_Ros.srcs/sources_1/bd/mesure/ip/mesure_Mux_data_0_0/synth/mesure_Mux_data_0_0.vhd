@@ -56,6 +56,8 @@ USE ieee.numeric_std.ALL;
 ENTITY mesure_Mux_data_0_0 IS
   PORT (
     Data_in : IN STD_LOGIC_VECTOR(127 DOWNTO 0);
+    Temp2 : IN STD_LOGIC_VECTOR(15 DOWNTO 0);
+    Voltage2 : IN STD_LOGIC_VECTOR(15 DOWNTO 0);
     Sel : IN STD_LOGIC_VECTOR(4 DOWNTO 0);
     Data_out : OUT STD_LOGIC_VECTOR(7 DOWNTO 0)
   );
@@ -70,6 +72,8 @@ ARCHITECTURE mesure_Mux_data_0_0_arch OF mesure_Mux_data_0_0 IS
     );
     PORT (
       Data_in : IN STD_LOGIC_VECTOR(127 DOWNTO 0);
+      Temp2 : IN STD_LOGIC_VECTOR(15 DOWNTO 0);
+      Voltage2 : IN STD_LOGIC_VECTOR(15 DOWNTO 0);
       Sel : IN STD_LOGIC_VECTOR(4 DOWNTO 0);
       Data_out : OUT STD_LOGIC_VECTOR(7 DOWNTO 0)
     );
@@ -89,6 +93,8 @@ BEGIN
     )
     PORT MAP (
       Data_in => Data_in,
+      Temp2 => Temp2,
+      Voltage2 => Voltage2,
       Sel => Sel,
       Data_out => Data_out
     );
