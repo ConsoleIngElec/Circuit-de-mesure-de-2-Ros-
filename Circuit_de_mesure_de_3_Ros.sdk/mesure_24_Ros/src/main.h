@@ -1,0 +1,29 @@
+/*
+ * main.h
+ *
+ *  Created on: 31 mars 2026
+ *      Author: cmbouba
+ */
+
+#ifndef SRC_MAIN_H_
+#define SRC_MAIN_H_
+
+#include "xparameters.h"
+
+// --- ADRESSE DE BASE DE L'IP ---
+#define BASE_ADDR              XPAR_IP_CONVERSION_AXI_0_S00_AXI_BASEADDR
+
+// --- OFFSETS DES REGISTRES ---
+#define REG_DATA_ALLOW_OFFSET  0    // slv_reg0 : Data et signal Allow
+#define REG_TEMP_VOLT_OFFSET   4    // slv_reg1 : Capteurs Temp et Tension
+#define REG_DONE_OFFSET        8    // slv_reg2 : Signal de validation Done
+#define REG_DUTY_CYCLE_OFFSET  12   // slv_reg3 : Contrôle du moteur (PWM)
+
+// --- MASQUES DE BITS ---
+#define MASK_DATA              0xFF        // Les 8 premiers bits
+#define MASK_ALLOW             0x100       // Le 9ème bit (2^8 = 256)
+#define MASK_TEMP              0xFFFF      // Les 16 premiers bits
+#define MASK_VOLT              0xFFFF0000  // Les 16 derniers bits
+
+
+#endif /* SRC_MAIN_H_ */
