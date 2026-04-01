@@ -14,8 +14,8 @@ entity Hardware_Watchdog is
         Reset          : in  std_logic;
         
         -- Entrées brutes venant du SYSMON (Moyennées sur 16 bits)
-        Temp1          : in  std_logic_vector(15 downto 0); 
-        Voltage1       : in  std_logic_vector(15 downto 0);
+        Temp          : in  std_logic_vector(15 downto 0); 
+        Voltage       : in  std_logic_vector(15 downto 0);
         
         -- Sorties de sécurité
         Emergency_Stop : out std_logic; -- '1' = Coupe les Ring Oscillators
@@ -61,9 +61,9 @@ begin
             if Reset = '1' then
                 s_stop_temp <= '0';
             else
-                if unsigned(Temp1) >= T_MAX_RAW then
+                if unsigned(Temp) >= T_MAX_RAW then
                     s_stop_temp <= '1'; -- Seuil critique atteint (Coupure)
-                elsif unsigned(Temp1) <= T_RECOV_RAW then
+                elsif unsigned(Temp) <= T_RECOV_RAW then
                     s_stop_temp <= '0'; -- Refroidissement OK (Autorisation)
                 end if;
             end if;
@@ -80,7 +80,7 @@ begin
                 s_stop_volt <= '0';
             else
                 -- Détection de surtension ou de sous-tension
-                if (unsigned(Voltage1) >= V_MAX_RAW) or (unsigned(Voltage1) <= V_MIN_RAW) then
+                if (unsigned(Voltage) >= V_MAX_RAW) or (unsigned(Voltage) <= V_MIN_RAW) then
                     s_stop_volt <= '1'; -- Hors limites (Coupure)
                 else
                     s_stop_volt <= '0'; -- Tension normale

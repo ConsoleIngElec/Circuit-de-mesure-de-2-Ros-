@@ -1,7 +1,7 @@
 --Copyright 1986-2018 Xilinx, Inc. All Rights Reserved.
 ----------------------------------------------------------------------------------
 --Tool Version: Vivado v.2018.3 (win64) Build 2405991 Thu Dec  6 23:38:27 MST 2018
---Date        : Fri Mar 27 12:21:43 2026
+--Date        : Wed Apr  1 17:15:17 2026
 --Host        : poste-16 running 64-bit major release  (build 9200)
 --Command     : generate_target mesure.bd
 --Design      : mesure
@@ -600,9 +600,9 @@ architecture STRUCTURE of Sysmon_imp_1O9S7OC is
     dout : out STD_LOGIC_VECTOR ( 0 to 0 )
   );
   end component mesure_xlconstant_0_1;
+  signal Reset_1 : STD_LOGIC;
   signal adress_dout : STD_LOGIC_VECTOR ( 7 downto 0 );
   signal dclk_in_0_1 : STD_LOGIC;
-  signal reset_in_0_1 : STD_LOGIC;
   signal system_management_wiz_0_channel_out : STD_LOGIC_VECTOR ( 5 downto 0 );
   signal system_management_wiz_0_do_out : STD_LOGIC_VECTOR ( 15 downto 0 );
   signal system_management_wiz_0_drdy_out : STD_LOGIC;
@@ -622,9 +622,9 @@ architecture STRUCTURE of Sysmon_imp_1O9S7OC is
 begin
   Dout(15 downto 0) <= system_management_wiz_0_do_out(15 downto 0);
   Enable <= system_management_wiz_0_drdy_out;
+  Reset_1 <= Reset;
   Sel(5 downto 0) <= system_management_wiz_0_channel_out(5 downto 0);
   dclk_in_0_1 <= Clk;
-  reset_in_0_1 <= Reset;
 adress: entity work.adress_imp_1HLMKAA
      port map (
       In0(5 downto 0) => system_management_wiz_0_channel_out(5 downto 0),
@@ -645,7 +645,7 @@ system_management_wiz_0: component mesure_system_management_wiz_0_1
       eoc_out => system_management_wiz_0_eoc_out,
       eos_out => NLW_system_management_wiz_0_eos_out_UNCONNECTED,
       ot_out => NLW_system_management_wiz_0_ot_out_UNCONNECTED,
-      reset_in => reset_in_0_1,
+      reset_in => Reset_1,
       user_temp_alarm_out => NLW_system_management_wiz_0_user_temp_alarm_out_UNCONNECTED,
       vccaux_alarm_out => NLW_system_management_wiz_0_vccaux_alarm_out_UNCONNECTED,
       vccint_alarm_out => NLW_system_management_wiz_0_vccint_alarm_out_UNCONNECTED,
@@ -1004,37 +1004,6 @@ architecture STRUCTURE of mesure is
     peripheral_aresetn : out STD_LOGIC_VECTOR ( 0 to 0 )
   );
   end component mesure_rst_ps8_0_100M_1;
-  component mesure_IP_Conversion_Axi_0_0 is
-  port (
-    Data : in STD_LOGIC_VECTOR ( 7 downto 0 );
-    Allow : in STD_LOGIC;
-    Temp1 : in STD_LOGIC_VECTOR ( 15 downto 0 );
-    Voltage1 : in STD_LOGIC_VECTOR ( 15 downto 0 );
-    Done : out STD_LOGIC;
-    Duty_cycle : out STD_LOGIC_VECTOR ( 15 downto 0 );
-    s00_axi_awaddr : in STD_LOGIC_VECTOR ( 3 downto 0 );
-    s00_axi_awprot : in STD_LOGIC_VECTOR ( 2 downto 0 );
-    s00_axi_awvalid : in STD_LOGIC;
-    s00_axi_awready : out STD_LOGIC;
-    s00_axi_wdata : in STD_LOGIC_VECTOR ( 31 downto 0 );
-    s00_axi_wstrb : in STD_LOGIC_VECTOR ( 3 downto 0 );
-    s00_axi_wvalid : in STD_LOGIC;
-    s00_axi_wready : out STD_LOGIC;
-    s00_axi_bresp : out STD_LOGIC_VECTOR ( 1 downto 0 );
-    s00_axi_bvalid : out STD_LOGIC;
-    s00_axi_bready : in STD_LOGIC;
-    s00_axi_araddr : in STD_LOGIC_VECTOR ( 3 downto 0 );
-    s00_axi_arprot : in STD_LOGIC_VECTOR ( 2 downto 0 );
-    s00_axi_arvalid : in STD_LOGIC;
-    s00_axi_arready : out STD_LOGIC;
-    s00_axi_rdata : out STD_LOGIC_VECTOR ( 31 downto 0 );
-    s00_axi_rresp : out STD_LOGIC_VECTOR ( 1 downto 0 );
-    s00_axi_rvalid : out STD_LOGIC;
-    s00_axi_rready : in STD_LOGIC;
-    s00_axi_aclk : in STD_LOGIC;
-    s00_axi_aresetn : in STD_LOGIC
-  );
-  end component mesure_IP_Conversion_Axi_0_0;
   component mesure_All_Ro_out_0_0 is
   port (
     CE_1Hz : in STD_LOGIC;
@@ -1046,15 +1015,6 @@ architecture STRUCTURE of mesure is
     Data : out STD_LOGIC_VECTOR ( 127 downto 0 )
   );
   end component mesure_All_Ro_out_0_0;
-  component mesure_Mux_data_0_0 is
-  port (
-    Data_in : in STD_LOGIC_VECTOR ( 127 downto 0 );
-    Temp2 : in STD_LOGIC_VECTOR ( 15 downto 0 );
-    Voltage2 : in STD_LOGIC_VECTOR ( 15 downto 0 );
-    Sel : in STD_LOGIC_VECTOR ( 4 downto 0 );
-    Data_out : out STD_LOGIC_VECTOR ( 7 downto 0 )
-  );
-  end component mesure_Mux_data_0_0;
   component mesure_Gen_stress_0_1 is
   port (
     Clk : in STD_LOGIC;
@@ -1096,31 +1056,6 @@ architecture STRUCTURE of mesure is
     SS2 : out STD_LOGIC
   );
   end component mesure_De_Mux_0_0;
-  component mesure_Hardware_Watchdog_0_0 is
-  port (
-    Clk : in STD_LOGIC;
-    Reset : in STD_LOGIC;
-    Temp1 : in STD_LOGIC_VECTOR ( 15 downto 0 );
-    Voltage1 : in STD_LOGIC_VECTOR ( 15 downto 0 );
-    Emergency_Stop : out STD_LOGIC;
-    Alarm_Temp : out STD_LOGIC;
-    Alarm_Volt : out STD_LOGIC
-  );
-  end component mesure_Hardware_Watchdog_0_0;
-  component mesure_Temp_Voltage_Avarage_0_0 is
-  port (
-    Clk : in STD_LOGIC;
-    Reset : in STD_LOGIC;
-    SD1 : in STD_LOGIC_VECTOR ( 15 downto 0 );
-    SD2 : in STD_LOGIC_VECTOR ( 15 downto 0 );
-    SS1 : in STD_LOGIC;
-    SS2 : in STD_LOGIC;
-    Temp1 : out STD_LOGIC_VECTOR ( 15 downto 0 );
-    Temp2 : out STD_LOGIC_VECTOR ( 15 downto 0 );
-    Voltage1 : out STD_LOGIC_VECTOR ( 15 downto 0 );
-    Voltage2 : out STD_LOGIC_VECTOR ( 15 downto 0 )
-  );
-  end component mesure_Temp_Voltage_Avarage_0_0;
   component mesure_PWM_Motor_0_0 is
   port (
     Clk : in STD_LOGIC;
@@ -1129,6 +1064,67 @@ architecture STRUCTURE of mesure is
     PWM_Out : out STD_LOGIC
   );
   end component mesure_PWM_Motor_0_0;
+  component mesure_Mux_Data_0_1 is
+  port (
+    Data_In : in STD_LOGIC_VECTOR ( 127 downto 0 );
+    Sel : in STD_LOGIC_VECTOR ( 4 downto 0 );
+    Data_Out : out STD_LOGIC_VECTOR ( 7 downto 0 )
+  );
+  end component mesure_Mux_Data_0_1;
+  component mesure_Hardware_Watchdog_0_0 is
+  port (
+    Clk : in STD_LOGIC;
+    Reset : in STD_LOGIC;
+    Temp : in STD_LOGIC_VECTOR ( 15 downto 0 );
+    Voltage : in STD_LOGIC_VECTOR ( 15 downto 0 );
+    Emergency_Stop : out STD_LOGIC;
+    Alarm_Temp : out STD_LOGIC;
+    Alarm_Volt : out STD_LOGIC
+  );
+  end component mesure_Hardware_Watchdog_0_0;
+  component mesure_IP_Conversion_Axi_0_0 is
+  port (
+    Data : in STD_LOGIC_VECTOR ( 7 downto 0 );
+    Allow : in STD_LOGIC;
+    Temp : in STD_LOGIC_VECTOR ( 15 downto 0 );
+    Voltage : in STD_LOGIC_VECTOR ( 15 downto 0 );
+    Done : out STD_LOGIC;
+    Duty_cycle : out STD_LOGIC_VECTOR ( 15 downto 0 );
+    s00_axi_awaddr : in STD_LOGIC_VECTOR ( 3 downto 0 );
+    s00_axi_awprot : in STD_LOGIC_VECTOR ( 2 downto 0 );
+    s00_axi_awvalid : in STD_LOGIC;
+    s00_axi_awready : out STD_LOGIC;
+    s00_axi_wdata : in STD_LOGIC_VECTOR ( 31 downto 0 );
+    s00_axi_wstrb : in STD_LOGIC_VECTOR ( 3 downto 0 );
+    s00_axi_wvalid : in STD_LOGIC;
+    s00_axi_wready : out STD_LOGIC;
+    s00_axi_bresp : out STD_LOGIC_VECTOR ( 1 downto 0 );
+    s00_axi_bvalid : out STD_LOGIC;
+    s00_axi_bready : in STD_LOGIC;
+    s00_axi_araddr : in STD_LOGIC_VECTOR ( 3 downto 0 );
+    s00_axi_arprot : in STD_LOGIC_VECTOR ( 2 downto 0 );
+    s00_axi_arvalid : in STD_LOGIC;
+    s00_axi_arready : out STD_LOGIC;
+    s00_axi_rdata : out STD_LOGIC_VECTOR ( 31 downto 0 );
+    s00_axi_rresp : out STD_LOGIC_VECTOR ( 1 downto 0 );
+    s00_axi_rvalid : out STD_LOGIC;
+    s00_axi_rready : in STD_LOGIC;
+    s00_axi_aclk : in STD_LOGIC;
+    s00_axi_aresetn : in STD_LOGIC
+  );
+  end component mesure_IP_Conversion_Axi_0_0;
+  component mesure_Temp_Voltage_Average_0_0 is
+  port (
+    Clk : in STD_LOGIC;
+    Reset : in STD_LOGIC;
+    SD1 : in STD_LOGIC_VECTOR ( 15 downto 0 );
+    SD2 : in STD_LOGIC_VECTOR ( 15 downto 0 );
+    SS1 : in STD_LOGIC;
+    SS2 : in STD_LOGIC;
+    Temp : out STD_LOGIC_VECTOR ( 15 downto 0 );
+    Voltage : out STD_LOGIC_VECTOR ( 15 downto 0 )
+  );
+  end component mesure_Temp_Voltage_Average_0_0;
   signal All_Ro_out_0_Data : STD_LOGIC_VECTOR ( 127 downto 0 );
   signal De_Mux_0_SD1 : STD_LOGIC_VECTOR ( 15 downto 0 );
   signal De_Mux_0_SD2 : STD_LOGIC_VECTOR ( 15 downto 0 );
@@ -1145,17 +1141,15 @@ architecture STRUCTURE of mesure is
   signal Hardware_Watchdog_0_Emergency_Stop : STD_LOGIC;
   signal IP_Conversion_Axi_0_Done : STD_LOGIC;
   signal IP_Conversion_Axi_0_Duty_cycle : STD_LOGIC_VECTOR ( 15 downto 0 );
-  signal Mux_data_0_Data_out : STD_LOGIC_VECTOR ( 7 downto 0 );
+  signal Mux_Data_0_Data_Out : STD_LOGIC_VECTOR ( 7 downto 0 );
   signal PWM_Motor_0_PWM_Out : STD_LOGIC;
   signal Select_Data_0_Allow : STD_LOGIC;
   signal Select_Data_0_Sel : STD_LOGIC_VECTOR ( 4 downto 0 );
   signal Sysmon_Dout : STD_LOGIC_VECTOR ( 15 downto 0 );
   signal Sysmon_Enable : STD_LOGIC;
   signal Sysmon_Sel : STD_LOGIC_VECTOR ( 5 downto 0 );
-  signal Temp_Voltage_Avarage_0_Temp1 : STD_LOGIC_VECTOR ( 15 downto 0 );
-  signal Temp_Voltage_Avarage_0_Temp2 : STD_LOGIC_VECTOR ( 15 downto 0 );
-  signal Temp_Voltage_Avarage_0_Voltage1 : STD_LOGIC_VECTOR ( 15 downto 0 );
-  signal Temp_Voltage_Avarage_0_Voltage2 : STD_LOGIC_VECTOR ( 15 downto 0 );
+  signal Temp_Voltage_Average_0_Temp : STD_LOGIC_VECTOR ( 15 downto 0 );
+  signal Temp_Voltage_Average_0_Voltage : STD_LOGIC_VECTOR ( 15 downto 0 );
   signal ps8_0_axi_periph_M00_AXI_ARADDR : STD_LOGIC_VECTOR ( 39 downto 0 );
   signal ps8_0_axi_periph_M00_AXI_ARPROT : STD_LOGIC_VECTOR ( 2 downto 0 );
   signal ps8_0_axi_periph_M00_AXI_ARREADY : STD_LOGIC;
@@ -1269,17 +1263,17 @@ Hardware_Watchdog_0: component mesure_Hardware_Watchdog_0_0
       Clk => zynq_ultra_ps_e_0_pl_clk0,
       Emergency_Stop => Hardware_Watchdog_0_Emergency_Stop,
       Reset => util_vector_logic_0_Res(0),
-      Temp1(15 downto 0) => Temp_Voltage_Avarage_0_Temp1(15 downto 0),
-      Voltage1(15 downto 0) => Temp_Voltage_Avarage_0_Voltage1(15 downto 0)
+      Temp(15 downto 0) => Temp_Voltage_Average_0_Temp(15 downto 0),
+      Voltage(15 downto 0) => Temp_Voltage_Average_0_Voltage(15 downto 0)
     );
 IP_Conversion_Axi_0: component mesure_IP_Conversion_Axi_0_0
      port map (
       Allow => Select_Data_0_Allow,
-      Data(7 downto 0) => Mux_data_0_Data_out(7 downto 0),
+      Data(7 downto 0) => Mux_Data_0_Data_Out(7 downto 0),
       Done => IP_Conversion_Axi_0_Done,
       Duty_cycle(15 downto 0) => IP_Conversion_Axi_0_Duty_cycle(15 downto 0),
-      Temp1(15 downto 0) => Temp_Voltage_Avarage_0_Temp1(15 downto 0),
-      Voltage1(15 downto 0) => Temp_Voltage_Avarage_0_Voltage1(15 downto 0),
+      Temp(15 downto 0) => Temp_Voltage_Average_0_Temp(15 downto 0),
+      Voltage(15 downto 0) => Temp_Voltage_Average_0_Voltage(15 downto 0),
       s00_axi_aclk => zynq_ultra_ps_e_0_pl_clk0,
       s00_axi_araddr(3 downto 0) => ps8_0_axi_periph_M00_AXI_ARADDR(3 downto 0),
       s00_axi_aresetn => rst_ps8_0_100M_peripheral_aresetn(0),
@@ -1302,13 +1296,11 @@ IP_Conversion_Axi_0: component mesure_IP_Conversion_Axi_0_0
       s00_axi_wstrb(3 downto 0) => ps8_0_axi_periph_M00_AXI_WSTRB(3 downto 0),
       s00_axi_wvalid => ps8_0_axi_periph_M00_AXI_WVALID
     );
-Mux_data_0: component mesure_Mux_data_0_0
+Mux_Data_0: component mesure_Mux_Data_0_1
      port map (
-      Data_in(127 downto 0) => All_Ro_out_0_Data(127 downto 0),
-      Data_out(7 downto 0) => Mux_data_0_Data_out(7 downto 0),
-      Sel(4 downto 0) => Select_Data_0_Sel(4 downto 0),
-      Temp2(15 downto 0) => Temp_Voltage_Avarage_0_Temp2(15 downto 0),
-      Voltage2(15 downto 0) => Temp_Voltage_Avarage_0_Voltage2(15 downto 0)
+      Data_In(127 downto 0) => All_Ro_out_0_Data(127 downto 0),
+      Data_Out(7 downto 0) => Mux_Data_0_Data_Out(7 downto 0),
+      Sel(4 downto 0) => Select_Data_0_Sel(4 downto 0)
     );
 PWM_Motor_0: component mesure_PWM_Motor_0_0
      port map (
@@ -1334,7 +1326,7 @@ Sysmon: entity work.Sysmon_imp_1O9S7OC
       Reset => util_vector_logic_0_Res(0),
       Sel(5 downto 0) => Sysmon_Sel(5 downto 0)
     );
-Temp_Voltage_Avarage_0: component mesure_Temp_Voltage_Avarage_0_0
+Temp_Voltage_Average_0: component mesure_Temp_Voltage_Average_0_0
      port map (
       Clk => zynq_ultra_ps_e_0_pl_clk0,
       Reset => util_vector_logic_0_Res(0),
@@ -1342,10 +1334,8 @@ Temp_Voltage_Avarage_0: component mesure_Temp_Voltage_Avarage_0_0
       SD2(15 downto 0) => De_Mux_0_SD2(15 downto 0),
       SS1 => De_Mux_0_SS1,
       SS2 => De_Mux_0_SS2,
-      Temp1(15 downto 0) => Temp_Voltage_Avarage_0_Temp1(15 downto 0),
-      Temp2(15 downto 0) => Temp_Voltage_Avarage_0_Temp2(15 downto 0),
-      Voltage1(15 downto 0) => Temp_Voltage_Avarage_0_Voltage1(15 downto 0),
-      Voltage2(15 downto 0) => Temp_Voltage_Avarage_0_Voltage2(15 downto 0)
+      Temp(15 downto 0) => Temp_Voltage_Average_0_Temp(15 downto 0),
+      Voltage(15 downto 0) => Temp_Voltage_Average_0_Voltage(15 downto 0)
     );
 ps8_0_axi_periph: entity work.mesure_ps8_0_axi_periph_1
      port map (

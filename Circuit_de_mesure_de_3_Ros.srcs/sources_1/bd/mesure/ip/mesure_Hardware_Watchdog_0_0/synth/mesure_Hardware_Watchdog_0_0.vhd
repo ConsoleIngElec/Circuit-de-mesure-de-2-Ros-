@@ -57,8 +57,8 @@ ENTITY mesure_Hardware_Watchdog_0_0 IS
   PORT (
     Clk : IN STD_LOGIC;
     Reset : IN STD_LOGIC;
-    Temp1 : IN STD_LOGIC_VECTOR(15 DOWNTO 0);
-    Voltage1 : IN STD_LOGIC_VECTOR(15 DOWNTO 0);
+    Temp : IN STD_LOGIC_VECTOR(15 DOWNTO 0);
+    Voltage : IN STD_LOGIC_VECTOR(15 DOWNTO 0);
     Emergency_Stop : OUT STD_LOGIC;
     Alarm_Temp : OUT STD_LOGIC;
     Alarm_Volt : OUT STD_LOGIC
@@ -77,8 +77,8 @@ ARCHITECTURE mesure_Hardware_Watchdog_0_0_arch OF mesure_Hardware_Watchdog_0_0 I
     PORT (
       Clk : IN STD_LOGIC;
       Reset : IN STD_LOGIC;
-      Temp1 : IN STD_LOGIC_VECTOR(15 DOWNTO 0);
-      Voltage1 : IN STD_LOGIC_VECTOR(15 DOWNTO 0);
+      Temp : IN STD_LOGIC_VECTOR(15 DOWNTO 0);
+      Voltage : IN STD_LOGIC_VECTOR(15 DOWNTO 0);
       Emergency_Stop : OUT STD_LOGIC;
       Alarm_Temp : OUT STD_LOGIC;
       Alarm_Volt : OUT STD_LOGIC
@@ -108,8 +108,8 @@ BEGIN
     PORT MAP (
       Clk => Clk,
       Reset => Reset,
-      Temp1 => Temp1,
-      Voltage1 => Voltage1,
+      Temp => Temp,
+      Voltage => Voltage,
       Emergency_Stop => Emergency_Stop,
       Alarm_Temp => Alarm_Temp,
       Alarm_Volt => Alarm_Volt

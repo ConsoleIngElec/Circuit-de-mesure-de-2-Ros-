@@ -20,10 +20,23 @@
 #define REG_DUTY_CYCLE_OFFSET  12   // slv_reg3 : Contrôle du moteur (PWM)
 
 // --- MASQUES DE BITS ---
+//--- Masques pour separer Data et Allow dans REG_DATA_ALLOW_OFFSET
 #define MASK_DATA              0xFF        // Les 8 premiers bits
 #define MASK_ALLOW             0x100       // Le 9ème bit (2^8 = 256)
+
+//--- Masques pour separer Temp et Voltage dans REG_TEMP_VOLT_OFFSET
 #define MASK_TEMP              0xFFFF      // Les 16 premiers bits
 #define MASK_VOLT              0xFFFF0000  // Les 16 derniers bits
 
+// --- IIC MUX ---
+#define IIC_MUX_ADDR           0x75  // Adresse du MUX I2C sur Ultra96-V2
+#define IIC_MUX_PMIC_CHANNEL   0x10  // Canal du PMIC dans le MUX
+
+// --- TENSION VCCINT ---
+#define VCCINT_VOLTAGE     0.85f  // La valeur demandée de la tension
+#define VCCINT_VMAX        0.90f  // Seuil de sécurité (VCCINT_VMAX >= VCCINT_VOLTAGE)
+
+// --- RESOLUTION PMIC ---
+#define VCCINT_RESOLUTION  1      // Resolution du PMIC: 1 = 3.906 mV/step  |  2 = 1.953 mV/step
 
 #endif /* SRC_MAIN_H_ */

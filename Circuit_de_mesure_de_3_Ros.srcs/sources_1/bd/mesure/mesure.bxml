@@ -2,22 +2,14 @@
 <Root MajorVersion="0" MinorVersion="36">
   <CompositeFile CompositeFileTopName="mesure" CanBeSetAsTop="false" CanDisplayChildGraph="true">
     <Description>Composite Fileset</Description>
-    <Generation Name="SYNTHESIS" State="GENERATED" Timestamp="1774610504"/>
-    <Generation Name="IMPLEMENTATION" State="GENERATED" Timestamp="1774610504"/>
-    <Generation Name="SIMULATION" State="GENERATED" Timestamp="1774610504"/>
-    <Generation Name="HW_HANDOFF" State="GENERATED" Timestamp="1774610504"/>
+    <Generation Name="SYNTHESIS" State="GENERATED" Timestamp="1775056518"/>
+    <Generation Name="IMPLEMENTATION" State="GENERATED" Timestamp="1775056518"/>
+    <Generation Name="SIMULATION" State="GENERATED" Timestamp="1775056518"/>
+    <Generation Name="HW_HANDOFF" State="GENERATED" Timestamp="1775056518"/>
     <FileCollection Name="SOURCES" Type="SOURCES">
       <File Name="ip\mesure_All_Ro_out_0_0\mesure_All_Ro_out_0_0.xci" Type="IP">
         <Instance HierarchyPath="All_Ro_out_0"/>
         <Properties IsEditable="false" IsVisible="true" Timestamp="1773328348" IsTrackable="true" IsStatusTracked="true"/>
-        <Library Name="xil_defaultlib"/>
-        <UsedIn Val="SYNTHESIS"/>
-        <UsedIn Val="IMPLEMENTATION"/>
-        <UsedIn Val="SIMULATION"/>
-      </File>
-      <File Name="ip\mesure_Mux_data_0_0\mesure_Mux_data_0_0.xci" Type="IP">
-        <Instance HierarchyPath="Mux_data_0"/>
-        <Properties IsEditable="false" IsVisible="true" Timestamp="1773240643" IsTrackable="true" IsStatusTracked="true"/>
         <Library Name="xil_defaultlib"/>
         <UsedIn Val="SYNTHESIS"/>
         <UsedIn Val="IMPLEMENTATION"/>
@@ -56,6 +48,7 @@
         <UsedIn Val="SIMULATION"/>
       </File>
       <File Name="ip\mesure_ps8_0_axi_periph_1\mesure_ps8_0_axi_periph_1.xci" Type="IP">
+        <Instance HierarchyPath="ps8_0_axi_periph"/>
         <Properties IsEditable="false" IsVisible="false" Timestamp="1773241383" IsTrackable="true" IsStatusTracked="true"/>
         <Library Name="xil_defaultlib"/>
         <UsedIn Val="SYNTHESIS"/>
@@ -152,16 +145,24 @@
         <UsedIn Val="IMPLEMENTATION"/>
         <UsedIn Val="SIMULATION"/>
       </File>
-      <File Name="ip\mesure_Temp_Voltage_Avarage_0_0\mesure_Temp_Voltage_Avarage_0_0.xci" Type="IP">
-        <Instance HierarchyPath="Temp_Voltage_Avarage_0"/>
+      <File Name="ip\mesure_PWM_Motor_0_0\mesure_PWM_Motor_0_0.xci" Type="IP">
+        <Instance HierarchyPath="PWM_Motor_0"/>
         <Properties IsEditable="false" IsVisible="true" Timestamp="0" IsTrackable="true" IsStatusTracked="true"/>
         <Library Name="xil_defaultlib"/>
         <UsedIn Val="SYNTHESIS"/>
         <UsedIn Val="IMPLEMENTATION"/>
         <UsedIn Val="SIMULATION"/>
       </File>
-      <File Name="ip\mesure_PWM_Motor_0_0\mesure_PWM_Motor_0_0.xci" Type="IP">
-        <Instance HierarchyPath="PWM_Motor_0"/>
+      <File Name="ip\mesure_Mux_Data_0_1\mesure_Mux_Data_0_1.xci" Type="IP">
+        <Instance HierarchyPath="Mux_Data_0"/>
+        <Properties IsEditable="false" IsVisible="true" Timestamp="0" IsTrackable="true" IsStatusTracked="true"/>
+        <Library Name="xil_defaultlib"/>
+        <UsedIn Val="SYNTHESIS"/>
+        <UsedIn Val="IMPLEMENTATION"/>
+        <UsedIn Val="SIMULATION"/>
+      </File>
+      <File Name="ip\mesure_Temp_Voltage_Average_0_0\mesure_Temp_Voltage_Average_0_0.xci" Type="IP">
+        <Instance HierarchyPath="Temp_Voltage_Average_0"/>
         <Properties IsEditable="false" IsVisible="true" Timestamp="0" IsTrackable="true" IsStatusTracked="true"/>
         <Library Name="xil_defaultlib"/>
         <UsedIn Val="SYNTHESIS"/>

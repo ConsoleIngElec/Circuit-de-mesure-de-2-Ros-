@@ -27,16 +27,16 @@
           "xlconstant_2": ""
         }
       },
-      "IP_Conversion_Axi_0": "",
       "All_Ro_out_0": "",
-      "Mux_data_0": "",
       "Gen_stress_0": "",
       "Gen_mode_0": "",
       "Select_Data_0": "",
       "De_Mux_0": "",
+      "PWM_Motor_0": "",
+      "Mux_Data_0": "",
       "Hardware_Watchdog_0": "",
-      "Temp_Voltage_Avarage_0": "",
-      "PWM_Motor_0": ""
+      "IP_Conversion_Axi_0": "",
+      "Temp_Voltage_Average_0": ""
     },
     "ports": {
       "PWM_Out": {
@@ -1510,16 +1510,16 @@
           }
         },
         "interface_nets": {
-          "s00_couplers_to_ps8_0_axi_periph": {
-            "interface_ports": [
-              "M00_AXI",
-              "s00_couplers/M_AXI"
-            ]
-          },
           "ps8_0_axi_periph_to_s00_couplers": {
             "interface_ports": [
               "S00_AXI",
               "s00_couplers/S_AXI"
+            ]
+          },
+          "s00_couplers_to_ps8_0_axi_periph": {
+            "interface_ports": [
+              "M00_AXI",
+              "s00_couplers/M_AXI"
             ]
           }
         },
@@ -1724,17 +1724,13 @@
               "Sel"
             ]
           },
-          "reset_in_0_1": {
+          "Reset_1": {
             "ports": [
               "Reset",
               "system_management_wiz_0/reset_in"
             ]
           }
         }
-      },
-      "IP_Conversion_Axi_0": {
-        "vlnv": "IMS.bordeaux:user:IP_Conversion_Axi:1.0",
-        "xci_name": "mesure_IP_Conversion_Axi_0_0"
       },
       "All_Ro_out_0": {
         "vlnv": "xilinx.com:module_ref:All_Ro_out:1.0",
@@ -1774,42 +1770,6 @@
           "Data": {
             "direction": "O",
             "left": "127",
-            "right": "0"
-          }
-        }
-      },
-      "Mux_data_0": {
-        "vlnv": "xilinx.com:module_ref:Mux_data:1.0",
-        "xci_name": "mesure_Mux_data_0_0",
-        "reference_info": {
-          "ref_type": "hdl",
-          "ref_name": "Mux_data",
-          "boundary_crc": "0x0"
-        },
-        "ports": {
-          "Data_in": {
-            "direction": "I",
-            "left": "127",
-            "right": "0"
-          },
-          "Temp2": {
-            "direction": "I",
-            "left": "15",
-            "right": "0"
-          },
-          "Voltage2": {
-            "direction": "I",
-            "left": "15",
-            "right": "0"
-          },
-          "Sel": {
-            "direction": "I",
-            "left": "4",
-            "right": "0"
-          },
-          "Data_out": {
-            "direction": "O",
-            "left": "7",
             "right": "0"
           }
         }
@@ -2015,6 +1975,73 @@
           }
         }
       },
+      "PWM_Motor_0": {
+        "vlnv": "xilinx.com:module_ref:PWM_Motor:1.0",
+        "xci_name": "mesure_PWM_Motor_0_0",
+        "reference_info": {
+          "ref_type": "hdl",
+          "ref_name": "PWM_Motor",
+          "boundary_crc": "0x0"
+        },
+        "ports": {
+          "Clk": {
+            "type": "clk",
+            "direction": "I",
+            "parameters": {
+              "ASSOCIATED_RESET": {
+                "value": "Reset",
+                "value_src": "constant"
+              },
+              "CLK_DOMAIN": {
+                "value": "mesure_zynq_ultra_ps_e_0_1_pl_clk0",
+                "value_src": "default_prop"
+              },
+              "FREQ_HZ": {
+                "value": "100000000",
+                "value_src": "user_prop"
+              }
+            }
+          },
+          "Reset": {
+            "type": "rst",
+            "direction": "I"
+          },
+          "Duty": {
+            "direction": "I",
+            "left": "15",
+            "right": "0"
+          },
+          "PWM_Out": {
+            "direction": "O"
+          }
+        }
+      },
+      "Mux_Data_0": {
+        "vlnv": "xilinx.com:module_ref:Mux_Data:1.0",
+        "xci_name": "mesure_Mux_Data_0_1",
+        "reference_info": {
+          "ref_type": "hdl",
+          "ref_name": "Mux_Data",
+          "boundary_crc": "0x0"
+        },
+        "ports": {
+          "Data_In": {
+            "direction": "I",
+            "left": "127",
+            "right": "0"
+          },
+          "Sel": {
+            "direction": "I",
+            "left": "4",
+            "right": "0"
+          },
+          "Data_Out": {
+            "direction": "O",
+            "left": "7",
+            "right": "0"
+          }
+        }
+      },
       "Hardware_Watchdog_0": {
         "vlnv": "xilinx.com:module_ref:Hardware_Watchdog:1.0",
         "xci_name": "mesure_Hardware_Watchdog_0_0",
@@ -2046,12 +2073,12 @@
             "type": "rst",
             "direction": "I"
           },
-          "Temp1": {
+          "Temp": {
             "direction": "I",
             "left": "15",
             "right": "0"
           },
-          "Voltage1": {
+          "Voltage": {
             "direction": "I",
             "left": "15",
             "right": "0"
@@ -2079,12 +2106,16 @@
           }
         }
       },
-      "Temp_Voltage_Avarage_0": {
-        "vlnv": "xilinx.com:module_ref:Temp_Voltage_Avarage:1.0",
-        "xci_name": "mesure_Temp_Voltage_Avarage_0_0",
+      "IP_Conversion_Axi_0": {
+        "vlnv": "IMS.bordeaux:user:IP_Conversion_Axi:1.0",
+        "xci_name": "mesure_IP_Conversion_Axi_0_0"
+      },
+      "Temp_Voltage_Average_0": {
+        "vlnv": "xilinx.com:module_ref:Temp_Voltage_Average:1.0",
+        "xci_name": "mesure_Temp_Voltage_Average_0_0",
         "reference_info": {
           "ref_type": "hdl",
-          "ref_name": "Temp_Voltage_Avarage",
+          "ref_name": "Temp_Voltage_Average",
           "boundary_crc": "0x0"
         },
         "ports": {
@@ -2126,81 +2157,30 @@
           "SS2": {
             "direction": "I"
           },
-          "Temp1": {
+          "Temp": {
             "direction": "O",
             "left": "15",
             "right": "0"
           },
-          "Temp2": {
+          "Voltage": {
             "direction": "O",
             "left": "15",
             "right": "0"
-          },
-          "Voltage1": {
-            "direction": "O",
-            "left": "15",
-            "right": "0"
-          },
-          "Voltage2": {
-            "direction": "O",
-            "left": "15",
-            "right": "0"
-          }
-        }
-      },
-      "PWM_Motor_0": {
-        "vlnv": "xilinx.com:module_ref:PWM_Motor:1.0",
-        "xci_name": "mesure_PWM_Motor_0_0",
-        "reference_info": {
-          "ref_type": "hdl",
-          "ref_name": "PWM_Motor",
-          "boundary_crc": "0x0"
-        },
-        "ports": {
-          "Clk": {
-            "type": "clk",
-            "direction": "I",
-            "parameters": {
-              "ASSOCIATED_RESET": {
-                "value": "Reset",
-                "value_src": "constant"
-              },
-              "CLK_DOMAIN": {
-                "value": "mesure_zynq_ultra_ps_e_0_1_pl_clk0",
-                "value_src": "default_prop"
-              },
-              "FREQ_HZ": {
-                "value": "100000000",
-                "value_src": "user_prop"
-              }
-            }
-          },
-          "Reset": {
-            "type": "rst",
-            "direction": "I"
-          },
-          "Duty": {
-            "direction": "I",
-            "left": "15",
-            "right": "0"
-          },
-          "PWM_Out": {
-            "direction": "O"
           }
         }
       }
     },
     "interface_nets": {
-      "zynq_ultra_ps_e_0_M_AXI_HPM0_FPD": {
-        "interface_ports": [
-          "zynq_ultra_ps_e_0/M_AXI_HPM0_FPD",
-          "ps8_0_axi_periph/S00_AXI"
-        ]
-      },
       "ps8_0_axi_periph_M00_AXI": {
         "interface_ports": [
           "ps8_0_axi_periph/M00_AXI",
           "IP_Conversion_Axi_0/S00_AXI"
+        ]
+      },
+      "zynq_ultra_ps_e_0_M_AXI_HPM0_FPD": {
+        "interface_ports": [
+          "zynq_ultra_ps_e_0/M_AXI_HPM0_FPD",
+          "ps8_0_axi_periph/S00_AXI"
         ]
       }
     },
@@ -2209,18 +2189,6 @@
         "ports": [
           "Gen_stress_0/Stress",
           "All_Ro_out_0/Stress"
-        ]
-      },
-      "All_Ro_out_0_Data": {
-        "ports": [
-          "All_Ro_out_0/Data",
-          "Mux_data_0/Data_in"
-        ]
-      },
-      "Mux_data_0_Data_out": {
-        "ports": [
-          "Mux_data_0/Data_out",
-          "IP_Conversion_Axi_0/Data"
         ]
       },
       "zynq_ultra_ps_e_0_pl_resetn0": {
@@ -2233,14 +2201,14 @@
       "util_vector_logic_0_Res": {
         "ports": [
           "util_vector_logic_0/Res",
-          "Sysmon/Reset",
           "Gen_stress_0/Reset",
           "Gen_mode_0/Reset",
           "Select_Data_0/Reset",
           "De_Mux_0/Reset",
+          "PWM_Motor_0/Reset",
+          "Sysmon/Reset",
           "Hardware_Watchdog_0/Reset",
-          "Temp_Voltage_Avarage_0/Reset",
-          "PWM_Motor_0/Reset"
+          "Temp_Voltage_Average_0/Reset"
         ]
       },
       "zynq_ultra_ps_e_0_pl_clk0": {
@@ -2251,15 +2219,15 @@
           "rst_ps8_0_100M/slowest_sync_clk",
           "ps8_0_axi_periph/M00_ACLK",
           "ps8_0_axi_periph/ACLK",
-          "IP_Conversion_Axi_0/s00_axi_aclk",
           "Sysmon/Clk",
           "Gen_stress_0/Clk",
           "Gen_mode_0/Clk",
           "Select_Data_0/Clk",
           "De_Mux_0/Clk",
+          "PWM_Motor_0/Clk",
           "Hardware_Watchdog_0/Clk",
-          "Temp_Voltage_Avarage_0/Clk",
-          "PWM_Motor_0/Clk"
+          "IP_Conversion_Axi_0/s00_axi_aclk",
+          "Temp_Voltage_Average_0/Clk"
         ]
       },
       "rst_ps8_0_100M_peripheral_aresetn": {
@@ -2313,12 +2281,6 @@
           "IP_Conversion_Axi_0/Allow"
         ]
       },
-      "Select_Data_0_Sel": {
-        "ports": [
-          "Select_Data_0/Sel",
-          "Mux_data_0/Sel"
-        ]
-      },
       "Sysmon_Dout": {
         "ports": [
           "Sysmon/Dout",
@@ -2329,62 +2291,6 @@
         "ports": [
           "Sysmon/Enable",
           "De_Mux_0/Enable"
-        ]
-      },
-      "Sysmon_Sel": {
-        "ports": [
-          "Sysmon/Sel",
-          "De_Mux_0/Sel"
-        ]
-      },
-      "De_Mux_0_SS1": {
-        "ports": [
-          "De_Mux_0/SS1",
-          "Temp_Voltage_Avarage_0/SS1"
-        ]
-      },
-      "De_Mux_0_SS2": {
-        "ports": [
-          "De_Mux_0/SS2",
-          "Temp_Voltage_Avarage_0/SS2"
-        ]
-      },
-      "De_Mux_0_SD2": {
-        "ports": [
-          "De_Mux_0/SD2",
-          "Temp_Voltage_Avarage_0/SD2"
-        ]
-      },
-      "De_Mux_0_SD1": {
-        "ports": [
-          "De_Mux_0/SD1",
-          "Temp_Voltage_Avarage_0/SD1"
-        ]
-      },
-      "Temp_Voltage_Avarage_0_Temp2": {
-        "ports": [
-          "Temp_Voltage_Avarage_0/Temp2",
-          "Mux_data_0/Temp2"
-        ]
-      },
-      "Temp_Voltage_Avarage_0_Temp1": {
-        "ports": [
-          "Temp_Voltage_Avarage_0/Temp1",
-          "IP_Conversion_Axi_0/Temp1",
-          "Hardware_Watchdog_0/Temp1"
-        ]
-      },
-      "Temp_Voltage_Avarage_0_Voltage1": {
-        "ports": [
-          "Temp_Voltage_Avarage_0/Voltage1",
-          "IP_Conversion_Axi_0/Voltage1",
-          "Hardware_Watchdog_0/Voltage1"
-        ]
-      },
-      "Temp_Voltage_Avarage_0_Voltage2": {
-        "ports": [
-          "Temp_Voltage_Avarage_0/Voltage2",
-          "Mux_data_0/Voltage2"
         ]
       },
       "Hardware_Watchdog_0_Emergency_Stop": {
@@ -2415,6 +2321,68 @@
         "ports": [
           "PWM_Motor_0/PWM_Out",
           "PWM_Out"
+        ]
+      },
+      "Sysmon_Sel": {
+        "ports": [
+          "Sysmon/Sel",
+          "De_Mux_0/Sel"
+        ]
+      },
+      "Mux_Data_0_Data_Out": {
+        "ports": [
+          "Mux_Data_0/Data_Out",
+          "IP_Conversion_Axi_0/Data"
+        ]
+      },
+      "Select_Data_0_Sel": {
+        "ports": [
+          "Select_Data_0/Sel",
+          "Mux_Data_0/Sel"
+        ]
+      },
+      "All_Ro_out_0_Data": {
+        "ports": [
+          "All_Ro_out_0/Data",
+          "Mux_Data_0/Data_In"
+        ]
+      },
+      "De_Mux_0_SS2": {
+        "ports": [
+          "De_Mux_0/SS2",
+          "Temp_Voltage_Average_0/SS2"
+        ]
+      },
+      "De_Mux_0_SS1": {
+        "ports": [
+          "De_Mux_0/SS1",
+          "Temp_Voltage_Average_0/SS1"
+        ]
+      },
+      "De_Mux_0_SD2": {
+        "ports": [
+          "De_Mux_0/SD2",
+          "Temp_Voltage_Average_0/SD2"
+        ]
+      },
+      "De_Mux_0_SD1": {
+        "ports": [
+          "De_Mux_0/SD1",
+          "Temp_Voltage_Average_0/SD1"
+        ]
+      },
+      "Temp_Voltage_Average_0_Temp": {
+        "ports": [
+          "Temp_Voltage_Average_0/Temp",
+          "Hardware_Watchdog_0/Temp",
+          "IP_Conversion_Axi_0/Temp"
+        ]
+      },
+      "Temp_Voltage_Average_0_Voltage": {
+        "ports": [
+          "Temp_Voltage_Average_0/Voltage",
+          "Hardware_Watchdog_0/Voltage",
+          "IP_Conversion_Axi_0/Voltage"
         ]
       }
     },

@@ -22,6 +22,9 @@ const char *stress_label[4] = {
     "100 MHz"
 };
 
+float current_temp      = 0.0f;
+float current_volt_fpga = 0.0f;
+
 // --- Formatage du temps écoulé ---
 void format_time(double total_seconds, char *out_str) {
     int days = (int)total_seconds / 86400;
@@ -38,52 +41,73 @@ void format_time(double total_seconds, char *out_str) {
 
 // --- Capture d'un cycle complet (6 modes x 4 ROs) ---
 void run_capture_cycle(int cycle_count, XTime tStart) {
-    int k, ro_idx, b;
-    u32 byte_read, frequency_32bit;
+    u8  raw_bytes[20];       // 20 octets : 16 pour les ROs + 4 pour les données provenant du Sysmon
+    u32 frequency_32bit;
+    u16 raw_temp, raw_volt;
+    u32 reg_temp_volt;       // Pour la lecture directe du registre 32 bits
     char time_str[40], mode_label[20];
     XTime tNow;
 
-    for (k = 0; k < NB_MODES; k++) {
+    for (int k = 0; k < NB_MODES; k++) {
 
         check_sd_card();
 
+        // 1. Attente du signal de gel des données (ALLOW)
         while ((Xil_In32(BASE_ADDR + REG_DATA_ALLOW_OFFSET) & MASK_ALLOW) == 0);
 
+        // 2. Horodatage
         XTime_GetTime(&tNow);
         double elapsed = (double)(tNow - tStart) / COUNTS_PER_SECOND;
         format_time(elapsed, time_str);
-
         elapsed_mode[k] = elapsed;
         strcpy(time_mode[k], time_str);
 
         if (k < 3) sprintf(mode_label, "RO_B %d",  k + 1);
         else       sprintf(mode_label, "RO_LP %d", k - 2);
 
+        // 3. Lecture des 16 premiers octets pour les ROs (Multiplexeur)
+        // Note : On ne lit que jusqu'à 16 car Temp/Volt sont lus via le registre AXI directement
+        for (int i = 0; i < 16; i++) {
+            raw_bytes[i] = Xil_In32(BASE_ADDR + REG_DATA_ALLOW_OFFSET) & MASK_DATA;
+
+            Xil_Out32(BASE_ADDR + REG_DONE_OFFSET, 1);
+            Xil_Out32(BASE_ADDR + REG_DONE_OFFSET, 0);
+            for (volatile int d = 0; d < 500; d++);
+        }
+
+        // 4. Lecture directe Température et Tension via le registre dédié (32 bits)
+        // Utilisation des masques définis dans main.h
+        reg_temp_volt = Xil_In32(BASE_ADDR + REG_TEMP_VOLT_OFFSET);
+
+        raw_temp = (u16)(reg_temp_volt & MASK_TEMP);           // Bits [15:0] du REG_TEMP_VOLT_OFFSET pour la température
+        raw_volt = (u16)((reg_temp_volt & MASK_VOLT) >> 16);   // Bits [31:16] du REG_TEMP_VOLT_OFFSET pour la tension
+
+        // Calculs avec les constantes UltraScale+ (UG580): Voir pages 41(Température) et 43(Tension)  de l'UG580
+        current_temp      = ((float)raw_temp * 509.314f / 65536.0f) - 280.23f;
+        current_volt_fpga = ((float)raw_volt * 3.0f / 65536.0f);
+
+        // 5. Affichage entête du mode
         printf("\n  CAPTURE %06d | %s | Mode %d: %s | SD:%s\n",
                cycle_count, time_str, k + 1, mode_label,
                sd_ready ? "OK" : "ABSENTE");
         printf("  --------------------------------------------------\n");
+        printf("  V_FPGA: %.3f V | T_FPGA: %.2f C\n",
+               current_volt_fpga, current_temp);
 
-        for (ro_idx = 0; ro_idx < 4; ro_idx++) {
+        // 6. Reconstruction et affichage des 4 ROs (index 0 à 15)
+        for (int ro_idx = 0; ro_idx < 4; ro_idx++) {
+            int base = ro_idx * 4;
+            frequency_32bit = ((u32)raw_bytes[base+3] << 24)
+                            | ((u32)raw_bytes[base+2] << 16)
+                            | ((u32)raw_bytes[base+1] <<  8)
+                            |  (u32)raw_bytes[base];
 
-            check_sd_card();
-
-            frequency_32bit = 0;
-
-            for (b = 0; b < 4; b++) {
-                byte_read = Xil_In32(BASE_ADDR + REG_DATA_ALLOW_OFFSET) & 0xFF;
-                frequency_32bit |= (byte_read << (b * 8));
-
-                Xil_Out32(BASE_ADDR + REG_DONE_OFFSET, 1);
-                Xil_Out32(BASE_ADDR + REG_DONE_OFFSET, 0);
-                for (volatile int d = 0; d < 500; d++);
-            }
-
-            float freq_mhz     = (float)frequency_32bit / 1000000.0f;
+            float freq_mhz    = (float)frequency_32bit / 1000000.0f;
             int   global_ro_id = (k * 4) + ro_idx + 1;
 
             freq_all[global_ro_id - 1] = freq_mhz;
 
+            //Conversion des fréquences en GHz ou en MHz selon la valeur de la fréquence (Optionnel)
             if (frequency_32bit >= 1000000000) {
                 printf("    RO %-2d (%s) : %.3f GHz\n",
                        global_ro_id, stress_label[ro_idx],
@@ -97,7 +121,7 @@ void run_capture_cycle(int cycle_count, XTime tStart) {
 
         printf("\n");
 
+        // 7. Libération du FPGA (Signal ALLOW repasse à 0)
         while ((Xil_In32(BASE_ADDR + REG_DATA_ALLOW_OFFSET) & MASK_ALLOW) != 0);
     }
 }
-
