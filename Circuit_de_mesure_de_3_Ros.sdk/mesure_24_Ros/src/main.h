@@ -9,34 +9,59 @@
 #define SRC_MAIN_H_
 
 #include "xparameters.h"
+#include "pmic.h"
 
-// --- ADRESSE DE BASE DE L'IP ---
+/* -------------------------------------------------------------------------
+ * Adresse de base de l'IP
+ * ------------------------------------------------------------------------- */
 #define BASE_ADDR              XPAR_IP_CONVERSION_AXI_0_S00_AXI_BASEADDR
 
-// --- OFFSETS DES REGISTRES ---
-#define REG_DATA_ALLOW_OFFSET  0    // slv_reg0 : Data et signal Allow
-#define REG_TEMP_VOLT_OFFSET   4    // slv_reg1 : Capteurs Temp et Tension
-#define REG_DONE_OFFSET        8    // slv_reg2 : Signal de validation Done
-#define REG_DUTY_CYCLE_OFFSET  12   // slv_reg3 : Contrôle du moteur (PWM)
+/* -------------------------------------------------------------------------
+ * Offsets des registres
+ * ------------------------------------------------------------------------- */
+#define REG_DATA_ALLOW_OFFSET  0
+#define REG_TEMP_VOLT_OFFSET   4
+#define REG_DONE_OFFSET        8
+#define REG_DUTY_CYCLE_OFFSET  12
 
-// --- MASQUES DE BITS ---
-//--- Masques pour separer Data et Allow dans REG_DATA_ALLOW_OFFSET
-#define MASK_DATA              0xFF        // Les 8 premiers bits
-#define MASK_ALLOW             0x100       // Le 9ème bit (2^8 = 256)
+/* -------------------------------------------------------------------------
+ * Masques de bits
+ * ------------------------------------------------------------------------- */
+#define MASK_DATA              0xFF
+#define MASK_ALLOW             0x100
+#define MASK_TEMP              0xFFFF
+#define MASK_VOLT              0xFFFF0000
 
-//--- Masques pour separer Temp et Voltage dans REG_TEMP_VOLT_OFFSET
-#define MASK_TEMP              0xFFFF      // Les 16 premiers bits
-#define MASK_VOLT              0xFFFF0000  // Les 16 derniers bits
+/* -------------------------------------------------------------------------
+ * Configuration VCCINT
+ *
+ *   VCCINT_VOLTAGE    : tension cible en volts
+ *
+ *   VCCINT_VMAX       : plafond de securite ecrit dans VOUT_MAX.
+ *                       Doit etre >= VCCINT_VOLTAGE.
+ *
+ *   VCCINT_RESOLUTION :  resolution du DAC de tension du PMIC.
+ *                       1 = ~3.906 mV/LSB  (VOUT_MODE = 0x18, exp=-8)
+ *                           valeur OTP par defaut Avnet
+ *                       2 = ~1.953 mV/LSB  (VOUT_MODE = 0x17, exp=-9)
+ *                           accessible a chaud depuis RES_1 mais après
+ *                           un reset.
+ *                       3 = ~0.244 mV/LSB  (VOUT_MODE = 0x14, exp=-12)
+ *                           inaccessible a chaud : le changement de scale
+ *                           provoque une chute fatale de VCCINT qui detruit
+ *                           l'etat du PS Zynq. Accessible uniquement via
+ *                           reprogrammation OTP ou maitre I2C externe avant
+ *                           demarrage du Zynq
+ * ------------------------------------------------------------------------- */
 
-// --- IIC MUX ---
-#define IIC_MUX_ADDR           0x75  // Adresse du MUX I2C sur Ultra96-V2
-#define IIC_MUX_PMIC_CHANNEL   0x10  // Canal du PMIC dans le MUX
+#define VCCINT_VOLTAGE         0.906f
+#define VCCINT_VMAX            1.100f
+#define VCCINT_RESOLUTION      2
 
-// --- TENSION VCCINT ---
-#define VCCINT_VOLTAGE     0.85f  // La valeur demandée de la tension
-#define VCCINT_VMAX        0.90f  // Seuil de sécurité (VCCINT_VMAX >= VCCINT_VOLTAGE)
-
-// --- RESOLUTION PMIC ---
-#define VCCINT_RESOLUTION  1      // Resolution du PMIC: 1 = 3.906 mV/step  |  2 = 1.953 mV/step
+/* -------------------------------------------------------------------------
+ * Régulation RST
+ * ------------------------------------------------------------------------- */
+#define TEMP_REF_C             40.0    // Consigne température en °C
+#define PWM_SAT                65535.0 // Saturation imposée par l'AXI 16 bits
 
 #endif /* SRC_MAIN_H_ */

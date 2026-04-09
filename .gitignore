@@ -13,6 +13,14 @@ vivado*.backup.*
 *.sim/
 *.tmp/
 
+# --- SDK / Eclipse (IMPORTANT) ---
+.metadata/
+RemoteSystemsTempFiles/
+webtalk/
+**/Debug/
+**/Release/
+*.bsp
+
 # --- Fichiers système Windows uniquement ---
 Thumbs.db
 desktop.ini
