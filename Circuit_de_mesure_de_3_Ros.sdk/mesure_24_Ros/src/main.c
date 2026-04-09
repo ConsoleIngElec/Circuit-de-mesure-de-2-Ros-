@@ -54,8 +54,13 @@ int main()
 
     /* -----------------------------------------------------------------------
      * Initialisation RST
+     *
+     * On s'assure que Done est a 0 avant tout demarrage pour ne pas
+     * perturber la FSM Select_Data qui detecte un front montant sur Done.
+     * Un Done reste a 1 au demarrage decalerait la FSM d'un etat.
      * ----------------------------------------------------------------------- */
     RST_init();
+    Xil_Out32(BASE_ADDR + REG_DONE_OFFSET, 0x00000000);
     printf("[RST] Correcteur initialise. Consigne : %.2f C\n\r",
            (float)TEMP_REF_C);
 
@@ -82,6 +87,11 @@ int main()
 
         /* -------------------------------------------------------------------
          * 1. Lecture SYSMON via AXI
+         *
+         * Formule SYSMONE4 reference interne (UG580 Eq. 2-11) :
+         *   T(C) = ADC * 509.314 / 65536 - 280.23
+         * L'Ultra96v2 n'a pas de reference externe sur VREFP/VREFN
+         * (R38/R39 DNP dans le schema Avnet SCH-US1SBC Rev1).
          * ------------------------------------------------------------------- */
         reg_temp_volt     = Xil_In32(BASE_ADDR + REG_TEMP_VOLT_OFFSET);
         current_temp      = ((float)(reg_temp_volt & MASK_TEMP)
@@ -90,11 +100,18 @@ int main()
                             * 3.0f / 65536.0f);
 
         /* -------------------------------------------------------------------
-         * 2. Calcul RST et envoi vers le PL
+         * 2. Calcul RST et envoi du duty cycle vers le PL
+         *
+         * IMPORTANT : Done est remis a 0 immediatement apres l'impulsion.
+         * La FSM Select_Data (PL) detecte un front MONTANT sur Done pour
+         * avancer d'un octet. Si Done reste a 1 avant run_capture_cycle(),
+         * la FSM se desynchronisera provoquant un blocage ou des donnees
+         * incorrectes.
          * ------------------------------------------------------------------- */
         duty = RST_compute(current_temp);
         Xil_Out32(BASE_ADDR + REG_DUTY_CYCLE_OFFSET, (u32)duty);
-        Xil_Out32(BASE_ADDR + REG_DONE_OFFSET,        0x00000001);
+        Xil_Out32(BASE_ADDR + REG_DONE_OFFSET, 0x00000001);
+        Xil_Out32(BASE_ADDR + REG_DONE_OFFSET, 0x00000000);
 
         /* -------------------------------------------------------------------
          * 3. Affichage
@@ -116,6 +133,9 @@ int main()
 
         /* -------------------------------------------------------------------
          * 5. Captures ROs
+         *
+         * A ce point Done est a 0 — la FSM Select_Data est en attente
+         * propre du prochain front montant emis par acquisition.c.
          * ------------------------------------------------------------------- */
         run_capture_cycle(cycle_count, tStart);
 
@@ -129,25 +149,38 @@ int main()
 
         /* -------------------------------------------------------------------
          * 7. Pause thermique 5 minutes
-         *    RST mis à jour toutes les 5 secondes
+         *
+         *    Toutes les 5 secondes :
+         *      - RST ajuste le duty cycle PWM pour maintenir T = TEMP_REF_C
+         *      - regulate_vccint_auto() recale VCCINT sur le SYSMON
+         *
+         *    Le recalage de tension pendant la pause compense les derives
+         *    lentes dues aux variations thermiques ambiantes et au
+         *    vieillissement sur des campagnes longues (jours ou semaines).
+         *    Sans risque de conflit avec Select_Data car Done vient d'etre
+         *    remis a 0 et run_capture_cycle() n'est pas en cours.
          * ------------------------------------------------------------------- */
         for (i = 0; i < 60; i++)
         {
             usleep(5000000);
             check_sd_card();
 
+            /* Lecture SYSMON */
             reg_temp_volt     = Xil_In32(BASE_ADDR + REG_TEMP_VOLT_OFFSET);
             current_temp      = ((float)(reg_temp_volt & MASK_TEMP)
                                 * 509.314f / 65536.0f) - 280.23f;
             current_volt_fpga = ((float)((reg_temp_volt & MASK_VOLT) >> 16)
                                 * 3.0f / 65536.0f);
 
+            /* Regulation thermique */
             duty = RST_compute(current_temp);
             Xil_Out32(BASE_ADDR + REG_DUTY_CYCLE_OFFSET, (u32)duty);
-            Xil_Out32(BASE_ADDR + REG_DONE_OFFSET,        0x00000001);
+            Xil_Out32(BASE_ADDR + REG_DONE_OFFSET, 0x00000001);
+            Xil_Out32(BASE_ADDR + REG_DONE_OFFSET, 0x00000000);
 
-            printf("[PAUSE %2d/60] V_FPGA = %.3f V | T_FPGA = %.2f C\n\r",
-                   i + 1, current_volt_fpga, current_temp);
+            /* Recalage de la tension VCCINT toutes les 5s */
+            regulate_vccint_auto(VCCINT_VOLTAGE, VCCINT_VMAX,
+                                 BASE_ADDR + REG_TEMP_VOLT_OFFSET);
         }
 
         cycle_count++;
