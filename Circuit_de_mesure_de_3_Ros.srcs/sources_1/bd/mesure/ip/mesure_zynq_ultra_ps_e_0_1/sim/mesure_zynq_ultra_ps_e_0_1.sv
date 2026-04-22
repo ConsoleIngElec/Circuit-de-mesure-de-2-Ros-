@@ -1533,7 +1533,6 @@
   maxigp0_awqos,
   maxigp0_arqos,
   pl_ps_irq0,
-  pl_ps_irq1,
   pl_resetn0,
   pl_clk0
  );
@@ -1621,7 +1620,6 @@
       output  [3 : 0] maxigp0_awqos;
       output  [3 : 0] maxigp0_arqos;
       input  [0 : 0] pl_ps_irq0;
-      input  [0 : 0] pl_ps_irq1;
       output  pl_resetn0;
       output  pl_clk0;
 
@@ -1995,17 +1993,6 @@ end
  always@(negedge pl_ps_irq0[0])
  begin
   ps8_set_input_pl_ps_irq0(0,0);
-end
-
- import "DPI-C" function void ps8_set_input_pl_ps_irq1(input int pinIndex, input int pinVlaue);
- always@(posedge pl_ps_irq1[0])
- begin
-  ps8_set_input_pl_ps_irq1(0,1);
-end
-
- always@(negedge pl_ps_irq1[0])
- begin
-  ps8_set_input_pl_ps_irq1(0,0);
 end
 
 import "DPI-C" function void ps8_init_m_axi_hpm0_fpd(input int maxigp0_awid_size,input int maxigp0_awaddr_size,input int maxigp0_awlen_size,input int maxigp0_awsize_size,input int maxigp0_awburst_size,input int maxigp0_awlock_size,input int maxigp0_awcache_size,input int maxigp0_awprot_size,input int maxigp0_awqos_size,input int maxigp0_awuser_size,input int maxigp0_awvalid_size,input int maxigp0_awready_size,input int maxigp0_wdata_size,input int maxigp0_wstrb_size,input int maxigp0_wlast_size,input int maxigp0_wvalid_size,input int maxigp0_wready_size,input int maxigp0_bid_size,input int maxigp0_bresp_size,input int maxigp0_bvalid_size,input int maxigp0_bready_size,input int maxigp0_arid_size,input int maxigp0_araddr_size,input int maxigp0_arlen_size,input int maxigp0_arsize_size,input int maxigp0_arburst_size,input int maxigp0_arlock_size,input int maxigp0_arcache_size,input int maxigp0_arprot_size,input int maxigp0_arqos_size,input int maxigp0_aruser_size,input int maxigp0_arvalid_size,input int maxigp0_arready_size,input int maxigp0_rid_size,input int maxigp0_rdata_size,input int maxigp0_rresp_size,input int maxigp0_rlast_size,input int maxigp0_rvalid_size,input int maxigp0_rready_size);

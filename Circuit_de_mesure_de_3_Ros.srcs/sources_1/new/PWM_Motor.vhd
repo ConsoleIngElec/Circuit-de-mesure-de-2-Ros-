@@ -11,8 +11,8 @@
 -- 
 -- Description : 
 --     Générateur de signal PWM (Modulation de Largeur d'Impulsion) sur 16 bits.
---     Ce module pilote le driver de puissance (Pont-H) qui pilote le moteur  
---     qui servira au chauffage du module Peltier.
+--     Ce module pilote le driver de puissance (Pont-H) qui pilote le module
+--     Peltier.
 --
 --     Paramètres temporels :
 --     - Fréquence de sortie @ 100 MHz : 1,52 kHz (Période de 100 MHz / 65536).

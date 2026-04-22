@@ -54,11 +54,10 @@ architecture Behavioral of Gen_mode is
     -- Signaux pour la base de temps (1Hz)
     signal count_1hz : integer range 0 to FREQ_Clk := 0;
     signal pulse_1s  : std_logic := '0'; 
-    signal pulse_1s_delayed : std_logic := '0'; -- Pour la détection de front
 
     -- Compteurs de séquençage
-    signal timer_sec   : integer range 0 to 49  := 0; 
-    signal timer_pause : integer range 0 to 299 := 0; 
+    signal timer_sec   : integer range 0 to 7  := 0; 
+    signal timer_pause : integer range 0 to 551 := 0; 
     signal k           : integer range 0 to 5   := 0; 
 
     -- FSM
@@ -79,10 +78,6 @@ begin
             if Reset = '1' then
                 count_1hz <= 0;
                 pulse_1s  <= '0';
-                pulse_1s_delayed <= '0';
-            else
-                -- Registre de retard pour détecter le front de pulse_1s
-                pulse_1s_delayed <= pulse_1s;
 
                 if count_1hz < (FREQ_Clk - 1) then
                     count_1hz <= count_1hz + 1;
@@ -122,15 +117,15 @@ begin
                             Reset_Ro <= (others => '0');
                             
                             case timer_sec is
-                                when 0 to 5 =>    -- Phase RESET
+                                when 0 =>    -- Phase RESET
                                     Mode(k) <= '1';
                                     Reset_Ro(k) <= '1';
                                     
-                                when 6 to 24 =>   -- Phase OSCILLATION
+                                when 1 to 6 =>   -- Phase OSCILLATION + STABILISATION 
                                     Mode(k) <= '1'; 
                                     Reset_Ro(k) <= '0';
                                     
-                                when 25 =>        -- Phase CAPTURE
+                                when 7 =>        -- Phase MESURE + ENVOIE 
                                     Mode(k) <= '1';
                                     Reset_Ro(k) <= '0';
                                     send_request <= '1'; -- Demande d'envoi
@@ -140,7 +135,7 @@ begin
                             end case;
 
                             -- Logique de progression
-                            if timer_sec < 49 then
+                            if timer_sec < 7 then
                                 timer_sec <= timer_sec + 1;
                             else
                                 timer_sec <= 0;
@@ -154,9 +149,9 @@ begin
 
                         when PAUSE_THERMIQUE =>
                             Mode <= (others => '0');
-                            Reset_Ro <= (others => '1'); -- Stress statique
+                            Reset_Ro <= (others => '0'); -- Stress statique
                             
-                            if timer_pause < 299 then
+                            if timer_pause < 551 then -- pendant cette durée de 551s, les ROs ne sont que stressés 
                                 timer_pause <= timer_pause + 1;
                             else
                                 timer_pause   <= 0;
@@ -178,7 +173,7 @@ begin
     -- La FSM lève le drapeau interne 'send_request' uniquement à T=25s (MESURE_RO).
     -- Ce signal synchronisé indique à l'AXI_Lite que la mesure est stable pour le PS.
     
-    Send <= '1' when (pulse_1s = '1' and timer_sec = 25 and current_state = MESURE_RO) else '0';
+    Send <= '1' when (pulse_1s = '1' and timer_sec = 7 and current_state = MESURE_RO) else '0';
     
     
     --------------------------------------------------------------------------

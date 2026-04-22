@@ -162,7 +162,7 @@ int main()
          * ------------------------------------------------------------------- */
         for (i = 0; i < 60; i++)
         {
-            usleep(5000000);
+            usleep(100000);
             check_sd_card();
 
             /* Lecture SYSMON */
@@ -181,6 +181,12 @@ int main()
             /* Recalage de la tension VCCINT toutes les 5s */
             regulate_vccint_auto(VCCINT_VOLTAGE, VCCINT_VMAX,
                                  BASE_ADDR + REG_TEMP_VOLT_OFFSET);
+
+            printf("\n\n>>> DEBUT DU CYCLE N %06d", cycle_count);
+			printf(" | SD : %s\n", sd_ready ? "[OK]" : "[ABSENTE]");
+			printf(">>> V_FPGA = %.3f V | T_FPGA = %.2f C\n",
+				   current_volt_fpga, current_temp);
+			printf("--------------------------------------------------------\n");
         }
 
         cycle_count++;

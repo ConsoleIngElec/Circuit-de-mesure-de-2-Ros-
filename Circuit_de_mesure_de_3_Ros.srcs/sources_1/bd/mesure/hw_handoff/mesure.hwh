@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
-<EDKSYSTEM EDWVERSION="1.2" TIMESTAMP="Wed Apr  1 17:15:17 2026" VIVADOVERSION="2018.3">
+<EDKSYSTEM EDWVERSION="1.2" TIMESTAMP="Wed Apr 22 18:16:37 2026" VIVADOVERSION="2018.3">
 
   <SYSTEMINFO ARCH="zynquplus" BOARD="avnet-tria:ultra96v2:part0:1.3" DEVICE="xczu3eg" NAME="mesure" PACKAGE="sbva484" SPEEDGRADE="-1"/>
 
@@ -7,6 +7,11 @@
     <PORT DIR="O" NAME="PWM_Out" SIGIS="undef" SIGNAME="PWM_Motor_0_PWM_Out">
       <CONNECTIONS>
         <CONNECTION INSTANCE="PWM_Motor_0" PORT="PWM_Out"/>
+      </CONNECTIONS>
+    </PORT>
+    <PORT DIR="O" NAME="S_IH_0" SIGIS="undef" SIGNAME="InternalHeater_0_S_IH">
+      <CONNECTIONS>
+        <CONNECTION INSTANCE="InternalHeater_0" PORT="S_IH"/>
       </CONNECTIONS>
     </PORT>
   </EXTERNALPORTS>
@@ -29,11 +34,7 @@
             <CONNECTION INSTANCE="Gen_mode_0" PORT="CE_1Hz"/>
           </CONNECTIONS>
         </PORT>
-        <PORT DIR="I" NAME="Emergency_Stop" SIGIS="undef" SIGNAME="Hardware_Watchdog_0_Emergency_Stop">
-          <CONNECTIONS>
-            <CONNECTION INSTANCE="Hardware_Watchdog_0" PORT="Emergency_Stop"/>
-          </CONNECTIONS>
-        </PORT>
+        <PORT DIR="I" NAME="Emergency_Stop" SIGIS="undef"/>
         <PORT DIR="I" LEFT="5" NAME="Mode" RIGHT="0" SIGIS="undef" SIGNAME="Gen_mode_0_Mode">
           <CONNECTIONS>
             <CONNECTION INSTANCE="Gen_mode_0" PORT="Mode"/>
@@ -56,7 +57,7 @@
         </PORT>
         <PORT DIR="O" LEFT="127" NAME="Data" RIGHT="0" SIGIS="undef" SIGNAME="All_Ro_out_0_Data">
           <CONNECTIONS>
-            <CONNECTION INSTANCE="Mux_Data_0" PORT="Data_In"/>
+            <CONNECTION INSTANCE="IP_Conversion_Axi_0" PORT="Data"/>
           </CONNECTIONS>
         </PORT>
       </PORTS>
@@ -159,7 +160,7 @@
         </PORT>
         <PORT DIR="O" NAME="Send" SIGIS="undef" SIGNAME="Gen_mode_0_Send">
           <CONNECTIONS>
-            <CONNECTION INSTANCE="Select_Data_0" PORT="Send"/>
+            <CONNECTION INSTANCE="IP_Conversion_Axi_0" PORT="Send"/>
           </CONNECTIONS>
         </PORT>
       </PORTS>
@@ -190,76 +191,29 @@
       </PORTS>
       <BUSINTERFACES/>
     </MODULE>
-    <MODULE COREREVISION="1" FULLNAME="/Hardware_Watchdog_0" HWVERSION="1.0" INSTANCE="Hardware_Watchdog_0" IPTYPE="PERIPHERAL" IS_ENABLE="1" MODCLASS="PERIPHERAL" MODTYPE="Hardware_Watchdog" VLNV="xilinx.com:module_ref:Hardware_Watchdog:1.0">
-      <DOCUMENTS/>
-      <PARAMETERS>
-        <PARAMETER NAME="TEMP_MAX_C_INT" VALUE="95"/>
-        <PARAMETER NAME="VOLT_MAX_MV" VALUE="1150"/>
-        <PARAMETER NAME="VOLT_MIN_MV" VALUE="750"/>
-        <PARAMETER NAME="Component_Name" VALUE="mesure_Hardware_Watchdog_0_0"/>
-        <PARAMETER NAME="EDK_IPTYPE" VALUE="PERIPHERAL"/>
-      </PARAMETERS>
-      <PORTS>
-        <PORT CLKFREQUENCY="100000000" DIR="I" NAME="Clk" SIGIS="clk" SIGNAME="zynq_ultra_ps_e_0_pl_clk0">
-          <CONNECTIONS>
-            <CONNECTION INSTANCE="zynq_ultra_ps_e_0" PORT="pl_clk0"/>
-          </CONNECTIONS>
-        </PORT>
-        <PORT DIR="I" NAME="Reset" SIGIS="rst" SIGNAME="util_vector_logic_0_Res">
-          <CONNECTIONS>
-            <CONNECTION INSTANCE="util_vector_logic_0" PORT="Res"/>
-          </CONNECTIONS>
-        </PORT>
-        <PORT DIR="I" LEFT="15" NAME="Temp" RIGHT="0" SIGIS="undef" SIGNAME="Temp_Voltage_Average_0_Temp">
-          <CONNECTIONS>
-            <CONNECTION INSTANCE="Temp_Voltage_Average_0" PORT="Temp"/>
-          </CONNECTIONS>
-        </PORT>
-        <PORT DIR="I" LEFT="15" NAME="Voltage" RIGHT="0" SIGIS="undef" SIGNAME="Temp_Voltage_Average_0_Voltage">
-          <CONNECTIONS>
-            <CONNECTION INSTANCE="Temp_Voltage_Average_0" PORT="Voltage"/>
-          </CONNECTIONS>
-        </PORT>
-        <PORT DIR="O" NAME="Emergency_Stop" SIGIS="undef" SIGNAME="Hardware_Watchdog_0_Emergency_Stop">
-          <CONNECTIONS>
-            <CONNECTION INSTANCE="All_Ro_out_0" PORT="Emergency_Stop"/>
-          </CONNECTIONS>
-        </PORT>
-        <PORT DIR="O" NAME="Alarm_Temp" SIGIS="undef" SIGNAME="Hardware_Watchdog_0_Alarm_Temp">
-          <CONNECTIONS>
-            <CONNECTION INSTANCE="zynq_ultra_ps_e_0" PORT="pl_ps_irq0"/>
-          </CONNECTIONS>
-        </PORT>
-        <PORT DIR="O" NAME="Alarm_Volt" SIGIS="undef" SIGNAME="Hardware_Watchdog_0_Alarm_Volt">
-          <CONNECTIONS>
-            <CONNECTION INSTANCE="zynq_ultra_ps_e_0" PORT="pl_ps_irq1"/>
-          </CONNECTIONS>
-        </PORT>
-      </PORTS>
-      <BUSINTERFACES/>
-    </MODULE>
-    <MODULE COREREVISION="4" FULLNAME="/IP_Conversion_Axi_0" HWVERSION="1.0" INSTANCE="IP_Conversion_Axi_0" IPTYPE="PERIPHERAL" IS_ENABLE="1" MODCLASS="PERIPHERAL" MODTYPE="IP_Conversion_Axi" VLNV="IMS.bordeaux:user:IP_Conversion_Axi:1.0">
+    <MODULE COREREVISION="7" FULLNAME="/IP_Conversion_Axi_0" HWVERSION="1.0" INSTANCE="IP_Conversion_Axi_0" IPTYPE="PERIPHERAL" IS_ENABLE="1" MODCLASS="PERIPHERAL" MODTYPE="IP_Conversion_Axi" VLNV="IMS.bordeaux:user:IP_Conversion_Axi:1.0">
       <DOCUMENTS/>
       <ADDRESSBLOCKS>
         <ADDRESSBLOCK ACCESS="" INTERFACE="S00_AXI" NAME="S00_AXI_reg" RANGE="4096" USAGE="register"/>
       </ADDRESSBLOCKS>
       <PARAMETERS>
         <PARAMETER NAME="C_S00_AXI_DATA_WIDTH" VALUE="32"/>
-        <PARAMETER NAME="C_S00_AXI_ADDR_WIDTH" VALUE="4"/>
+        <PARAMETER NAME="C_S00_AXI_ADDR_WIDTH" VALUE="7"/>
+        <PARAMETER NAME="C_AXI_FREQ_HZ" VALUE="100000000"/>
         <PARAMETER NAME="Component_Name" VALUE="mesure_IP_Conversion_Axi_0_0"/>
         <PARAMETER NAME="EDK_IPTYPE" VALUE="PERIPHERAL"/>
         <PARAMETER NAME="C_S00_AXI_BASEADDR" VALUE="0xA0000000"/>
         <PARAMETER NAME="C_S00_AXI_HIGHADDR" VALUE="0xA0000FFF"/>
       </PARAMETERS>
       <PORTS>
-        <PORT DIR="I" LEFT="7" NAME="Data" RIGHT="0" SIGIS="undef" SIGNAME="Mux_Data_0_Data_Out">
+        <PORT DIR="I" LEFT="127" NAME="Data" RIGHT="0" SIGIS="undef" SIGNAME="All_Ro_out_0_Data">
           <CONNECTIONS>
-            <CONNECTION INSTANCE="Mux_Data_0" PORT="Data_Out"/>
+            <CONNECTION INSTANCE="All_Ro_out_0" PORT="Data"/>
           </CONNECTIONS>
         </PORT>
-        <PORT DIR="I" NAME="Allow" SIGIS="undef" SIGNAME="Select_Data_0_Allow">
+        <PORT DIR="I" NAME="Send" SIGIS="undef" SIGNAME="Gen_mode_0_Send">
           <CONNECTIONS>
-            <CONNECTION INSTANCE="Select_Data_0" PORT="Allow"/>
+            <CONNECTION INSTANCE="Gen_mode_0" PORT="Send"/>
           </CONNECTIONS>
         </PORT>
         <PORT DIR="I" LEFT="15" NAME="Temp" RIGHT="0" SIGIS="undef" SIGNAME="Temp_Voltage_Average_0_Temp">
@@ -272,9 +226,9 @@
             <CONNECTION INSTANCE="Temp_Voltage_Average_0" PORT="Voltage"/>
           </CONNECTIONS>
         </PORT>
-        <PORT DIR="O" NAME="Done" SIGIS="undef" SIGNAME="IP_Conversion_Axi_0_Done">
+        <PORT DIR="O" NAME="Data_Ready" SIGIS="undef" SIGNAME="IP_Conversion_Axi_0_Data_Ready">
           <CONNECTIONS>
-            <CONNECTION INSTANCE="Select_Data_0" PORT="Done"/>
+            <CONNECTION INSTANCE="zynq_ultra_ps_e_0" PORT="pl_ps_irq0"/>
           </CONNECTIONS>
         </PORT>
         <PORT DIR="O" LEFT="15" NAME="Duty_cycle" RIGHT="0" SIGIS="undef" SIGNAME="IP_Conversion_Axi_0_Duty_cycle">
@@ -282,7 +236,7 @@
             <CONNECTION INSTANCE="PWM_Motor_0" PORT="Duty"/>
           </CONNECTIONS>
         </PORT>
-        <PORT DIR="I" LEFT="3" NAME="s00_axi_awaddr" RIGHT="0" SIGIS="undef" SIGNAME="IP_Conversion_Axi_0_s00_axi_awaddr">
+        <PORT DIR="I" LEFT="6" NAME="s00_axi_awaddr" RIGHT="0" SIGIS="undef" SIGNAME="IP_Conversion_Axi_0_s00_axi_awaddr">
           <CONNECTIONS>
             <CONNECTION INSTANCE="ps8_0_axi_periph" PORT="M00_AXI_awaddr"/>
           </CONNECTIONS>
@@ -337,7 +291,7 @@
             <CONNECTION INSTANCE="ps8_0_axi_periph" PORT="M00_AXI_bready"/>
           </CONNECTIONS>
         </PORT>
-        <PORT DIR="I" LEFT="3" NAME="s00_axi_araddr" RIGHT="0" SIGIS="undef" SIGNAME="IP_Conversion_Axi_0_s00_axi_araddr">
+        <PORT DIR="I" LEFT="6" NAME="s00_axi_araddr" RIGHT="0" SIGIS="undef" SIGNAME="IP_Conversion_Axi_0_s00_axi_araddr">
           <CONNECTIONS>
             <CONNECTION INSTANCE="ps8_0_axi_periph" PORT="M00_AXI_araddr"/>
           </CONNECTIONS>
@@ -397,7 +351,7 @@
           <PARAMETER NAME="PROTOCOL" VALUE="AXI4LITE"/>
           <PARAMETER NAME="FREQ_HZ" VALUE="100000000"/>
           <PARAMETER NAME="ID_WIDTH" VALUE="0"/>
-          <PARAMETER NAME="ADDR_WIDTH" VALUE="4"/>
+          <PARAMETER NAME="ADDR_WIDTH" VALUE="7"/>
           <PARAMETER NAME="AWUSER_WIDTH" VALUE="0"/>
           <PARAMETER NAME="ARUSER_WIDTH" VALUE="0"/>
           <PARAMETER NAME="WUSER_WIDTH" VALUE="0"/>
@@ -447,27 +401,16 @@
         </BUSINTERFACE>
       </BUSINTERFACES>
     </MODULE>
-    <MODULE COREREVISION="1" FULLNAME="/Mux_Data_0" HWVERSION="1.0" INSTANCE="Mux_Data_0" IPTYPE="PERIPHERAL" IS_ENABLE="1" MODCLASS="PERIPHERAL" MODTYPE="Mux_Data" VLNV="xilinx.com:module_ref:Mux_Data:1.0">
+    <MODULE COREREVISION="1" FULLNAME="/InternalHeater_0" HWVERSION="1.0" INSTANCE="InternalHeater_0" IPTYPE="PERIPHERAL" IS_ENABLE="1" MODCLASS="PERIPHERAL" MODTYPE="InternalHeater" VLNV="xilinx.com:module_ref:InternalHeater:1.0">
       <DOCUMENTS/>
       <PARAMETERS>
-        <PARAMETER NAME="Rout_Number" VALUE="4"/>
-        <PARAMETER NAME="Component_Name" VALUE="mesure_Mux_Data_0_1"/>
+        <PARAMETER NAME="Component_Name" VALUE="mesure_InternalHeater_0_0"/>
         <PARAMETER NAME="EDK_IPTYPE" VALUE="PERIPHERAL"/>
       </PARAMETERS>
       <PORTS>
-        <PORT DIR="I" LEFT="127" NAME="Data_In" RIGHT="0" SIGIS="undef" SIGNAME="All_Ro_out_0_Data">
+        <PORT DIR="O" NAME="S_IH" SIGIS="undef" SIGNAME="InternalHeater_0_S_IH">
           <CONNECTIONS>
-            <CONNECTION INSTANCE="All_Ro_out_0" PORT="Data"/>
-          </CONNECTIONS>
-        </PORT>
-        <PORT DIR="I" LEFT="4" NAME="Sel" RIGHT="0" SIGIS="undef" SIGNAME="Select_Data_0_Sel">
-          <CONNECTIONS>
-            <CONNECTION INSTANCE="Select_Data_0" PORT="Sel"/>
-          </CONNECTIONS>
-        </PORT>
-        <PORT DIR="O" LEFT="7" NAME="Data_Out" RIGHT="0" SIGIS="undef" SIGNAME="Mux_Data_0_Data_Out">
-          <CONNECTIONS>
-            <CONNECTION INSTANCE="IP_Conversion_Axi_0" PORT="Data"/>
+            <CONNECTION INSTANCE="External_Ports" PORT="S_IH_0"/>
           </CONNECTIONS>
         </PORT>
       </PORTS>
@@ -498,47 +441,6 @@
         <PORT DIR="O" NAME="PWM_Out" SIGIS="undef" SIGNAME="PWM_Motor_0_PWM_Out">
           <CONNECTIONS>
             <CONNECTION INSTANCE="External_Ports" PORT="PWM_Out"/>
-          </CONNECTIONS>
-        </PORT>
-      </PORTS>
-      <BUSINTERFACES/>
-    </MODULE>
-    <MODULE COREREVISION="1" FULLNAME="/Select_Data_0" HWVERSION="1.0" INSTANCE="Select_Data_0" IPTYPE="PERIPHERAL" IS_ENABLE="1" MODCLASS="PERIPHERAL" MODTYPE="Select_Data" VLNV="xilinx.com:module_ref:Select_Data:1.0">
-      <DOCUMENTS/>
-      <PARAMETERS>
-        <PARAMETER NAME="Stress_Number" VALUE="4"/>
-        <PARAMETER NAME="Component_Name" VALUE="mesure_Select_Data_0_1"/>
-        <PARAMETER NAME="EDK_IPTYPE" VALUE="PERIPHERAL"/>
-      </PARAMETERS>
-      <PORTS>
-        <PORT CLKFREQUENCY="100000000" DIR="I" NAME="Clk" SIGIS="clk" SIGNAME="zynq_ultra_ps_e_0_pl_clk0">
-          <CONNECTIONS>
-            <CONNECTION INSTANCE="zynq_ultra_ps_e_0" PORT="pl_clk0"/>
-          </CONNECTIONS>
-        </PORT>
-        <PORT DIR="I" NAME="Reset" SIGIS="rst" SIGNAME="util_vector_logic_0_Res">
-          <CONNECTIONS>
-            <CONNECTION INSTANCE="util_vector_logic_0" PORT="Res"/>
-          </CONNECTIONS>
-        </PORT>
-        <PORT DIR="I" NAME="Done" SIGIS="undef" SIGNAME="IP_Conversion_Axi_0_Done">
-          <CONNECTIONS>
-            <CONNECTION INSTANCE="IP_Conversion_Axi_0" PORT="Done"/>
-          </CONNECTIONS>
-        </PORT>
-        <PORT DIR="I" NAME="Send" SIGIS="undef" SIGNAME="Gen_mode_0_Send">
-          <CONNECTIONS>
-            <CONNECTION INSTANCE="Gen_mode_0" PORT="Send"/>
-          </CONNECTIONS>
-        </PORT>
-        <PORT DIR="O" LEFT="4" NAME="Sel" RIGHT="0" SIGIS="undef" SIGNAME="Select_Data_0_Sel">
-          <CONNECTIONS>
-            <CONNECTION INSTANCE="Mux_Data_0" PORT="Sel"/>
-          </CONNECTIONS>
-        </PORT>
-        <PORT DIR="O" NAME="Allow" SIGIS="undef" SIGNAME="Select_Data_0_Allow">
-          <CONNECTIONS>
-            <CONNECTION INSTANCE="IP_Conversion_Axi_0" PORT="Allow"/>
           </CONNECTIONS>
         </PORT>
       </PORTS>
@@ -1664,13 +1566,11 @@
         </PORT>
         <PORT DIR="O" LEFT="15" NAME="Temp" RIGHT="0" SIGIS="undef" SIGNAME="Temp_Voltage_Average_0_Temp">
           <CONNECTIONS>
-            <CONNECTION INSTANCE="Hardware_Watchdog_0" PORT="Temp"/>
             <CONNECTION INSTANCE="IP_Conversion_Axi_0" PORT="Temp"/>
           </CONNECTIONS>
         </PORT>
         <PORT DIR="O" LEFT="15" NAME="Voltage" RIGHT="0" SIGIS="undef" SIGNAME="Temp_Voltage_Average_0_Voltage">
           <CONNECTIONS>
-            <CONNECTION INSTANCE="Hardware_Watchdog_0" PORT="Voltage"/>
             <CONNECTION INSTANCE="IP_Conversion_Axi_0" PORT="Voltage"/>
           </CONNECTIONS>
         </PORT>
@@ -2030,101 +1930,6 @@
             <CONNECTION INSTANCE="rst_ps8_0_100M" PORT="peripheral_aresetn"/>
           </CONNECTIONS>
         </PORT>
-        <PORT DIR="O" LEFT="39" NAME="M00_AXI_awaddr" RIGHT="0" SIGIS="undef" SIGNAME="IP_Conversion_Axi_0_s00_axi_awaddr">
-          <CONNECTIONS>
-            <CONNECTION INSTANCE="IP_Conversion_Axi_0" PORT="s00_axi_awaddr"/>
-          </CONNECTIONS>
-        </PORT>
-        <PORT DIR="O" LEFT="2" NAME="M00_AXI_awprot" RIGHT="0" SIGIS="undef" SIGNAME="IP_Conversion_Axi_0_s00_axi_awprot">
-          <CONNECTIONS>
-            <CONNECTION INSTANCE="IP_Conversion_Axi_0" PORT="s00_axi_awprot"/>
-          </CONNECTIONS>
-        </PORT>
-        <PORT DIR="O" NAME="M00_AXI_awvalid" SIGIS="undef" SIGNAME="IP_Conversion_Axi_0_s00_axi_awvalid">
-          <CONNECTIONS>
-            <CONNECTION INSTANCE="IP_Conversion_Axi_0" PORT="s00_axi_awvalid"/>
-          </CONNECTIONS>
-        </PORT>
-        <PORT DIR="I" NAME="M00_AXI_awready" SIGIS="undef" SIGNAME="IP_Conversion_Axi_0_s00_axi_awready">
-          <CONNECTIONS>
-            <CONNECTION INSTANCE="IP_Conversion_Axi_0" PORT="s00_axi_awready"/>
-          </CONNECTIONS>
-        </PORT>
-        <PORT DIR="O" LEFT="31" NAME="M00_AXI_wdata" RIGHT="0" SIGIS="undef" SIGNAME="IP_Conversion_Axi_0_s00_axi_wdata">
-          <CONNECTIONS>
-            <CONNECTION INSTANCE="IP_Conversion_Axi_0" PORT="s00_axi_wdata"/>
-          </CONNECTIONS>
-        </PORT>
-        <PORT DIR="O" LEFT="3" NAME="M00_AXI_wstrb" RIGHT="0" SIGIS="undef" SIGNAME="IP_Conversion_Axi_0_s00_axi_wstrb">
-          <CONNECTIONS>
-            <CONNECTION INSTANCE="IP_Conversion_Axi_0" PORT="s00_axi_wstrb"/>
-          </CONNECTIONS>
-        </PORT>
-        <PORT DIR="O" NAME="M00_AXI_wvalid" SIGIS="undef" SIGNAME="IP_Conversion_Axi_0_s00_axi_wvalid">
-          <CONNECTIONS>
-            <CONNECTION INSTANCE="IP_Conversion_Axi_0" PORT="s00_axi_wvalid"/>
-          </CONNECTIONS>
-        </PORT>
-        <PORT DIR="I" NAME="M00_AXI_wready" SIGIS="undef" SIGNAME="IP_Conversion_Axi_0_s00_axi_wready">
-          <CONNECTIONS>
-            <CONNECTION INSTANCE="IP_Conversion_Axi_0" PORT="s00_axi_wready"/>
-          </CONNECTIONS>
-        </PORT>
-        <PORT DIR="I" LEFT="1" NAME="M00_AXI_bresp" RIGHT="0" SIGIS="undef" SIGNAME="IP_Conversion_Axi_0_s00_axi_bresp">
-          <CONNECTIONS>
-            <CONNECTION INSTANCE="IP_Conversion_Axi_0" PORT="s00_axi_bresp"/>
-          </CONNECTIONS>
-        </PORT>
-        <PORT DIR="I" NAME="M00_AXI_bvalid" SIGIS="undef" SIGNAME="IP_Conversion_Axi_0_s00_axi_bvalid">
-          <CONNECTIONS>
-            <CONNECTION INSTANCE="IP_Conversion_Axi_0" PORT="s00_axi_bvalid"/>
-          </CONNECTIONS>
-        </PORT>
-        <PORT DIR="O" NAME="M00_AXI_bready" SIGIS="undef" SIGNAME="IP_Conversion_Axi_0_s00_axi_bready">
-          <CONNECTIONS>
-            <CONNECTION INSTANCE="IP_Conversion_Axi_0" PORT="s00_axi_bready"/>
-          </CONNECTIONS>
-        </PORT>
-        <PORT DIR="O" LEFT="39" NAME="M00_AXI_araddr" RIGHT="0" SIGIS="undef" SIGNAME="IP_Conversion_Axi_0_s00_axi_araddr">
-          <CONNECTIONS>
-            <CONNECTION INSTANCE="IP_Conversion_Axi_0" PORT="s00_axi_araddr"/>
-          </CONNECTIONS>
-        </PORT>
-        <PORT DIR="O" LEFT="2" NAME="M00_AXI_arprot" RIGHT="0" SIGIS="undef" SIGNAME="IP_Conversion_Axi_0_s00_axi_arprot">
-          <CONNECTIONS>
-            <CONNECTION INSTANCE="IP_Conversion_Axi_0" PORT="s00_axi_arprot"/>
-          </CONNECTIONS>
-        </PORT>
-        <PORT DIR="O" NAME="M00_AXI_arvalid" SIGIS="undef" SIGNAME="IP_Conversion_Axi_0_s00_axi_arvalid">
-          <CONNECTIONS>
-            <CONNECTION INSTANCE="IP_Conversion_Axi_0" PORT="s00_axi_arvalid"/>
-          </CONNECTIONS>
-        </PORT>
-        <PORT DIR="I" NAME="M00_AXI_arready" SIGIS="undef" SIGNAME="IP_Conversion_Axi_0_s00_axi_arready">
-          <CONNECTIONS>
-            <CONNECTION INSTANCE="IP_Conversion_Axi_0" PORT="s00_axi_arready"/>
-          </CONNECTIONS>
-        </PORT>
-        <PORT DIR="I" LEFT="31" NAME="M00_AXI_rdata" RIGHT="0" SIGIS="undef" SIGNAME="IP_Conversion_Axi_0_s00_axi_rdata">
-          <CONNECTIONS>
-            <CONNECTION INSTANCE="IP_Conversion_Axi_0" PORT="s00_axi_rdata"/>
-          </CONNECTIONS>
-        </PORT>
-        <PORT DIR="I" LEFT="1" NAME="M00_AXI_rresp" RIGHT="0" SIGIS="undef" SIGNAME="IP_Conversion_Axi_0_s00_axi_rresp">
-          <CONNECTIONS>
-            <CONNECTION INSTANCE="IP_Conversion_Axi_0" PORT="s00_axi_rresp"/>
-          </CONNECTIONS>
-        </PORT>
-        <PORT DIR="I" NAME="M00_AXI_rvalid" SIGIS="undef" SIGNAME="IP_Conversion_Axi_0_s00_axi_rvalid">
-          <CONNECTIONS>
-            <CONNECTION INSTANCE="IP_Conversion_Axi_0" PORT="s00_axi_rvalid"/>
-          </CONNECTIONS>
-        </PORT>
-        <PORT DIR="O" NAME="M00_AXI_rready" SIGIS="undef" SIGNAME="IP_Conversion_Axi_0_s00_axi_rready">
-          <CONNECTIONS>
-            <CONNECTION INSTANCE="IP_Conversion_Axi_0" PORT="s00_axi_rready"/>
-          </CONNECTIONS>
-        </PORT>
         <PORT DIR="I" LEFT="15" NAME="S00_AXI_awid" RIGHT="0" SIGIS="undef" SIGNAME="ps8_0_axi_periph_S00_AXI_awid">
           <CONNECTIONS>
             <CONNECTION INSTANCE="zynq_ultra_ps_e_0" PORT="maxigp0_awid"/>
@@ -2312,6 +2117,101 @@
             <CONNECTION INSTANCE="zynq_ultra_ps_e_0" PORT="maxigp0_rready"/>
           </CONNECTIONS>
         </PORT>
+        <PORT DIR="O" LEFT="39" NAME="M00_AXI_awaddr" RIGHT="0" SIGIS="undef" SIGNAME="IP_Conversion_Axi_0_s00_axi_awaddr">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="IP_Conversion_Axi_0" PORT="s00_axi_awaddr"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="O" LEFT="2" NAME="M00_AXI_awprot" RIGHT="0" SIGIS="undef" SIGNAME="IP_Conversion_Axi_0_s00_axi_awprot">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="IP_Conversion_Axi_0" PORT="s00_axi_awprot"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="O" NAME="M00_AXI_awvalid" SIGIS="undef" SIGNAME="IP_Conversion_Axi_0_s00_axi_awvalid">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="IP_Conversion_Axi_0" PORT="s00_axi_awvalid"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="I" NAME="M00_AXI_awready" SIGIS="undef" SIGNAME="IP_Conversion_Axi_0_s00_axi_awready">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="IP_Conversion_Axi_0" PORT="s00_axi_awready"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="O" LEFT="31" NAME="M00_AXI_wdata" RIGHT="0" SIGIS="undef" SIGNAME="IP_Conversion_Axi_0_s00_axi_wdata">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="IP_Conversion_Axi_0" PORT="s00_axi_wdata"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="O" LEFT="3" NAME="M00_AXI_wstrb" RIGHT="0" SIGIS="undef" SIGNAME="IP_Conversion_Axi_0_s00_axi_wstrb">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="IP_Conversion_Axi_0" PORT="s00_axi_wstrb"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="O" NAME="M00_AXI_wvalid" SIGIS="undef" SIGNAME="IP_Conversion_Axi_0_s00_axi_wvalid">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="IP_Conversion_Axi_0" PORT="s00_axi_wvalid"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="I" NAME="M00_AXI_wready" SIGIS="undef" SIGNAME="IP_Conversion_Axi_0_s00_axi_wready">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="IP_Conversion_Axi_0" PORT="s00_axi_wready"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="I" LEFT="1" NAME="M00_AXI_bresp" RIGHT="0" SIGIS="undef" SIGNAME="IP_Conversion_Axi_0_s00_axi_bresp">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="IP_Conversion_Axi_0" PORT="s00_axi_bresp"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="I" NAME="M00_AXI_bvalid" SIGIS="undef" SIGNAME="IP_Conversion_Axi_0_s00_axi_bvalid">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="IP_Conversion_Axi_0" PORT="s00_axi_bvalid"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="O" NAME="M00_AXI_bready" SIGIS="undef" SIGNAME="IP_Conversion_Axi_0_s00_axi_bready">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="IP_Conversion_Axi_0" PORT="s00_axi_bready"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="O" LEFT="39" NAME="M00_AXI_araddr" RIGHT="0" SIGIS="undef" SIGNAME="IP_Conversion_Axi_0_s00_axi_araddr">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="IP_Conversion_Axi_0" PORT="s00_axi_araddr"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="O" LEFT="2" NAME="M00_AXI_arprot" RIGHT="0" SIGIS="undef" SIGNAME="IP_Conversion_Axi_0_s00_axi_arprot">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="IP_Conversion_Axi_0" PORT="s00_axi_arprot"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="O" NAME="M00_AXI_arvalid" SIGIS="undef" SIGNAME="IP_Conversion_Axi_0_s00_axi_arvalid">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="IP_Conversion_Axi_0" PORT="s00_axi_arvalid"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="I" NAME="M00_AXI_arready" SIGIS="undef" SIGNAME="IP_Conversion_Axi_0_s00_axi_arready">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="IP_Conversion_Axi_0" PORT="s00_axi_arready"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="I" LEFT="31" NAME="M00_AXI_rdata" RIGHT="0" SIGIS="undef" SIGNAME="IP_Conversion_Axi_0_s00_axi_rdata">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="IP_Conversion_Axi_0" PORT="s00_axi_rdata"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="I" LEFT="1" NAME="M00_AXI_rresp" RIGHT="0" SIGIS="undef" SIGNAME="IP_Conversion_Axi_0_s00_axi_rresp">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="IP_Conversion_Axi_0" PORT="s00_axi_rresp"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="I" NAME="M00_AXI_rvalid" SIGIS="undef" SIGNAME="IP_Conversion_Axi_0_s00_axi_rvalid">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="IP_Conversion_Axi_0" PORT="s00_axi_rvalid"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="O" NAME="M00_AXI_rready" SIGIS="undef" SIGNAME="IP_Conversion_Axi_0_s00_axi_rready">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="IP_Conversion_Axi_0" PORT="s00_axi_rready"/>
+          </CONNECTIONS>
+        </PORT>
       </PORTS>
       <BUSINTERFACES>
         <BUSINTERFACE BUSNAME="zynq_ultra_ps_e_0_M_AXI_HPM0_FPD" DATAWIDTH="128" NAME="S00_AXI" TYPE="SLAVE" VLNV="xilinx.com:interface:aximm:1.0">
@@ -2448,13 +2348,11 @@
         <PORT DIR="O" LEFT="0" NAME="Res" RIGHT="0" SIGIS="undef" SIGNAME="util_vector_logic_0_Res">
           <CONNECTIONS>
             <CONNECTION INSTANCE="Gen_stress_0" PORT="Reset"/>
-            <CONNECTION INSTANCE="Gen_mode_0" PORT="Reset"/>
-            <CONNECTION INSTANCE="Select_Data_0" PORT="Reset"/>
             <CONNECTION INSTANCE="De_Mux_0" PORT="Reset"/>
-            <CONNECTION INSTANCE="PWM_Motor_0" PORT="Reset"/>
             <CONNECTION INSTANCE="Sysmon_system_management_wiz_0" PORT="reset_in"/>
-            <CONNECTION INSTANCE="Hardware_Watchdog_0" PORT="Reset"/>
             <CONNECTION INSTANCE="Temp_Voltage_Average_0" PORT="Reset"/>
+            <CONNECTION INSTANCE="PWM_Motor_0" PORT="Reset"/>
+            <CONNECTION INSTANCE="Gen_mode_0" PORT="Reset"/>
           </CONNECTIONS>
         </PORT>
       </PORTS>
@@ -3083,7 +2981,7 @@
         <PARAMETER NAME="PSU__USE__GDMA" VALUE="0"/>
         <PARAMETER NAME="PSU__USE__IRQ" VALUE="0"/>
         <PARAMETER NAME="PSU__USE__IRQ0" VALUE="1"/>
-        <PARAMETER NAME="PSU__USE__IRQ1" VALUE="1"/>
+        <PARAMETER NAME="PSU__USE__IRQ1" VALUE="0"/>
         <PARAMETER NAME="PSU__USE__CLK0" VALUE="0"/>
         <PARAMETER NAME="PSU__USE__CLK1" VALUE="0"/>
         <PARAMETER NAME="PSU__USE__CLK2" VALUE="0"/>
@@ -4278,14 +4176,9 @@
             <CONNECTION INSTANCE="ps8_0_axi_periph" PORT="S00_AXI_arqos"/>
           </CONNECTIONS>
         </PORT>
-        <PORT DIR="I" LEFT="0" NAME="pl_ps_irq0" RIGHT="0" SENSITIVITY="LEVEL_HIGH" SIGIS="INTERRUPT" SIGNAME="Hardware_Watchdog_0_Alarm_Temp">
+        <PORT DIR="I" LEFT="0" NAME="pl_ps_irq0" RIGHT="0" SENSITIVITY="LEVEL_HIGH" SIGIS="INTERRUPT" SIGNAME="IP_Conversion_Axi_0_Data_Ready">
           <CONNECTIONS>
-            <CONNECTION INSTANCE="Hardware_Watchdog_0" PORT="Alarm_Temp"/>
-          </CONNECTIONS>
-        </PORT>
-        <PORT DIR="I" LEFT="0" NAME="pl_ps_irq1" RIGHT="0" SENSITIVITY="LEVEL_HIGH" SIGIS="INTERRUPT" SIGNAME="Hardware_Watchdog_0_Alarm_Volt">
-          <CONNECTIONS>
-            <CONNECTION INSTANCE="Hardware_Watchdog_0" PORT="Alarm_Volt"/>
+            <CONNECTION INSTANCE="IP_Conversion_Axi_0" PORT="Data_Ready"/>
           </CONNECTIONS>
         </PORT>
         <PORT DIR="O" NAME="pl_resetn0" SIGIS="rst" SIGNAME="zynq_ultra_ps_e_0_pl_resetn0">
@@ -4303,13 +4196,11 @@
             <CONNECTION INSTANCE="ps8_0_axi_periph" PORT="ACLK"/>
             <CONNECTION INSTANCE="Sysmon_system_management_wiz_0" PORT="dclk_in"/>
             <CONNECTION INSTANCE="Gen_stress_0" PORT="Clk"/>
-            <CONNECTION INSTANCE="Gen_mode_0" PORT="Clk"/>
-            <CONNECTION INSTANCE="Select_Data_0" PORT="Clk"/>
             <CONNECTION INSTANCE="De_Mux_0" PORT="Clk"/>
-            <CONNECTION INSTANCE="PWM_Motor_0" PORT="Clk"/>
-            <CONNECTION INSTANCE="Hardware_Watchdog_0" PORT="Clk"/>
-            <CONNECTION INSTANCE="IP_Conversion_Axi_0" PORT="s00_axi_aclk"/>
             <CONNECTION INSTANCE="Temp_Voltage_Average_0" PORT="Clk"/>
+            <CONNECTION INSTANCE="PWM_Motor_0" PORT="Clk"/>
+            <CONNECTION INSTANCE="IP_Conversion_Axi_0" PORT="s00_axi_aclk"/>
+            <CONNECTION INSTANCE="Gen_mode_0" PORT="Clk"/>
           </CONNECTIONS>
         </PORT>
       </PORTS>

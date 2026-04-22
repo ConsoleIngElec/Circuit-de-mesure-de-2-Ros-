@@ -100,7 +100,6 @@ module mesure_zynq_ultra_ps_e_0_1 (
   output bit [3 : 0] maxigp0_awqos,
   output bit [3 : 0] maxigp0_arqos,
   input bit [0 : 0] pl_ps_irq0,
-  input bit [0 : 0] pl_ps_irq1,
   output bit_as_bool pl_resetn0,
   output bit_as_bool pl_clk0
 );

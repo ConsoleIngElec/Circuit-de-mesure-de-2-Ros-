@@ -40,7 +40,7 @@ if { [string first $scripts_vivado_version $current_vivado_version] == -1 } {
 
 # The design that will be created by this Tcl script contains the following 
 # module references:
-# All_Ro_out, De_Mux, Gen_mode, Gen_stress, Hardware_Watchdog, Mux_Data, PWM_Motor, Select_Data, Temp_Voltage_Average
+# All_Ro_out, De_Mux, Gen_mode, Gen_stress, InternalHeater, PWM_Motor, Temp_Voltage_Average
 
 # Please add the sources of those modules before sourcing this Tcl script.
 
@@ -311,6 +311,7 @@ proc create_root_design { parentCell } {
 
   # Create ports
   set PWM_Out [ create_bd_port -dir O PWM_Out ]
+  set S_IH_0 [ create_bd_port -dir O S_IH_0 ]
 
   # Create instance: All_Ro_out_0, and set properties
   set block_name All_Ro_out
@@ -356,27 +357,16 @@ proc create_root_design { parentCell } {
      return 1
    }
   
-  # Create instance: Hardware_Watchdog_0, and set properties
-  set block_name Hardware_Watchdog
-  set block_cell_name Hardware_Watchdog_0
-  if { [catch {set Hardware_Watchdog_0 [create_bd_cell -type module -reference $block_name $block_cell_name] } errmsg] } {
-     catch {common::send_msg_id "BD_TCL-105" "ERROR" "Unable to add referenced block <$block_name>. Please add the files for ${block_name}'s definition into the project."}
-     return 1
-   } elseif { $Hardware_Watchdog_0 eq "" } {
-     catch {common::send_msg_id "BD_TCL-106" "ERROR" "Unable to referenced block <$block_name>. Please add the files for ${block_name}'s definition into the project."}
-     return 1
-   }
-  
   # Create instance: IP_Conversion_Axi_0, and set properties
   set IP_Conversion_Axi_0 [ create_bd_cell -type ip -vlnv IMS.bordeaux:user:IP_Conversion_Axi:1.0 IP_Conversion_Axi_0 ]
 
-  # Create instance: Mux_Data_0, and set properties
-  set block_name Mux_Data
-  set block_cell_name Mux_Data_0
-  if { [catch {set Mux_Data_0 [create_bd_cell -type module -reference $block_name $block_cell_name] } errmsg] } {
+  # Create instance: InternalHeater_0, and set properties
+  set block_name InternalHeater
+  set block_cell_name InternalHeater_0
+  if { [catch {set InternalHeater_0 [create_bd_cell -type module -reference $block_name $block_cell_name] } errmsg] } {
      catch {common::send_msg_id "BD_TCL-105" "ERROR" "Unable to add referenced block <$block_name>. Please add the files for ${block_name}'s definition into the project."}
      return 1
-   } elseif { $Mux_Data_0 eq "" } {
+   } elseif { $InternalHeater_0 eq "" } {
      catch {common::send_msg_id "BD_TCL-106" "ERROR" "Unable to referenced block <$block_name>. Please add the files for ${block_name}'s definition into the project."}
      return 1
    }
@@ -388,17 +378,6 @@ proc create_root_design { parentCell } {
      catch {common::send_msg_id "BD_TCL-105" "ERROR" "Unable to add referenced block <$block_name>. Please add the files for ${block_name}'s definition into the project."}
      return 1
    } elseif { $PWM_Motor_0 eq "" } {
-     catch {common::send_msg_id "BD_TCL-106" "ERROR" "Unable to referenced block <$block_name>. Please add the files for ${block_name}'s definition into the project."}
-     return 1
-   }
-  
-  # Create instance: Select_Data_0, and set properties
-  set block_name Select_Data
-  set block_cell_name Select_Data_0
-  if { [catch {set Select_Data_0 [create_bd_cell -type module -reference $block_name $block_cell_name] } errmsg] } {
-     catch {common::send_msg_id "BD_TCL-105" "ERROR" "Unable to add referenced block <$block_name>. Please add the files for ${block_name}'s definition into the project."}
-     return 1
-   } elseif { $Select_Data_0 eq "" } {
      catch {common::send_msg_id "BD_TCL-106" "ERROR" "Unable to referenced block <$block_name>. Please add the files for ${block_name}'s definition into the project."}
      return 1
    }
@@ -1050,7 +1029,7 @@ proc create_root_design { parentCell } {
    CONFIG.PSU__USB__RESET__MODE {Boot Pin} \
    CONFIG.PSU__USB__RESET__POLARITY {Active Low} \
    CONFIG.PSU__USE__IRQ0 {1} \
-   CONFIG.PSU__USE__IRQ1 {1} \
+   CONFIG.PSU__USE__IRQ1 {0} \
    CONFIG.PSU__USE__M_AXI_GP0 {1} \
    CONFIG.PSU__USE__M_AXI_GP1 {0} \
    CONFIG.PSU__USE__M_AXI_GP2 {0} \
@@ -1062,7 +1041,7 @@ proc create_root_design { parentCell } {
   connect_bd_intf_net -intf_net zynq_ultra_ps_e_0_M_AXI_HPM0_FPD [get_bd_intf_pins ps8_0_axi_periph/S00_AXI] [get_bd_intf_pins zynq_ultra_ps_e_0/M_AXI_HPM0_FPD]
 
   # Create port connections
-  connect_bd_net -net All_Ro_out_0_Data [get_bd_pins All_Ro_out_0/Data] [get_bd_pins Mux_Data_0/Data_In]
+  connect_bd_net -net All_Ro_out_0_Data [get_bd_pins All_Ro_out_0/Data] [get_bd_pins IP_Conversion_Axi_0/Data]
   connect_bd_net -net De_Mux_0_SD1 [get_bd_pins De_Mux_0/SD1] [get_bd_pins Temp_Voltage_Average_0/SD1]
   connect_bd_net -net De_Mux_0_SD2 [get_bd_pins De_Mux_0/SD2] [get_bd_pins Temp_Voltage_Average_0/SD2]
   connect_bd_net -net De_Mux_0_SS1 [get_bd_pins De_Mux_0/SS1] [get_bd_pins Temp_Voltage_Average_0/SS1]
@@ -1071,25 +1050,20 @@ proc create_root_design { parentCell } {
   connect_bd_net -net Gen_mode_0_Mode [get_bd_pins All_Ro_out_0/Mode] [get_bd_pins Gen_mode_0/Mode]
   connect_bd_net -net Gen_mode_0_Reset_RO [get_bd_pins All_Ro_out_0/Reset_RO] [get_bd_pins Gen_mode_0/Reset_RO]
   connect_bd_net -net Gen_mode_0_Ro_sel [get_bd_pins All_Ro_out_0/Ro_sel] [get_bd_pins Gen_mode_0/Ro_sel]
-  connect_bd_net -net Gen_mode_0_Send [get_bd_pins Gen_mode_0/Send] [get_bd_pins Select_Data_0/Send]
+  connect_bd_net -net Gen_mode_0_Send [get_bd_pins Gen_mode_0/Send] [get_bd_pins IP_Conversion_Axi_0/Send]
   connect_bd_net -net Gen_stress_0_Stress [get_bd_pins All_Ro_out_0/Stress] [get_bd_pins Gen_stress_0/Stress]
-  connect_bd_net -net Hardware_Watchdog_0_Alarm_Temp [get_bd_pins Hardware_Watchdog_0/Alarm_Temp] [get_bd_pins zynq_ultra_ps_e_0/pl_ps_irq0]
-  connect_bd_net -net Hardware_Watchdog_0_Alarm_Volt [get_bd_pins Hardware_Watchdog_0/Alarm_Volt] [get_bd_pins zynq_ultra_ps_e_0/pl_ps_irq1]
-  connect_bd_net -net Hardware_Watchdog_0_Emergency_Stop [get_bd_pins All_Ro_out_0/Emergency_Stop] [get_bd_pins Hardware_Watchdog_0/Emergency_Stop]
-  connect_bd_net -net IP_Conversion_Axi_0_Done [get_bd_pins IP_Conversion_Axi_0/Done] [get_bd_pins Select_Data_0/Done]
+  connect_bd_net -net IP_Conversion_Axi_0_Data_Ready [get_bd_pins IP_Conversion_Axi_0/Data_Ready] [get_bd_pins zynq_ultra_ps_e_0/pl_ps_irq0]
   connect_bd_net -net IP_Conversion_Axi_0_Duty_cycle [get_bd_pins IP_Conversion_Axi_0/Duty_cycle] [get_bd_pins PWM_Motor_0/Duty]
-  connect_bd_net -net Mux_Data_0_Data_Out [get_bd_pins IP_Conversion_Axi_0/Data] [get_bd_pins Mux_Data_0/Data_Out]
+  connect_bd_net -net InternalHeater_0_S_IH [get_bd_ports S_IH_0] [get_bd_pins InternalHeater_0/S_IH]
   connect_bd_net -net PWM_Motor_0_PWM_Out [get_bd_ports PWM_Out] [get_bd_pins PWM_Motor_0/PWM_Out]
-  connect_bd_net -net Select_Data_0_Allow [get_bd_pins IP_Conversion_Axi_0/Allow] [get_bd_pins Select_Data_0/Allow]
-  connect_bd_net -net Select_Data_0_Sel [get_bd_pins Mux_Data_0/Sel] [get_bd_pins Select_Data_0/Sel]
   connect_bd_net -net Sysmon_Dout [get_bd_pins De_Mux_0/ED1] [get_bd_pins Sysmon/Dout]
   connect_bd_net -net Sysmon_Enable [get_bd_pins De_Mux_0/Enable] [get_bd_pins Sysmon/Enable]
   connect_bd_net -net Sysmon_Sel [get_bd_pins De_Mux_0/Sel] [get_bd_pins Sysmon/Sel]
-  connect_bd_net -net Temp_Voltage_Average_0_Temp [get_bd_pins Hardware_Watchdog_0/Temp] [get_bd_pins IP_Conversion_Axi_0/Temp] [get_bd_pins Temp_Voltage_Average_0/Temp]
-  connect_bd_net -net Temp_Voltage_Average_0_Voltage [get_bd_pins Hardware_Watchdog_0/Voltage] [get_bd_pins IP_Conversion_Axi_0/Voltage] [get_bd_pins Temp_Voltage_Average_0/Voltage]
+  connect_bd_net -net Temp_Voltage_Average_0_Temp [get_bd_pins IP_Conversion_Axi_0/Temp] [get_bd_pins Temp_Voltage_Average_0/Temp]
+  connect_bd_net -net Temp_Voltage_Average_0_Voltage [get_bd_pins IP_Conversion_Axi_0/Voltage] [get_bd_pins Temp_Voltage_Average_0/Voltage]
   connect_bd_net -net rst_ps8_0_100M_peripheral_aresetn [get_bd_pins IP_Conversion_Axi_0/s00_axi_aresetn] [get_bd_pins ps8_0_axi_periph/ARESETN] [get_bd_pins ps8_0_axi_periph/M00_ARESETN] [get_bd_pins ps8_0_axi_periph/S00_ARESETN] [get_bd_pins rst_ps8_0_100M/peripheral_aresetn]
-  connect_bd_net -net util_vector_logic_0_Res [get_bd_pins De_Mux_0/Reset] [get_bd_pins Gen_mode_0/Reset] [get_bd_pins Gen_stress_0/Reset] [get_bd_pins Hardware_Watchdog_0/Reset] [get_bd_pins PWM_Motor_0/Reset] [get_bd_pins Select_Data_0/Reset] [get_bd_pins Sysmon/Reset] [get_bd_pins Temp_Voltage_Average_0/Reset] [get_bd_pins util_vector_logic_0/Res]
-  connect_bd_net -net zynq_ultra_ps_e_0_pl_clk0 [get_bd_pins De_Mux_0/Clk] [get_bd_pins Gen_mode_0/Clk] [get_bd_pins Gen_stress_0/Clk] [get_bd_pins Hardware_Watchdog_0/Clk] [get_bd_pins IP_Conversion_Axi_0/s00_axi_aclk] [get_bd_pins PWM_Motor_0/Clk] [get_bd_pins Select_Data_0/Clk] [get_bd_pins Sysmon/Clk] [get_bd_pins Temp_Voltage_Average_0/Clk] [get_bd_pins ps8_0_axi_periph/ACLK] [get_bd_pins ps8_0_axi_periph/M00_ACLK] [get_bd_pins ps8_0_axi_periph/S00_ACLK] [get_bd_pins rst_ps8_0_100M/slowest_sync_clk] [get_bd_pins zynq_ultra_ps_e_0/maxihpm0_fpd_aclk] [get_bd_pins zynq_ultra_ps_e_0/pl_clk0]
+  connect_bd_net -net util_vector_logic_0_Res [get_bd_pins De_Mux_0/Reset] [get_bd_pins Gen_mode_0/Reset] [get_bd_pins Gen_stress_0/Reset] [get_bd_pins PWM_Motor_0/Reset] [get_bd_pins Sysmon/Reset] [get_bd_pins Temp_Voltage_Average_0/Reset] [get_bd_pins util_vector_logic_0/Res]
+  connect_bd_net -net zynq_ultra_ps_e_0_pl_clk0 [get_bd_pins De_Mux_0/Clk] [get_bd_pins Gen_mode_0/Clk] [get_bd_pins Gen_stress_0/Clk] [get_bd_pins IP_Conversion_Axi_0/s00_axi_aclk] [get_bd_pins PWM_Motor_0/Clk] [get_bd_pins Sysmon/Clk] [get_bd_pins Temp_Voltage_Average_0/Clk] [get_bd_pins ps8_0_axi_periph/ACLK] [get_bd_pins ps8_0_axi_periph/M00_ACLK] [get_bd_pins ps8_0_axi_periph/S00_ACLK] [get_bd_pins rst_ps8_0_100M/slowest_sync_clk] [get_bd_pins zynq_ultra_ps_e_0/maxihpm0_fpd_aclk] [get_bd_pins zynq_ultra_ps_e_0/pl_clk0]
   connect_bd_net -net zynq_ultra_ps_e_0_pl_resetn0 [get_bd_pins rst_ps8_0_100M/ext_reset_in] [get_bd_pins util_vector_logic_0/Op1] [get_bd_pins zynq_ultra_ps_e_0/pl_resetn0]
 
   # Create address segments

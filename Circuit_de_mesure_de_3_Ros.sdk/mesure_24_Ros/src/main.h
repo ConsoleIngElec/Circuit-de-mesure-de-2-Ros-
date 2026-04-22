@@ -54,7 +54,7 @@
  *                           demarrage du Zynq
  * ------------------------------------------------------------------------- */
 
-#define VCCINT_VOLTAGE         0.906f
+#define VCCINT_VOLTAGE         0.850f
 #define VCCINT_VMAX            1.100f
 #define VCCINT_RESOLUTION      2
 

@@ -47,7 +47,7 @@
 -- DO NOT MODIFY THIS FILE.
 
 -- IP VLNV: IMS.bordeaux:user:IP_Conversion_Axi:1.0
--- IP Revision: 4
+-- IP Revision: 7
 
 LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
@@ -55,13 +55,13 @@ USE ieee.numeric_std.ALL;
 
 ENTITY mesure_IP_Conversion_Axi_0_0 IS
   PORT (
-    Data : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
-    Allow : IN STD_LOGIC;
+    Data : IN STD_LOGIC_VECTOR(127 DOWNTO 0);
+    Send : IN STD_LOGIC;
     Temp : IN STD_LOGIC_VECTOR(15 DOWNTO 0);
     Voltage : IN STD_LOGIC_VECTOR(15 DOWNTO 0);
-    Done : OUT STD_LOGIC;
+    Data_Ready : OUT STD_LOGIC;
     Duty_cycle : OUT STD_LOGIC_VECTOR(15 DOWNTO 0);
-    s00_axi_awaddr : IN STD_LOGIC_VECTOR(3 DOWNTO 0);
+    s00_axi_awaddr : IN STD_LOGIC_VECTOR(6 DOWNTO 0);
     s00_axi_awprot : IN STD_LOGIC_VECTOR(2 DOWNTO 0);
     s00_axi_awvalid : IN STD_LOGIC;
     s00_axi_awready : OUT STD_LOGIC;
@@ -72,7 +72,7 @@ ENTITY mesure_IP_Conversion_Axi_0_0 IS
     s00_axi_bresp : OUT STD_LOGIC_VECTOR(1 DOWNTO 0);
     s00_axi_bvalid : OUT STD_LOGIC;
     s00_axi_bready : IN STD_LOGIC;
-    s00_axi_araddr : IN STD_LOGIC_VECTOR(3 DOWNTO 0);
+    s00_axi_araddr : IN STD_LOGIC_VECTOR(6 DOWNTO 0);
     s00_axi_arprot : IN STD_LOGIC_VECTOR(2 DOWNTO 0);
     s00_axi_arvalid : IN STD_LOGIC;
     s00_axi_arready : OUT STD_LOGIC;
@@ -91,16 +91,17 @@ ARCHITECTURE mesure_IP_Conversion_Axi_0_0_arch OF mesure_IP_Conversion_Axi_0_0 I
   COMPONENT IP_Conversion_Axi_v1_0 IS
     GENERIC (
       C_S00_AXI_DATA_WIDTH : INTEGER; -- Width of S_AXI data bus
-      C_S00_AXI_ADDR_WIDTH : INTEGER -- Width of S_AXI address bus
+      C_S00_AXI_ADDR_WIDTH : INTEGER; -- Width of S_AXI address bus
+      C_AXI_FREQ_HZ : INTEGER
     );
     PORT (
-      Data : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
-      Allow : IN STD_LOGIC;
+      Data : IN STD_LOGIC_VECTOR(127 DOWNTO 0);
+      Send : IN STD_LOGIC;
       Temp : IN STD_LOGIC_VECTOR(15 DOWNTO 0);
       Voltage : IN STD_LOGIC_VECTOR(15 DOWNTO 0);
-      Done : OUT STD_LOGIC;
+      Data_Ready : OUT STD_LOGIC;
       Duty_cycle : OUT STD_LOGIC_VECTOR(15 DOWNTO 0);
-      s00_axi_awaddr : IN STD_LOGIC_VECTOR(3 DOWNTO 0);
+      s00_axi_awaddr : IN STD_LOGIC_VECTOR(6 DOWNTO 0);
       s00_axi_awprot : IN STD_LOGIC_VECTOR(2 DOWNTO 0);
       s00_axi_awvalid : IN STD_LOGIC;
       s00_axi_awready : OUT STD_LOGIC;
@@ -111,7 +112,7 @@ ARCHITECTURE mesure_IP_Conversion_Axi_0_0_arch OF mesure_IP_Conversion_Axi_0_0 I
       s00_axi_bresp : OUT STD_LOGIC_VECTOR(1 DOWNTO 0);
       s00_axi_bvalid : OUT STD_LOGIC;
       s00_axi_bready : IN STD_LOGIC;
-      s00_axi_araddr : IN STD_LOGIC_VECTOR(3 DOWNTO 0);
+      s00_axi_araddr : IN STD_LOGIC_VECTOR(6 DOWNTO 0);
       s00_axi_arprot : IN STD_LOGIC_VECTOR(2 DOWNTO 0);
       s00_axi_arvalid : IN STD_LOGIC;
       s00_axi_arready : OUT STD_LOGIC;
@@ -147,21 +148,22 @@ ARCHITECTURE mesure_IP_Conversion_Axi_0_0_arch OF mesure_IP_Conversion_Axi_0_0 I
   ATTRIBUTE X_INTERFACE_INFO OF s00_axi_awready: SIGNAL IS "xilinx.com:interface:aximm:1.0 S00_AXI AWREADY";
   ATTRIBUTE X_INTERFACE_INFO OF s00_axi_awvalid: SIGNAL IS "xilinx.com:interface:aximm:1.0 S00_AXI AWVALID";
   ATTRIBUTE X_INTERFACE_INFO OF s00_axi_awprot: SIGNAL IS "xilinx.com:interface:aximm:1.0 S00_AXI AWPROT";
-  ATTRIBUTE X_INTERFACE_PARAMETER OF s00_axi_awaddr: SIGNAL IS "XIL_INTERFACENAME S00_AXI, WIZ_DATA_WIDTH 32, WIZ_NUM_REG 4, SUPPORTS_NARROW_BURST 0, DATA_WIDTH 32, PROTOCOL AXI4LITE, FREQ_HZ 100000000, ID_WIDTH 0, ADDR_WIDTH 4, AWUSER_WIDTH 0, ARUSER_WIDTH 0, WUSER_WIDTH 0, RUSER_WIDTH 0, BUSER_WIDTH 0, READ_WRITE_MODE READ_WRITE, HAS_BURST 0, HAS_LOCK 0, HAS_PROT 1, HAS_CACHE 0, HAS_QOS 0, HAS_REGION 0, HAS_WSTRB 1, HAS_BRESP 1, HAS_RRESP 1, NUM_READ_OUTSTANDING 8, NUM_WRITE_OUTSTANDING 8, MAX_BURST_LENGTH 1, PHASE 0.000, CLK_DOMAIN mesure_zynq_ultra_ps_e_" & 
+  ATTRIBUTE X_INTERFACE_PARAMETER OF s00_axi_awaddr: SIGNAL IS "XIL_INTERFACENAME S00_AXI, WIZ_DATA_WIDTH 32, WIZ_NUM_REG 4, SUPPORTS_NARROW_BURST 0, DATA_WIDTH 32, PROTOCOL AXI4LITE, FREQ_HZ 100000000, ID_WIDTH 0, ADDR_WIDTH 7, AWUSER_WIDTH 0, ARUSER_WIDTH 0, WUSER_WIDTH 0, RUSER_WIDTH 0, BUSER_WIDTH 0, READ_WRITE_MODE READ_WRITE, HAS_BURST 0, HAS_LOCK 0, HAS_PROT 1, HAS_CACHE 0, HAS_QOS 0, HAS_REGION 0, HAS_WSTRB 1, HAS_BRESP 1, HAS_RRESP 1, NUM_READ_OUTSTANDING 8, NUM_WRITE_OUTSTANDING 8, MAX_BURST_LENGTH 1, PHASE 0.000, CLK_DOMAIN mesure_zynq_ultra_ps_e_" & 
 "0_1_pl_clk0, NUM_READ_THREADS 4, NUM_WRITE_THREADS 4, RUSER_BITS_PER_BYTE 0, WUSER_BITS_PER_BYTE 0, INSERT_VIP 0";
   ATTRIBUTE X_INTERFACE_INFO OF s00_axi_awaddr: SIGNAL IS "xilinx.com:interface:aximm:1.0 S00_AXI AWADDR";
 BEGIN
   U0 : IP_Conversion_Axi_v1_0
     GENERIC MAP (
       C_S00_AXI_DATA_WIDTH => 32,
-      C_S00_AXI_ADDR_WIDTH => 4
+      C_S00_AXI_ADDR_WIDTH => 7,
+      C_AXI_FREQ_HZ => 100000000
     )
     PORT MAP (
       Data => Data,
-      Allow => Allow,
+      Send => Send,
       Temp => Temp,
       Voltage => Voltage,
-      Done => Done,
+      Data_Ready => Data_Ready,
       Duty_cycle => Duty_cycle,
       s00_axi_awaddr => s00_axi_awaddr,
       s00_axi_awprot => s00_axi_awprot,
