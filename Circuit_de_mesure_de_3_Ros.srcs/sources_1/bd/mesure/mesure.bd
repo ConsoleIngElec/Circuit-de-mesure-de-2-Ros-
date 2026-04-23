@@ -26,14 +26,14 @@
           "xlconstant_2": ""
         }
       },
-      "All_Ro_out_0": "",
       "Gen_stress_0": "",
       "De_Mux_0": "",
       "Temp_Voltage_Average_0": "",
       "PWM_Motor_0": "",
       "InternalHeater_0": "",
       "IP_Conversion_Axi_0": "",
-      "Gen_mode_0": ""
+      "Gen_mode_0": "",
+      "All_Ro_out_0": ""
     },
     "ports": {
       "PWM_Out": {
@@ -1472,6 +1472,12 @@
               }
             },
             "interface_nets": {
+              "s00_couplers_to_auto_ds": {
+                "interface_ports": [
+                  "S_AXI",
+                  "auto_ds/S_AXI"
+                ]
+              },
               "auto_ds_to_auto_pc": {
                 "interface_ports": [
                   "auto_ds/M_AXI",
@@ -1482,12 +1488,6 @@
                 "interface_ports": [
                   "M_AXI",
                   "auto_pc/M_AXI"
-                ]
-              },
-              "s00_couplers_to_auto_ds": {
-                "interface_ports": [
-                  "S_AXI",
-                  "auto_ds/S_AXI"
                 ]
               }
             },
@@ -1510,16 +1510,16 @@
           }
         },
         "interface_nets": {
-          "s00_couplers_to_ps8_0_axi_periph": {
-            "interface_ports": [
-              "M00_AXI",
-              "s00_couplers/M_AXI"
-            ]
-          },
           "ps8_0_axi_periph_to_s00_couplers": {
             "interface_ports": [
               "S00_AXI",
               "s00_couplers/S_AXI"
+            ]
+          },
+          "s00_couplers_to_ps8_0_axi_periph": {
+            "interface_ports": [
+              "M00_AXI",
+              "s00_couplers/M_AXI"
             ]
           }
         },
@@ -1732,48 +1732,6 @@
           }
         }
       },
-      "All_Ro_out_0": {
-        "vlnv": "xilinx.com:module_ref:All_Ro_out:1.0",
-        "xci_name": "mesure_All_Ro_out_0_0",
-        "reference_info": {
-          "ref_type": "hdl",
-          "ref_name": "All_Ro_out",
-          "boundary_crc": "0x0"
-        },
-        "ports": {
-          "CE_1Hz": {
-            "direction": "I"
-          },
-          "Emergency_Stop": {
-            "direction": "I"
-          },
-          "Mode": {
-            "direction": "I",
-            "left": "5",
-            "right": "0"
-          },
-          "Reset_RO": {
-            "direction": "I",
-            "left": "5",
-            "right": "0"
-          },
-          "Ro_sel": {
-            "direction": "I",
-            "left": "2",
-            "right": "0"
-          },
-          "Stress": {
-            "direction": "I",
-            "left": "3",
-            "right": "0"
-          },
-          "Data": {
-            "direction": "O",
-            "left": "127",
-            "right": "0"
-          }
-        }
-      },
       "Gen_stress_0": {
         "vlnv": "xilinx.com:module_ref:Gen_stress:1.0",
         "xci_name": "mesure_Gen_stress_0_1",
@@ -1938,7 +1896,7 @@
       },
       "Gen_mode_0": {
         "vlnv": "xilinx.com:module_ref:Gen_mode:1.0",
-        "xci_name": "mesure_Gen_mode_0_1",
+        "xci_name": "mesure_Gen_mode_0_0",
         "reference_info": {
           "ref_type": "hdl",
           "ref_name": "Gen_mode",
@@ -1975,19 +1933,58 @@
             "direction": "O"
           }
         }
+      },
+      "All_Ro_out_0": {
+        "vlnv": "xilinx.com:module_ref:All_Ro_out:1.0",
+        "xci_name": "mesure_All_Ro_out_0_0",
+        "reference_info": {
+          "ref_type": "hdl",
+          "ref_name": "All_Ro_out",
+          "boundary_crc": "0x0"
+        },
+        "ports": {
+          "CE_1Hz": {
+            "direction": "I"
+          },
+          "Mode": {
+            "direction": "I",
+            "left": "5",
+            "right": "0"
+          },
+          "Reset_RO": {
+            "direction": "I",
+            "left": "5",
+            "right": "0"
+          },
+          "Ro_sel": {
+            "direction": "I",
+            "left": "2",
+            "right": "0"
+          },
+          "Stress": {
+            "direction": "I",
+            "left": "3",
+            "right": "0"
+          },
+          "Data": {
+            "direction": "O",
+            "left": "127",
+            "right": "0"
+          }
+        }
       }
     },
     "interface_nets": {
-      "zynq_ultra_ps_e_0_M_AXI_HPM0_FPD": {
-        "interface_ports": [
-          "zynq_ultra_ps_e_0/M_AXI_HPM0_FPD",
-          "ps8_0_axi_periph/S00_AXI"
-        ]
-      },
       "ps8_0_axi_periph_M00_AXI": {
         "interface_ports": [
           "ps8_0_axi_periph/M00_AXI",
           "IP_Conversion_Axi_0/S00_AXI"
+        ]
+      },
+      "zynq_ultra_ps_e_0_M_AXI_HPM0_FPD": {
+        "interface_ports": [
+          "zynq_ultra_ps_e_0/M_AXI_HPM0_FPD",
+          "ps8_0_axi_periph/S00_AXI"
         ]
       }
     },
@@ -2040,30 +2037,6 @@
           "ps8_0_axi_periph/M00_ARESETN",
           "ps8_0_axi_periph/ARESETN",
           "IP_Conversion_Axi_0/s00_axi_aresetn"
-        ]
-      },
-      "Gen_mode_0_CE_1Hz": {
-        "ports": [
-          "Gen_mode_0/CE_1Hz",
-          "All_Ro_out_0/CE_1Hz"
-        ]
-      },
-      "Gen_mode_0_Mode": {
-        "ports": [
-          "Gen_mode_0/Mode",
-          "All_Ro_out_0/Mode"
-        ]
-      },
-      "Gen_mode_0_Reset_RO": {
-        "ports": [
-          "Gen_mode_0/Reset_RO",
-          "All_Ro_out_0/Reset_RO"
-        ]
-      },
-      "Gen_mode_0_Ro_sel": {
-        "ports": [
-          "Gen_mode_0/Ro_sel",
-          "All_Ro_out_0/Ro_sel"
         ]
       },
       "Sysmon_Dout": {
@@ -2144,16 +2117,40 @@
           "IP_Conversion_Axi_0/Data"
         ]
       },
-      "Gen_mode_0_Send": {
-        "ports": [
-          "Gen_mode_0/Send",
-          "IP_Conversion_Axi_0/Send"
-        ]
-      },
       "IP_Conversion_Axi_0_Data_Ready": {
         "ports": [
           "IP_Conversion_Axi_0/Data_Ready",
           "zynq_ultra_ps_e_0/pl_ps_irq0"
+        ]
+      },
+      "Gen_mode_0_CE_1Hz": {
+        "ports": [
+          "Gen_mode_0/CE_1Hz",
+          "All_Ro_out_0/CE_1Hz"
+        ]
+      },
+      "Gen_mode_0_Mode": {
+        "ports": [
+          "Gen_mode_0/Mode",
+          "All_Ro_out_0/Mode"
+        ]
+      },
+      "Gen_mode_0_Reset_RO": {
+        "ports": [
+          "Gen_mode_0/Reset_RO",
+          "All_Ro_out_0/Reset_RO"
+        ]
+      },
+      "Gen_mode_0_Ro_sel": {
+        "ports": [
+          "Gen_mode_0/Ro_sel",
+          "All_Ro_out_0/Ro_sel"
+        ]
+      },
+      "Gen_mode_0_Send": {
+        "ports": [
+          "Gen_mode_0/Send",
+          "IP_Conversion_Axi_0/Send"
         ]
       }
     },

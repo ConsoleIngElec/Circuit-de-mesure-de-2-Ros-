@@ -41,7 +41,6 @@ static const char *mode_label[6] = {
 /* =========================================================================
  * Handler TTC — toutes les 0.1 seconde
  *
- * Même logique que BTN_Intr_Handler dans GPIO.c :
  *   - Lecture Temp/Voltage depuis le registre AXI
  *   - Calcul RST et envoi Duty_cycle
  *   - Régulation tension VCCINT

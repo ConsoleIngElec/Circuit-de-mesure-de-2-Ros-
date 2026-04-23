@@ -49,7 +49,6 @@ int main(void)
     usleep(50000);
     set_Vmax(VCCINT_VMAX);
     usleep(50000);
-    /* Erreur corrigée : set_resolution attend 3 arguments */
     set_resolution(2, VCCINT_VOLTAGE, VCCINT_VMAX);
     usleep(50000);
 
@@ -99,7 +98,6 @@ int main(void)
     XTtcPs_SetOptions(&TTCInst, XTTCPS_OPTION_INTERVAL_MODE |
                                  XTTCPS_OPTION_WAVE_DISABLE);
 
-    /* Erreur corrigée : CalcIntervalFromFreq attend des pointeurs */
     XTtcPs_CalcIntervalFromFreq(&TTCInst, TTC_TICK_HZ, &Interval, &Prescaler);
     XTtcPs_SetInterval(&TTCInst, Interval);
     XTtcPs_SetPrescaler(&TTCInst, Prescaler);
@@ -117,9 +115,6 @@ int main(void)
      * Interruption 2 : Data_Ready PL->PS (IRQ0)
      * Gère : lecture 24 registres AXI, reconstruction fréquences,
      *        affichage, écriture SD, reset capture
-     *
-     * IMPORTANT : remplacer DATA_READY_IRPT_INTR par le bon define
-     * trouvé dans xparameters.h (chercher IRQ0 ou PL_PS)
      * ------------------------------------------------------------------- */
     XScuGic_SetPriorityTriggerType(&INTCInst, DATA_READY_IRPT_INTR, 0xB0, 0x3);
     status = XScuGic_Connect(&INTCInst, DATA_READY_IRPT_INTR,

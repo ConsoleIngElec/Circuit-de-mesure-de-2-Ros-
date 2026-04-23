@@ -1,169 +1,144 @@
 ----------------------------------------------------------------------------------
--- Société :         Université de Bordeaux
--- Ingénieur :       Consolé MBOUBA
+-- Company:        Université de Bordeaux
+-- Engineer:       Consolé MBOUBA
 -- 
--- Date de création : 19.03.2026 18:44:37
--- Nom du design :   Circuit de mesure de 3 Ros
--- Nom du module :   Gen_mode - Behavioral
--- Projet :          Circuit de mesure de 3 Ros 
--- Cible matérielle : Zynq UltraScale+
--- Outil :           Vivado 2018.3
---
--- Description : 
---    Générateur de séquençage par Machine d'État (FSM) pour la caractérisation 
---    automatisée des Ring Oscillators (RO). 
---    Ce module gère :
---    1. La base de temps : Génération d'un top synchrone de 1 Hz (pulse_1s).
---    2. Le cycle de vie d'un RO : Séquençage temporel précis (Reset -> 
---       Oscillation -> Capture -> Repos).
---    3. Le multiplexage temporel : Alternance entre la mesure de 6 ROs (50s chacun) 
---       et une phase de pause thermique/stress de 5 minutes (300s).
---
--- Dépendances :    None
+-- Create Date:    23.04.2026 12:43:48
+-- Design Name:    Circuit de mesure de 24 ROs
+-- Module Name:    Gen_mode1 - Behavioral
+-- Project Name:   Circuit de mesure de 24 ROs
+-- Target Devices: Zynq UltraScale+
+-- Tool Versions:  Vivado 2018.3
+-- Description: 
+--   Module top-level du générateur de modes pour la caractérisation
+--   automatisée des Ring Oscillators.
+--   Instancie et connecte 3 sous-modules :
+--     - Gen_1Hz             : génère CE_1Hz à partir de l'horloge 100 MHz
+--     - Counter_mode        : génère Mode_G (48s mesure / 552s pause thermique)
+--     - State_machine_mode  : FSM séquençant les 6 modes × 4 ROs
 -- 
--- Révision :        Version 1.1 - Optimisation du pulse 'Send' (10ns)
--- Commentaires additionnels : 
---    - k : Indice binaire du RO sélectionné (0 à 5).
---    - pulse_1s : Signal de synchronisation interne (durée : 1 cycle d'horloge).
---    - Send : Impulsion de capture calibrée à 1 cycle d'horloge (10ns @ 100MHz).
+-- Dependencies: Gen_1Hz, Counter_mode, State_machine_mode
+-- 
+-- Revision:
+-- Revision 0.01 - File Created
+-- Additional Comments:
+--   Les génériques FREQ_Clk, Architecture_number et RO_by_architecture
+--   sont transmis aux sous-modules concernés.
+-- 
 ----------------------------------------------------------------------------------
 
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.NUMERIC_STD.ALL;
- 
+
 entity Gen_mode is
     generic(
         FREQ_Clk            : integer := 100_000_000;
-        Architecture_number : integer := 2; 
+        Architecture_number : integer := 2;
         RO_by_architecture  : integer := 3
     );
-    Port ( 
+    Port (
         Clk      : in  STD_LOGIC;
         Reset    : in  STD_LOGIC;
-        CE_1Hz   : out STD_LOGIC; 
+        CE_1Hz   : out STD_LOGIC;
         Mode     : out STD_LOGIC_VECTOR(Architecture_number * RO_by_architecture - 1 downto 0);
         Reset_RO : out STD_LOGIC_VECTOR(Architecture_number * RO_by_architecture - 1 downto 0);
-        Ro_sel   : out STD_LOGIC_VECTOR(2 downto 0); 
-        Send     : out STD_LOGIC  
+        Ro_sel   : out STD_LOGIC_VECTOR(2 downto 0);
+        Send     : out STD_LOGIC
     );
 end Gen_mode;
- 
+
 architecture Behavioral of Gen_mode is
- 
-    signal count_1hz : integer range 0 to FREQ_Clk := 0;
-    signal pulse_1s  : std_logic := '0'; 
- 
-    signal timer_sec   : integer range 0 to 7   := 0; 
-    signal timer_pause : integer range 0 to 551 := 0; 
-    signal k           : integer range 0 to 5   := 0; 
- 
-    type state_type is (MESURE_RO, PAUSE_THERMIQUE);
-    signal current_state : state_type := MESURE_RO;
- 
+
+    -- Déclaration de Gen_1Hz
+    component Gen_1Hz is
+        generic(FREQ_Clk : integer);
+        Port (
+            Clk    : in  STD_LOGIC;
+            Reset  : in  STD_LOGIC;
+            CE_1Hz : out STD_LOGIC
+        );
+    end component;
+
+    -- Déclaration de Counter_mode
+    component Counter_mode is
+        generic(
+            NB_MODES  : integer;
+            T_MODE_S  : integer;
+            T_PAUSE_S : integer
+        );
+        Port (
+            Clk    : in  STD_LOGIC;
+            Reset  : in  STD_LOGIC;
+            Enable : in  STD_LOGIC;
+            Mode_G : out STD_LOGIC
+        );
+    end component;
+
+    -- Déclaration de State_machine_mode
+    component State_machine_mode is
+        generic(
+            Architecture_number : integer;
+            RO_by_architecture  : integer
+        );
+        Port (
+            Clk      : in  STD_LOGIC;
+            Reset    : in  STD_LOGIC;
+            CE_1Hz   : in  STD_LOGIC;
+            Mode_G   : in  STD_LOGIC;
+            Ro_sel   : out STD_LOGIC_VECTOR(2 downto 0);
+            Mode     : out STD_LOGIC_VECTOR(Architecture_number * RO_by_architecture - 1 downto 0);
+            Reset_RO : out STD_LOGIC_VECTOR(Architecture_number * RO_by_architecture - 1 downto 0);
+            Send     : out STD_LOGIC
+        );
+    end component;
+
+    -- Signaux internes de connexion entre les sous-modules
+    signal CE_1Hz_int : STD_LOGIC;
+    signal Mode_G_int : STD_LOGIC;
+
 begin
- 
-    ------------------------------------------------------------------
-    -- 1. GÉNÉRATEUR DE TOP 1 SECONDE (Base de temps)
-    ------------------------------------------------------------------
-    process(Clk)
-    begin
-        if rising_edge(Clk) then
-            if Reset = '1' then
-                count_1hz <= 0;
-                pulse_1s  <= '0';
-            else
-                if count_1hz < (FREQ_Clk - 1) then
-                    count_1hz <= count_1hz + 1;
-                    pulse_1s  <= '0';
-                else
-                    count_1hz <= 0;
-                    pulse_1s  <= '1'; 
-                end if;
-            end if;
-        end if;
-    end process;
- 
-    ------------------------------------------------------------------
-    -- 2. MACHINE D'ÉTAT (FSM)
-    -- Send est piloté directement dans la FSM :
-    --   - Send = '0' par défaut partout
-    --   - Send = '1' uniquement au when 7 (pendant 1 seconde entière)
-    ------------------------------------------------------------------
-    process(Clk)
-    begin
-        if rising_edge(Clk) then
-            if Reset = '1' then
-                current_state <= MESURE_RO;
-                timer_sec     <= 0;
-                timer_pause   <= 0;
-                k             <= 0;
-                Mode          <= (others => '0');
-                Reset_Ro      <= (others => '0');
-                Send          <= '0';
-            else
-                Send <= '0'; -- Valeur par défaut
- 
-                if pulse_1s = '1' then
-                    case current_state is
- 
-                        when MESURE_RO =>
-                            Mode     <= (others => '0');
-                            Reset_Ro <= (others => '0');
-                            
-                            case timer_sec is
-                                when 0 =>
-                                    Mode(k)     <= '1';
-                                    Reset_Ro(k) <= '1';
-                                    
-                                when 1 to 6 =>
-                                    Mode(k)     <= '1'; 
-                                    Reset_Ro(k) <= '0';
-                                    
-                                when 7 =>
-                                    Mode(k)     <= '1';
-                                    Reset_Ro(k) <= '0';
-                                    Send        <= '1'; 
-                                    
-                                when others =>
-                                    null; 
-                            end case;
- 
-                            if timer_sec < 7 then
-                                timer_sec <= timer_sec + 1;
-                            else
-                                timer_sec <= 0;
-                                if k < 5 then
-                                    k <= k + 1;
-                                else
-                                    k <= 0;
-                                    current_state <= PAUSE_THERMIQUE;
-                                end if;
-                            end if;
- 
-                        when PAUSE_THERMIQUE =>
-                            Mode     <= (others => '0');
-                            Reset_Ro <= (others => '0');
-                            
-                            if timer_pause < 551 then
-                                timer_pause <= timer_pause + 1;
-                            else
-                                timer_pause   <= 0;
-                                current_state <= MESURE_RO;
-                            end if;
- 
-                        when others =>
-                            current_state <= MESURE_RO;
-                    end case;
-                end if;
-            end if;
-        end if;
-    end process;
- 
-    --------------------------------------------------------------------------
-    -- 3. AUTRES SORTIES
-    --------------------------------------------------------------------------
-    Ro_sel <= std_logic_vector(to_unsigned(k, 3));
-    CE_1Hz <= pulse_1s;
- 
+
+    -- Instance du générateur de base de temps 1Hz
+    I_Gen_1Hz : Gen_1Hz
+        generic map(FREQ_Clk => FREQ_Clk)
+        port map(
+            Clk    => Clk,
+            Reset  => Reset,
+            CE_1Hz => CE_1Hz_int
+        );
+
+    -- Instance du compteur de cycle mesure/pause
+    I_Counter_mode : Counter_mode
+        generic map(
+            NB_MODES  => Architecture_number * RO_by_architecture,
+            T_MODE_S  => 8,
+            T_PAUSE_S => 552
+        )
+        port map(
+            Clk    => Clk,
+            Reset  => Reset,
+            Enable => CE_1Hz_int,
+            Mode_G => Mode_G_int
+        );
+
+    -- Instance de la machine à états de séquençage des ROs
+    I_State_machine_mode : State_machine_mode
+        generic map(
+            Architecture_number => Architecture_number,
+            RO_by_architecture  => RO_by_architecture
+        )
+        port map(
+            Clk      => Clk,
+            Reset    => Reset,
+            CE_1Hz   => CE_1Hz_int,
+            Mode_G   => Mode_G_int,
+            Ro_sel   => Ro_sel,
+            Mode     => Mode,
+            Reset_RO => Reset_RO,
+            Send     => Send
+        );
+
+    -- Propagation de CE_1Hz vers l'extérieur
+    CE_1Hz <= CE_1Hz_int;
+
 end Behavioral;

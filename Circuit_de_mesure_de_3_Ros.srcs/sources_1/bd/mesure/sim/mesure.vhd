@@ -1,7 +1,7 @@
 --Copyright 1986-2018 Xilinx, Inc. All Rights Reserved.
 ----------------------------------------------------------------------------------
 --Tool Version: Vivado v.2018.3 (win64) Build 2405991 Thu Dec  6 23:38:27 MST 2018
---Date        : Thu Apr 23 10:21:11 2026
+--Date        : Thu Apr 23 13:43:50 2026
 --Host        : poste-16 running 64-bit major release  (build 9200)
 --Command     : generate_target mesure.bd
 --Design      : mesure
@@ -1004,17 +1004,6 @@ architecture STRUCTURE of mesure is
     peripheral_aresetn : out STD_LOGIC_VECTOR ( 0 to 0 )
   );
   end component mesure_rst_ps8_0_100M_1;
-  component mesure_All_Ro_out_0_0 is
-  port (
-    CE_1Hz : in STD_LOGIC;
-    Emergency_Stop : in STD_LOGIC;
-    Mode : in STD_LOGIC_VECTOR ( 5 downto 0 );
-    Reset_RO : in STD_LOGIC_VECTOR ( 5 downto 0 );
-    Ro_sel : in STD_LOGIC_VECTOR ( 2 downto 0 );
-    Stress : in STD_LOGIC_VECTOR ( 3 downto 0 );
-    Data : out STD_LOGIC_VECTOR ( 127 downto 0 )
-  );
-  end component mesure_All_Ro_out_0_0;
   component mesure_Gen_stress_0_1 is
   port (
     Clk : in STD_LOGIC;
@@ -1091,7 +1080,17 @@ architecture STRUCTURE of mesure is
     s00_axi_aresetn : in STD_LOGIC
   );
   end component mesure_IP_Conversion_Axi_0_0;
-  component mesure_Gen_mode_0_1 is
+  component mesure_All_Ro_out_0_0 is
+  port (
+    CE_1Hz : in STD_LOGIC;
+    Mode : in STD_LOGIC_VECTOR ( 5 downto 0 );
+    Reset_RO : in STD_LOGIC_VECTOR ( 5 downto 0 );
+    Ro_sel : in STD_LOGIC_VECTOR ( 2 downto 0 );
+    Stress : in STD_LOGIC_VECTOR ( 3 downto 0 );
+    Data : out STD_LOGIC_VECTOR ( 127 downto 0 )
+  );
+  end component mesure_All_Ro_out_0_0;
+  component mesure_Gen_mode_0_0 is
   port (
     Clk : in STD_LOGIC;
     Reset : in STD_LOGIC;
@@ -1101,7 +1100,7 @@ architecture STRUCTURE of mesure is
     Ro_sel : out STD_LOGIC_VECTOR ( 2 downto 0 );
     Send : out STD_LOGIC
   );
-  end component mesure_Gen_mode_0_1;
+  end component mesure_Gen_mode_0_0;
   signal All_Ro_out_0_Data : STD_LOGIC_VECTOR ( 127 downto 0 );
   signal De_Mux_0_SD1 : STD_LOGIC_VECTOR ( 15 downto 0 );
   signal De_Mux_0_SD2 : STD_LOGIC_VECTOR ( 15 downto 0 );
@@ -1195,7 +1194,6 @@ All_Ro_out_0: component mesure_All_Ro_out_0_0
      port map (
       CE_1Hz => Gen_mode_0_CE_1Hz,
       Data(127 downto 0) => All_Ro_out_0_Data(127 downto 0),
-      Emergency_Stop => '0',
       Mode(5 downto 0) => Gen_mode_0_Mode(5 downto 0),
       Reset_RO(5 downto 0) => Gen_mode_0_Reset_RO(5 downto 0),
       Ro_sel(2 downto 0) => Gen_mode_0_Ro_sel(2 downto 0),
@@ -1213,7 +1211,7 @@ De_Mux_0: component mesure_De_Mux_0_0
       SS2 => De_Mux_0_SS2,
       Sel(5 downto 0) => Sysmon_Sel(5 downto 0)
     );
-Gen_mode_0: component mesure_Gen_mode_0_1
+Gen_mode_0: component mesure_Gen_mode_0_0
      port map (
       CE_1Hz => Gen_mode_0_CE_1Hz,
       Clk => zynq_ultra_ps_e_0_pl_clk0,

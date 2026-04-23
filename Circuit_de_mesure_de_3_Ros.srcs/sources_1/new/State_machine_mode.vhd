@@ -2,104 +2,136 @@
 -- Company: Université de Bordeaux
 -- Engineer: Consolé MBOUBA
 -- 
--- Create Date: 09.03.2026 16:22:14
--- Design Name: Circuit de mesure de 3 ROs
+-- Create Date: 23.04.2026 12:30:10
+-- Design Name: Circuit de mesure de 3 Ros
 -- Module Name: State_machine_mode - Behavioral
--- Project Name: Circuit de mesure de 3 ROs
--- Target Devices: Zynq ultraScale +
--- Tool Versions: Vivado 2018.3
+-- Project Name: Circuit de mesure de 3 Ros
+-- Target Devices: Zynq UltraScale +
+-- Tool Versions: 2018.3
 -- Description: 
--- Cette machine d'état (FSM) séquence la mesure de multiples Ring Oscillators (RO).
--- Elle gère un cycle total de 50 secondes (index 0 à 49) par RO :
---   - 0s à 5s  : Phase de Reset (6s au total) pour initialiser l'oscillateur.
---   - 6s à 23s : Phase de Stabilisation (18s) pour laisser chauffer le RO.
---   - 24s pile  : Phase de Mesure (1s) déclenchant l'impulsion 'Send'.
---   - 25s à 49s : Phase de Pause (25s) pour le refroidissement thermique (Cool down).
+--   Machine à états de séquençage des Ring Oscillators.
+--   3 états : Eteint ? Envoi ? Attendre
+--     Eteint   : attente du démarrage (MODE_G = '1')
+--     Envoi    : séquençage de chaque mode k (0 à 5) :
+--                  timer_sec = 0     : Reset du RO k        (1s)
+--                  timer_sec = 1 à 6 : Oscillation libre    (6s)
+--                  timer_sec = 7     : Mesure + Send = '1'  (1s)
+--     Attendre : attente de la fin du cycle (Mode_G = '0')
+-- Dependencies: Gen_1Hz, Counter_mode
 -- 
--- Dependencies: Generateur_signal_1Hz, counter_mode
--- Revision: Version 1.0
+-- Revision:
 -- Revision 0.01 - File Created
 -- Additional Comments:
--- Le signal 'Send' est une impulsion (Pulse) d'un seul cycle d'horloge Clk.
--- L'index 'k' incrémente après chaque cycle complet de 50s.
+-- 
 ----------------------------------------------------------------------------------
+
+
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.NUMERIC_STD.ALL;
-
+ 
 entity State_machine_mode is
     generic(
-        Architecture_number : integer := 2; 
-        RO_by_architecture  : integer := 3
+        Architecture_number : integer := 2;  -- Nombre d'architectures de ROs
+        RO_by_architecture  : integer := 3   -- Nombre de ROs par architecture
     );
-    Port ( 
+    Port (
         Clk      : in  STD_LOGIC;
-        Reset    : in  STD_LOGIC; 
-        Mode_G   : in  STD_LOGIC; -- Contrôle l'activation globale
-        CE_1Hz   : in  STD_LOGIC; 
-        Mode     : out STD_LOGIC_VECTOR(5 downto 0);
-        Reset_RO : out STD_LOGIC_VECTOR(5 downto 0);
-        RO_sel   : out STD_LOGIC_VECTOR(2 downto 0); 
-        Send     : out STD_LOGIC 
+        Reset    : in  STD_LOGIC;
+        CE_1Hz   : in  STD_LOGIC;             -- Base de temps depuis Gen_1Hz
+        Mode_G   : in  STD_LOGIC;             -- Signal de mode depuis Counter_mode
+        Ro_sel   : out STD_LOGIC_VECTOR(2 downto 0);
+        Mode     : out STD_LOGIC_VECTOR(Architecture_number * RO_by_architecture - 1 downto 0);
+        Reset_RO : out STD_LOGIC_VECTOR(Architecture_number * RO_by_architecture - 1 downto 0);
+        Send     : out STD_LOGIC
     );
 end State_machine_mode;
-
+ 
 architecture Behavioral of State_machine_mode is
-    type type_etat is (IDLE, MEASURE);
-    signal etat : type_etat := IDLE;
-
-    signal i : integer range 0 to 49 := 0; -- Compteur 50s
-    signal k : integer range 0 to 5  := 0; -- Index RO (0 à 5)
+ 
+    type state_type is (Eteint, Envoi, Attendre);
+    signal etat : state_type := Eteint;
+ 
+    signal timer_sec : integer range 0 to 7 := 0;
+    signal k         : integer range 0 to 5 := 0;
+ 
 begin
-
+ 
     process(Clk)
     begin
         if rising_edge(Clk) then
             if Reset = '1' then
-                etat <= IDLE;
-                i <= 0; k <= 0;
-                Mode <= (others => '0');
-                Reset_RO <= (others => '0');
-                Send <= '0';
-            elsif CE_1Hz = '1' then
-                -- Valeurs par défaut
-                Mode <= (others => '0');
-                Reset_RO <= (others => '0');
-                Send <= '0';
-
+                etat      <= Eteint;
+                timer_sec <= 0;
+                k         <= 0;
+                Mode      <= (others => '0');
+                Reset_RO  <= (others => '0');
+                Send      <= '0';
+ 
+            else
+                Send <= '0'; -- Valeur par défaut
+ 
                 case etat is
-                    when IDLE =>
+ 
+                    -- ETEINT : attente du démarrage de la phase de mesure
+                    when Eteint =>
+                        Mode     <= (others => '0');
+                        Reset_RO <= (others => '0');
                         if Mode_G = '1' then
-                            etat <= MEASURE;
+                            etat <= Envoi;
                         end if;
-
-                    when MEASURE =>
-                        -- Séquencement interne des 50s
-                        if i <= 5 then         -- Phase RESET
-                            Mode(k) <= '1'; Reset_RO(k) <= '1';
-                        elsif i <= 24 then     -- Phase OSCILLATION
-                            Mode(k) <= '1'; Reset_RO(k) <= '0';
-                        elsif i = 25 then      -- Phase CAPTURE
-                            Mode(k) <= '1'; Reset_RO(k) <= '0'; Send <= '1';
-                        end if;
-
-                        -- Gestion des compteurs
-                        if i < 49 then
-                            i <= i + 1;
-                        else
-                            i <= 0;
-                            if k < 5 then
-                                k <= k + 1;
+ 
+                    -- ENVOI : séquençage Reset / Oscillation / Mesure pour le mode k
+                    when Envoi =>
+                        if CE_1Hz = '1' then
+                            Mode     <= (others => '0');
+                            Reset_RO <= (others => '0');
+ 
+                            case timer_sec is
+                                when 0 =>           -- Phase Reset (1s)
+                                    Mode(k)     <= '1';
+                                    Reset_RO(k) <= '1';
+ 
+                                when 1 to 6 =>      -- Phase oscillation (6s)
+                                    Mode(k)     <= '1';
+                                    Reset_RO(k) <= '0';
+ 
+                                when 7 =>           -- Phase mesure + send (1s)
+                                    Mode(k)     <= '1';
+                                    Reset_RO(k) <= '0';
+                                    Send        <= '1';
+ 
+                                when others =>
+                                    null;
+                            end case;
+ 
+                            -- Progression de timer_sec et k
+                            if timer_sec < 7 then
+                                timer_sec <= timer_sec + 1;
                             else
-                                k <= 0;
-                                etat <= IDLE; -- Fin des 6 RO, on attend le prochain Mode_G
+                                timer_sec <= 0;
+                                if k < Architecture_number * RO_by_architecture - 1 then
+                                    k <= k + 1;
+                                else
+                                    k    <= 0;
+                                    etat <= Attendre;
+                                end if;
                             end if;
                         end if;
+ 
+                    -- ATTENDRE : fin du cycle de mesure, attente de la pause thermique
+                    when Attendre =>
+                        Mode     <= (others => '0');
+                        Reset_RO <= (others => '0');
+                        if Mode_G = '0' then
+                            etat <= Eteint;
+                        end if;
+ 
                 end case;
             end if;
         end if;
     end process;
-
-    RO_sel <= std_logic_vector(to_unsigned(k, 3));
-
+ 
+    Ro_sel <= std_logic_vector(to_unsigned(k, 3));
+ 
 end Behavioral;
