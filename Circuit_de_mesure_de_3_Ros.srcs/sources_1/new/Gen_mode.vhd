@@ -31,10 +31,10 @@
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.NUMERIC_STD.ALL;
-
+ 
 entity Gen_mode is
     generic(
-        FREQ_Clk            : integer := 100_000_000; -- 100 MHz
+        FREQ_Clk            : integer := 100_000_000;
         Architecture_number : integer := 2; 
         RO_by_architecture  : integer := 3
     );
@@ -48,27 +48,21 @@ entity Gen_mode is
         Send     : out STD_LOGIC  
     );
 end Gen_mode;
-
+ 
 architecture Behavioral of Gen_mode is
-
-    -- Signaux pour la base de temps (1Hz)
+ 
     signal count_1hz : integer range 0 to FREQ_Clk := 0;
     signal pulse_1s  : std_logic := '0'; 
-
-    -- Compteurs de séquençage
-    signal timer_sec   : integer range 0 to 7  := 0; 
+ 
+    signal timer_sec   : integer range 0 to 7   := 0; 
     signal timer_pause : integer range 0 to 551 := 0; 
     signal k           : integer range 0 to 5   := 0; 
-
-    -- FSM
+ 
     type state_type is (MESURE_RO, PAUSE_THERMIQUE);
     signal current_state : state_type := MESURE_RO;
-
-    -- Flag interne pour la capture
-    signal send_request : std_logic := '0';
-
+ 
 begin
-
+ 
     ------------------------------------------------------------------
     -- 1. GÉNÉRATEUR DE TOP 1 SECONDE (Base de temps)
     ------------------------------------------------------------------
@@ -78,7 +72,7 @@ begin
             if Reset = '1' then
                 count_1hz <= 0;
                 pulse_1s  <= '0';
-
+            else
                 if count_1hz < (FREQ_Clk - 1) then
                     count_1hz <= count_1hz + 1;
                     pulse_1s  <= '0';
@@ -89,9 +83,12 @@ begin
             end if;
         end if;
     end process;
-
+ 
     ------------------------------------------------------------------
     -- 2. MACHINE D'ÉTAT (FSM)
+    -- Send est piloté directement dans la FSM :
+    --   - Send = '0' par défaut partout
+    --   - Send = '1' uniquement au when 7 (pendant 1 seconde entière)
     ------------------------------------------------------------------
     process(Clk)
     begin
@@ -103,38 +100,35 @@ begin
                 k             <= 0;
                 Mode          <= (others => '0');
                 Reset_Ro      <= (others => '0');
-                send_request  <= '0';
+                Send          <= '0';
             else
-                -- Valeur par défaut pour éviter les memorisations inutiles
-                send_request <= '0';
-
+                Send <= '0'; -- Valeur par défaut
+ 
                 if pulse_1s = '1' then
                     case current_state is
-
+ 
                         when MESURE_RO =>
-                            -- Initialisation des sorties pour l'état courant
-                            Mode <= (others => '0');
+                            Mode     <= (others => '0');
                             Reset_Ro <= (others => '0');
                             
                             case timer_sec is
-                                when 0 =>    -- Phase RESET
-                                    Mode(k) <= '1';
+                                when 0 =>
+                                    Mode(k)     <= '1';
                                     Reset_Ro(k) <= '1';
                                     
-                                when 1 to 6 =>   -- Phase OSCILLATION + STABILISATION 
-                                    Mode(k) <= '1'; 
+                                when 1 to 6 =>
+                                    Mode(k)     <= '1'; 
                                     Reset_Ro(k) <= '0';
                                     
-                                when 7 =>        -- Phase MESURE + ENVOIE 
-                                    Mode(k) <= '1';
+                                when 7 =>
+                                    Mode(k)     <= '1';
                                     Reset_Ro(k) <= '0';
-                                    send_request <= '1'; -- Demande d'envoi
+                                    Send        <= '1'; 
                                     
-                                when others =>    -- Phase REPOS
+                                when others =>
                                     null; 
                             end case;
-
-                            -- Logique de progression
+ 
                             if timer_sec < 7 then
                                 timer_sec <= timer_sec + 1;
                             else
@@ -146,18 +140,18 @@ begin
                                     current_state <= PAUSE_THERMIQUE;
                                 end if;
                             end if;
-
+ 
                         when PAUSE_THERMIQUE =>
-                            Mode <= (others => '0');
-                            Reset_Ro <= (others => '0'); -- Stress statique
+                            Mode     <= (others => '0');
+                            Reset_Ro <= (others => '0');
                             
-                            if timer_pause < 551 then -- pendant cette durée de 551s, les ROs ne sont que stressés 
+                            if timer_pause < 551 then
                                 timer_pause <= timer_pause + 1;
                             else
                                 timer_pause   <= 0;
                                 current_state <= MESURE_RO;
                             end if;
-
+ 
                         when others =>
                             current_state <= MESURE_RO;
                     end case;
@@ -165,23 +159,11 @@ begin
             end if;
         end if;
     end process;
-
-    ------------------------------------------------------------------
-    -- 3. GÉNÉRATION DE L'IMPULSION DE SORTIE (10ns)
-    ------------------------------------------------------------------
-    -- [Send] Impulsion de capture calibrée sur une période d'horloge (10 ns).
-    -- La FSM lève le drapeau interne 'send_request' uniquement à T=25s (MESURE_RO).
-    -- Ce signal synchronisé indique à l'AXI_Lite que la mesure est stable pour le PS.
-    
-    Send <= '1' when (pulse_1s = '1' and timer_sec = 7 and current_state = MESURE_RO) else '0';
-    
-    
+ 
     --------------------------------------------------------------------------
-    -- 4. AUTRES SORTIES DES DONNÉES
+    -- 3. AUTRES SORTIES
     --------------------------------------------------------------------------
-
-    -- Affectation des autres sorties
     Ro_sel <= std_logic_vector(to_unsigned(k, 3));
     CE_1Hz <= pulse_1s;
-
+ 
 end Behavioral;

@@ -46,7 +46,7 @@
 									<listOptionValue builtIn="false" value="-Wl,--start-group,-lxil,-lgcc,-lc,--end-group"/>
 								</option>
 								<option id="xilinx.gnu.c.linker.option.lscript.903161315" name="Linker Script" superClass="xilinx.gnu.c.linker.option.lscript" value="../src/lscript.ld" valueType="string"/>
-								<option id="xilinx.gnu.c.link.option.libs.102518883" superClass="xilinx.gnu.c.link.option.libs" valueType="libs">
+								<option id="xilinx.gnu.c.link.option.libs.102518883" name="Libraries (-l)" superClass="xilinx.gnu.c.link.option.libs" valueType="libs">
 									<listOptionValue builtIn="false" value="xilffs"/>
 								</option>
 								<inputType id="xilinx.gnu.linker.input.1498695628" superClass="xilinx.gnu.linker.input">
@@ -166,4 +166,5 @@
 			<resource resourceType="PROJECT" workspacePath="/mesure_24_Ros"/>
 		</configuration>
 	</storageModule>
+	<storageModule moduleId="org.eclipse.cdt.internal.ui.text.commentOwnerProjectMappings"/>
 </cproject>

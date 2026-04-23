@@ -359,6 +359,9 @@ proc create_root_design { parentCell } {
   
   # Create instance: IP_Conversion_Axi_0, and set properties
   set IP_Conversion_Axi_0 [ create_bd_cell -type ip -vlnv IMS.bordeaux:user:IP_Conversion_Axi:1.0 IP_Conversion_Axi_0 ]
+  set_property -dict [ list \
+   CONFIG.C_S00_AXI_ADDR_WIDTH {7} \
+ ] $IP_Conversion_Axi_0
 
   # Create instance: InternalHeater_0, and set properties
   set block_name InternalHeater

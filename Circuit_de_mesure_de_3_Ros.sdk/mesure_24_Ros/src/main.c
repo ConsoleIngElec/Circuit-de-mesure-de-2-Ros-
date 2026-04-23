@@ -8,188 +8,130 @@
 #include <stdio.h>
 #include <string.h>
 #include "platform.h"
-#include "xtime_l.h"
-#include "sleep.h"
+#include "xparameters.h"
+#include "xscugic.h"
+#include "xttcps.h"
+#include "xil_exception.h"
 #include "xil_io.h"
+#include "xil_printf.h"
+#include "sleep.h"
+#include "xtime_l.h"
 #include "main.h"
 #include "acquisition.h"
 #include "sd_logger.h"
 #include "pmic.h"
-#include "rst.h"
+#include "RST.h"
 
-int main()
+XScuGic   INTCInst;
+XTtcPs    TTCInst;
+
+int main(void)
 {
     init_platform();
 
-    int   i;
-    int   cycle_count       = 1;
-    XTime tStart;
-    float current_temp      = 0.0f;
-    float current_volt_fpga = 0.0f;
-    u32   reg_temp_volt;
-    u16   duty              = 0;
+    int status;
+    XTtcPs_Config *TTCConfig;
+    XInterval Interval;
+    u8        Prescaler;
 
-    printf("\n******************************************************\n");
-    printf("* SYSTEME DE CARACTERISATION AUTOMATISEE DES ROs       *\n");
-    printf("* Societe   : Universite de Bordeaux                   *\n");
-    printf("* Ingenieur : Console MBOUBA                           *\n");
-    printf("********************************************************\n");
+    xil_printf("\n******************************************************\n");
+    xil_printf("* SYSTEME DE CARACTERISATION AUTOMATISEE DES ROs     *\n");
+    xil_printf("* Societe   : Universite de Bordeaux                  *\n");
+    xil_printf("* Ingenieur : Console MBOUBA                          *\n");
+    xil_printf("******************************************************\n");
 
-    /* -----------------------------------------------------------------------
+    /* -------------------------------------------------------------------
      * Initialisation PMIC
-     * ----------------------------------------------------------------------- */
-    set_channel_IIC_MUX(IIC_MUX_ADDR, IIC_MUX_PMIC_CH);
+     * ------------------------------------------------------------------- */
+    set_channel_IIC_MUX(0x75, 0x10);
     usleep(50000);
-    set_PMIC_page(PMIC_PAGE_VCCINT);
+    set_PMIC_page(0xD);
     usleep(50000);
-    set_resolution(VCCINT_RESOLUTION, VCCINT_VOLTAGE, VCCINT_VMAX);
+    set_Vmax(VCCINT_VMAX);
     usleep(50000);
-    regulate_vccint_auto(VCCINT_VOLTAGE, VCCINT_VMAX,
-                         BASE_ADDR + REG_TEMP_VOLT_OFFSET);
-    {
-        int mv_w = (int)(VCCINT_VOLTAGE * 1000.0f) / 1000;
-        int mv_f = (int)(VCCINT_VOLTAGE * 1000.0f) % 1000;
-        printf("[PMIC] Tension cible VCCINT : %d.%03d V\r\n", mv_w, mv_f);
-    }
+    /* Erreur corrigée : set_resolution attend 3 arguments */
+    set_resolution(2, VCCINT_VOLTAGE, VCCINT_VMAX);
+    usleep(50000);
 
-    /* -----------------------------------------------------------------------
+    /* -------------------------------------------------------------------
      * Initialisation RST
-     *
-     * On s'assure que Done est a 0 avant tout demarrage pour ne pas
-     * perturber la FSM Select_Data qui detecte un front montant sur Done.
-     * Un Done reste a 1 au demarrage decalerait la FSM d'un etat.
-     * ----------------------------------------------------------------------- */
+     * ------------------------------------------------------------------- */
     RST_init();
-    Xil_Out32(BASE_ADDR + REG_DONE_OFFSET, 0x00000000);
-    printf("[RST] Correcteur initialise. Consigne : %.2f C\n\r",
-           (float)TEMP_REF_C);
 
-    /* -----------------------------------------------------------------------
+    /* -------------------------------------------------------------------
      * Initialisation SD
-     * ----------------------------------------------------------------------- */
-    printf("[SD] Initialisation... ");
+     * ------------------------------------------------------------------- */
+    xil_printf("[SD] Initialisation... ");
     if (remount_sd()) {
         sd_logger_init();
-        printf("[OK]\n\r");
+        xil_printf("[OK]\n\r");
         write_header();
     } else {
-        printf("[ERREUR] Carte SD absente. Mode console uniquement.\n\r");
+        xil_printf("[ERREUR] Carte SD absente. Mode console uniquement.\n\r");
     }
 
-    XTime_GetTime(&tStart);
+    /* -------------------------------------------------------------------
+     * Initialisation du contrôleur d'interruptions (GIC)
+     * ------------------------------------------------------------------- */
+    XScuGic_Config *GICConfig = XScuGic_LookupConfig(INTC_DEVICE_ID);
+    status = XScuGic_CfgInitialize(&INTCInst, GICConfig,
+                                    GICConfig->CpuBaseAddress);
+    if (status != XST_SUCCESS) {
+        xil_printf("[GIC] Erreur initialisation\n\r");
+        return XST_FAILURE;
+    }
 
-    /* -----------------------------------------------------------------------
-     * Boucle principale
-     * ----------------------------------------------------------------------- */
-    while (1)
-    {
-        check_sd_card();
+    Xil_ExceptionRegisterHandler(XIL_EXCEPTION_ID_INT,
+            (Xil_ExceptionHandler) XScuGic_InterruptHandler, &INTCInst);
+    Xil_ExceptionEnable();
 
-        /* -------------------------------------------------------------------
-         * 1. Lecture SYSMON via AXI
-         *
-         * Formule SYSMONE4 reference interne (UG580 Eq. 2-11) :
-         *   T(C) = ADC * 509.314 / 65536 - 280.23
-         * L'Ultra96v2 n'a pas de reference externe sur VREFP/VREFN
-         * (R38/R39 DNP dans le schema Avnet SCH-US1SBC Rev1).
-         * ------------------------------------------------------------------- */
-        reg_temp_volt     = Xil_In32(BASE_ADDR + REG_TEMP_VOLT_OFFSET);
-        current_temp      = ((float)(reg_temp_volt & MASK_TEMP)
-                            * 509.314f / 65536.0f) - 280.23f;
-        current_volt_fpga = ((float)((reg_temp_volt & MASK_VOLT) >> 16)
-                            * 3.0f / 65536.0f);
+    /* -------------------------------------------------------------------
+     * Interruption 1 : TTC0 — toutes les 0.1 secondes
+     * Gère : lecture Temp/Voltage, calcul RST, duty cycle, affichage
+     * ------------------------------------------------------------------- */
+    TTCConfig = XTtcPs_LookupConfig(TTC_DEVICE_ID);
+    status = XTtcPs_CfgInitialize(&TTCInst, TTCConfig, TTCConfig->BaseAddress);
+    if (status != XST_SUCCESS) {
+        xil_printf("[TTC] Erreur initialisation\n\r");
+        return XST_FAILURE;
+    }
 
-        /* -------------------------------------------------------------------
-         * 2. Calcul RST et envoi du duty cycle vers le PL
-         *
-         * IMPORTANT : Done est remis a 0 immediatement apres l'impulsion.
-         * La FSM Select_Data (PL) detecte un front MONTANT sur Done pour
-         * avancer d'un octet. Si Done reste a 1 avant run_capture_cycle(),
-         * la FSM se desynchronisera provoquant un blocage ou des donnees
-         * incorrectes.
-         * ------------------------------------------------------------------- */
-        duty = RST_compute(current_temp);
-        Xil_Out32(BASE_ADDR + REG_DUTY_CYCLE_OFFSET, (u32)duty);
-        Xil_Out32(BASE_ADDR + REG_DONE_OFFSET, 0x00000001);
-        Xil_Out32(BASE_ADDR + REG_DONE_OFFSET, 0x00000000);
+    XTtcPs_SetOptions(&TTCInst, XTTCPS_OPTION_INTERVAL_MODE |
+                                 XTTCPS_OPTION_WAVE_DISABLE);
 
-        /* -------------------------------------------------------------------
-         * 3. Affichage
-         * ------------------------------------------------------------------- */
-        printf("\n\n>>> DEBUT DU CYCLE N %06d", cycle_count);
-        printf(" | SD : %s\n", sd_ready ? "[OK]" : "[ABSENTE]");
-        printf(">>> V_FPGA = %.3f V | T_FPGA = %.2f C\n",
-               current_volt_fpga, current_temp);
-        printf("--------------------------------------------------------\n");
+    /* Erreur corrigée : CalcIntervalFromFreq attend des pointeurs */
+    XTtcPs_CalcIntervalFromFreq(&TTCInst, TTC_TICK_HZ, &Interval, &Prescaler);
+    XTtcPs_SetInterval(&TTCInst, Interval);
+    XTtcPs_SetPrescaler(&TTCInst, Prescaler);
 
-        /* -------------------------------------------------------------------
-         * 4. Reinitialisation des buffers
-         * ------------------------------------------------------------------- */
-        for (i = 0; i < NB_RO; i++) freq_all[i] = 0.0f;
-        for (i = 0; i < NB_MODES; i++) {
-            elapsed_mode[i] = 0.0;
-            strcpy(time_mode[i], "00h:00min:00s");
-        }
+    XScuGic_SetPriorityTriggerType(&INTCInst, TIMER_IRPT_INTR, 0xA0, 0x1);
+    status = XScuGic_Connect(&INTCInst, TIMER_IRPT_INTR,
+            (Xil_ExceptionHandler) TTC_Intr_Handler, (void *) &TTCInst);
+    if (status != XST_SUCCESS) return XST_FAILURE;
 
-        /* -------------------------------------------------------------------
-         * 5. Captures ROs
-         *
-         * A ce point Done est a 0 — la FSM Select_Data est en attente
-         * propre du prochain front montant emis par acquisition.c.
-         * ------------------------------------------------------------------- */
-        run_capture_cycle(cycle_count, tStart);
+    XScuGic_Enable(&INTCInst, TIMER_IRPT_INTR);
+    XTtcPs_EnableInterrupts(&TTCInst, XTTCPS_IXR_INTERVAL_MASK);
+    XTtcPs_Start(&TTCInst);
 
-        /* -------------------------------------------------------------------
-         * 6. Enregistrement SD
-         * ------------------------------------------------------------------- */
-        write_data_line(cycle_count);
+    /* -------------------------------------------------------------------
+     * Interruption 2 : Data_Ready PL->PS (IRQ0)
+     * Gère : lecture 24 registres AXI, reconstruction fréquences,
+     *        affichage, écriture SD, reset capture
+     *
+     * IMPORTANT : remplacer DATA_READY_IRPT_INTR par le bon define
+     * trouvé dans xparameters.h (chercher IRQ0 ou PL_PS)
+     * ------------------------------------------------------------------- */
+    XScuGic_SetPriorityTriggerType(&INTCInst, DATA_READY_IRPT_INTR, 0xB0, 0x3);
+    status = XScuGic_Connect(&INTCInst, DATA_READY_IRPT_INTR,
+            (Xil_ExceptionHandler) DataReady_Intr_Handler, NULL);
+    if (status != XST_SUCCESS) return XST_FAILURE;
 
-        printf(">>> Fin du cycle %06d. Pause thermique (300s)...\n",
-               cycle_count);
+    XScuGic_Enable(&INTCInst, DATA_READY_IRPT_INTR);
 
-        /* -------------------------------------------------------------------
-         * 7. Pause thermique 5 minutes
-         *
-         *    Toutes les 5 secondes :
-         *      - RST ajuste le duty cycle PWM pour maintenir T = TEMP_REF_C
-         *      - regulate_vccint_auto() recale VCCINT sur le SYSMON
-         *
-         *    Le recalage de tension pendant la pause compense les derives
-         *    lentes dues aux variations thermiques ambiantes et au
-         *    vieillissement sur des campagnes longues (jours ou semaines).
-         *    Sans risque de conflit avec Select_Data car Done vient d'etre
-         *    remis a 0 et run_capture_cycle() n'est pas en cours.
-         * ------------------------------------------------------------------- */
-        for (i = 0; i < 60; i++)
-        {
-            usleep(100000);
-            check_sd_card();
+    xil_printf("[SYSTEME] Interruptions actives. En attente...\n\r");
 
-            /* Lecture SYSMON */
-            reg_temp_volt     = Xil_In32(BASE_ADDR + REG_TEMP_VOLT_OFFSET);
-            current_temp      = ((float)(reg_temp_volt & MASK_TEMP)
-                                * 509.314f / 65536.0f) - 280.23f;
-            current_volt_fpga = ((float)((reg_temp_volt & MASK_VOLT) >> 16)
-                                * 3.0f / 65536.0f);
-
-            /* Regulation thermique */
-            duty = RST_compute(current_temp);
-            Xil_Out32(BASE_ADDR + REG_DUTY_CYCLE_OFFSET, (u32)duty);
-            Xil_Out32(BASE_ADDR + REG_DONE_OFFSET, 0x00000001);
-            Xil_Out32(BASE_ADDR + REG_DONE_OFFSET, 0x00000000);
-
-            /* Recalage de la tension VCCINT toutes les 5s */
-            regulate_vccint_auto(VCCINT_VOLTAGE, VCCINT_VMAX,
-                                 BASE_ADDR + REG_TEMP_VOLT_OFFSET);
-
-            printf("\n\n>>> DEBUT DU CYCLE N %06d", cycle_count);
-			printf(" | SD : %s\n", sd_ready ? "[OK]" : "[ABSENTE]");
-			printf(">>> V_FPGA = %.3f V | T_FPGA = %.2f C\n",
-				   current_volt_fpga, current_temp);
-			printf("--------------------------------------------------------\n");
-        }
-
-        cycle_count++;
+    while (1) {
+        /* Boucle principale vide : tout est géré par les interruptions */
     }
 
     cleanup_platform();

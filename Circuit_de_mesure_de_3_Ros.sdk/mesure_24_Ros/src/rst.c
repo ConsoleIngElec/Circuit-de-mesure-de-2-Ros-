@@ -1,17 +1,16 @@
 /*
- * rst.c
+ * RST.c
  *
  *  Created on: 9 avr. 2026
  *      Author: cmbouba
  */
 
 #include "rst.h"
-
-#include <stdint.h>
 #include "main.h"
+#include <stdint.h>
 
 /* -------------------------------------------------------------------------
- * Etats internes
+ * États internes
  * ------------------------------------------------------------------------- */
 static double ref_n_1  = 0;
 static double refM_n   = 0;
@@ -41,7 +40,7 @@ static const double bS0  =   1.000000000000000;
 static const double aS1  =  -0.648265762515189;
 
 /* -------------------------------------------------------------------------
- * Correcteur RST - une iteration
+ * Correcteur RST - une itération
  * ------------------------------------------------------------------------- */
 double RST(double ref_n, double mes_n, double sat)
 {
@@ -68,7 +67,7 @@ double RST(double ref_n, double mes_n, double sat)
 }
 
 /* -------------------------------------------------------------------------
- * Remise a zero des etats internes
+ * Remise à zéro des états internes
  * ------------------------------------------------------------------------- */
 void RST_init(void)
 {
@@ -78,19 +77,14 @@ void RST_init(void)
 }
 
 /* -------------------------------------------------------------------------
- * Interface : temp mesuree -> duty cycle PWM
+ * Interface : température mesurée -> duty cycle PWM
  * ------------------------------------------------------------------------- */
 uint16_t RST_compute(float temp_measured)
 {
     double u = RST((double)TEMP_REF_C,
                    (double)temp_measured,
                    PWM_SAT);
-
     if (u < 0.0)     u = 0.0;
     if (u > PWM_SAT) u = PWM_SAT;
-
     return (uint16_t)u;
 }
-
-
-
