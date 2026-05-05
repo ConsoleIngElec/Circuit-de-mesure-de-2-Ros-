@@ -19,32 +19,38 @@
 /* -------------------------------------------------------------------------
  * Carte mémoire des registres AXI
  *
- * Registres 0 à 23  (offsets 0x00 à 0x5C) : 6 captures x 128 bits
+ * Registres 0 à 23 (offsets 0x00 à 0x5C) : 6 captures x 128 bits
  *   Capture k : registres 4k à 4k+3
- *     reg 4k+0 : Data[31:0]
- *     reg 4k+1 : Data[63:32]
- *     reg 4k+2 : Data[95:64]
- *     reg 4k+3 : Data[127:96]
  *
  * Registre 24 (offset 0x60) : Statut
  *   bit 0 = Data_Ready
+ *   bit 1 = TV_Ready
  *
- * Registre 25 (offset 0x64) : Temp (bits 15:0) + Voltage (bits 31:16)
+ * Registre 25 (offset 0x64) : Temp_Voltage (bits 31:16 = Temp, bits 15:0 = Voltage)
+ *                             /!\ vérifie l'ordre selon ton VHDL final
+ *
  * Registre 26 (offset 0x68) : Duty_cycle (bits 15:0)
- * Registre 27 (offset 0x6C) : Reset capture (bit 0 = reset, auto-clear)
+ *
+ * Registre 27 (offset 0x6C) : Acquittement IRQ (auto-clear, écriture)
+ *   bit 0 = ack Data_Ready
+ *   bit 1 = ack TV_Ready
  * ------------------------------------------------------------------------- */
 #define REG_CAPTURE_BASE_OFFSET   0x00
 #define REG_STATUS_OFFSET         0x60
 #define REG_TEMP_VOLT_OFFSET      0x64
 #define REG_DUTY_CYCLE_OFFSET     0x68
-#define REG_RESET_CAPTURE_OFFSET  0x6C
+#define REG_ACK_IRQ_OFFSET        0x6C
 
 /* -------------------------------------------------------------------------
  * Masques
  * ------------------------------------------------------------------------- */
-#define MASK_DATA_READY    0x00000001
-#define MASK_TEMP          0x0000FFFF
-#define MASK_VOLT          0xFFFF0000
+#define MASK_DATA_READY        0x00000001
+#define MASK_TV_READY          0x00000002
+#define MASK_ACK_DATA_READY    0x00000001
+#define MASK_ACK_TV_READY      0x00000002
+
+#define MASK_TEMP              0xFFFF0000
+#define MASK_VOLT              0x0000FFFF
 
 /* -------------------------------------------------------------------------
  * Configuration VCCINT
@@ -55,20 +61,17 @@
 /* -------------------------------------------------------------------------
  * Régulation RST
  * ------------------------------------------------------------------------- */
-#define TEMP_REF_C         40.0
-#define PWM_SAT            65535.0
+#define TEMP_REF_C         110.0
+#define PWM_SAT            2550.0
 
 /* -------------------------------------------------------------------------
  * Interruptions
+ *
+ *   pl_ps_irq0 -> TV_Ready    (rafraîchissement Temp/Voltage à 10 Hz)
+ *   pl_ps_irq1 -> Data_Ready  (6 captures prêtes)
  * ------------------------------------------------------------------------- */
 #define INTC_DEVICE_ID              XPAR_PSU_ACPU_GIC_DEVICE_ID
-#define TIMER_IRPT_INTR             XPAR_XTTCPS_0_INTR        /* TTC0 -> 0.1s */
-#define DATA_READY_IRPT_INTR        XPS_FPGA0_INT_ID /* Data_Ready PL->PS */
-
-/* -------------------------------------------------------------------------
- * Timer TTC : période 0.1 seconde
- * ------------------------------------------------------------------------- */
-#define TTC_DEVICE_ID               XPAR_XTTCPS_0_DEVICE_ID
-#define TTC_TICK_HZ                 10   /* 10 Hz = 0.1 s */
+#define TV_READY_IRPT_INTR          XPAR_FABRIC_IP_CONVERSION_AXI_0_TV_READY_INTR_INTR   /* pl_ps_irq0 */
+#define DATA_READY_IRPT_INTR        XPAR_FABRIC_IP_CONVERSION_AXI_0_DATA_READY_INTR_INTR  /* pl_ps_irq1 */
 
 #endif /* SRC_MAIN_H_ */

@@ -761,6 +761,18 @@
 
 /******************************************************************/
 
+/* Definitions for Fabric interrupts connected to psu_acpu_gic */
+#define XPAR_FABRIC_IP_CONVERSION_AXI_0_TV_READY_INTR_INTR 121U
+#define XPAR_FABRIC_IP_CONVERSION_AXI_0_DATA_READY_INTR_INTR 136U
+
+/******************************************************************/
+
+/* Canonical definitions for Fabric interrupts connected to psu_acpu_gic */
+#define XPAR_FABRIC_IP_CONVERSION_AXI_0_TV_READY_INTR_VEC_ID XPAR_FABRIC_IP_CONVERSION_AXI_0_TV_READY_INTR_INTR
+#define XPAR_FABRIC_IP_CONVERSION_AXI_0_DATA_READY_INTR_VEC_ID XPAR_FABRIC_IP_CONVERSION_AXI_0_DATA_READY_INTR_INTR
+
+/******************************************************************/
+
 /* Definitions for driver SCUGIC */
 #define XPAR_XSCUGIC_NUM_INSTANCES 1U
 

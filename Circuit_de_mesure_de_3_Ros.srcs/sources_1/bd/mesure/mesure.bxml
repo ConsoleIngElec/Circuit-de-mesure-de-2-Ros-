@@ -2,10 +2,10 @@
 <Root MajorVersion="0" MinorVersion="36">
   <CompositeFile CompositeFileTopName="mesure" CanBeSetAsTop="false" CanDisplayChildGraph="true">
     <Description>Composite Fileset</Description>
-    <Generation Name="SYNTHESIS" State="RESET" Timestamp="1776949286"/>
-    <Generation Name="IMPLEMENTATION" State="RESET" Timestamp="1776949286"/>
-    <Generation Name="SIMULATION" State="RESET" Timestamp="1776949286"/>
-    <Generation Name="HW_HANDOFF" State="RESET" Timestamp="1776949286"/>
+    <Generation Name="SYNTHESIS" State="GENERATED" Timestamp="1777965996"/>
+    <Generation Name="IMPLEMENTATION" State="GENERATED" Timestamp="1777965996"/>
+    <Generation Name="SIMULATION" State="GENERATED" Timestamp="1777965996"/>
+    <Generation Name="HW_HANDOFF" State="GENERATED" Timestamp="1777965996"/>
     <FileCollection Name="SOURCES" Type="SOURCES">
       <File Name="ip\mesure_All_Ro_out_0_0\mesure_All_Ro_out_0_0.xci" Type="IP">
         <Instance HierarchyPath="All_Ro_out_0"/>
@@ -73,80 +73,176 @@
         <Library Name="xil_defaultlib"/>
         <UsedIn Val="SIMULATION"/>
       </File>
-      <File Name="ip\mesure_De_Mux_0_0\mesure_De_Mux_0_0.xci" Type="IP">
-        <Instance HierarchyPath="De_Mux_0"/>
+      <File Name="ip\mesure_Gen_time_0_0\mesure_Gen_time_0_0.xci" Type="IP">
+        <Instance HierarchyPath="Signal_process/Gen_time_0"/>
         <Properties IsEditable="false" IsVisible="true" Timestamp="0" IsTrackable="true" IsStatusTracked="true"/>
         <Library Name="xil_defaultlib"/>
         <UsedIn Val="SYNTHESIS"/>
         <UsedIn Val="IMPLEMENTATION"/>
         <UsedIn Val="SIMULATION"/>
       </File>
-      <File Name="ip\mesure_xlconstant_0_0\mesure_xlconstant_0_0.xci" Type="IP">
-        <Instance HierarchyPath="Sysmon/xlconstant_0"/>
+      <File Name="ip\mesure_Gen_mode_0_1\mesure_Gen_mode_0_1.xci" Type="IP">
+        <Instance HierarchyPath="Signal_process/Gen_mode_0"/>
         <Properties IsEditable="false" IsVisible="true" Timestamp="0" IsTrackable="true" IsStatusTracked="true"/>
         <Library Name="xil_defaultlib"/>
         <UsedIn Val="SYNTHESIS"/>
         <UsedIn Val="IMPLEMENTATION"/>
         <UsedIn Val="SIMULATION"/>
       </File>
-      <File Name="ip\mesure_system_management_wiz_0_1\mesure_system_management_wiz_0_1.xci" Type="IP">
-        <Instance HierarchyPath="Sysmon/system_management_wiz_0"/>
+      <File Name="ip\mesure_shift_ram_temperature_1\mesure_shift_ram_temperature_1.xci" Type="IP">
+        <Instance HierarchyPath="Temp_voltage_measure/shift_ram_voltage"/>
         <Properties IsEditable="false" IsVisible="true" Timestamp="0" IsTrackable="true" IsStatusTracked="true"/>
         <Library Name="xil_defaultlib"/>
         <UsedIn Val="SYNTHESIS"/>
         <UsedIn Val="IMPLEMENTATION"/>
         <UsedIn Val="SIMULATION"/>
       </File>
-      <File Name="ip\mesure_xlconstant_0_1\mesure_xlconstant_0_1.xci" Type="IP">
-        <Instance HierarchyPath="Sysmon/xlconstant_1"/>
+      <File Name="ip\mesure_c_shift_ram_0_1\mesure_c_shift_ram_0_1.xci" Type="IP">
+        <Instance HierarchyPath="Temp_voltage_measure/shift_ram_temperature"/>
         <Properties IsEditable="false" IsVisible="true" Timestamp="0" IsTrackable="true" IsStatusTracked="true"/>
         <Library Name="xil_defaultlib"/>
         <UsedIn Val="SYNTHESIS"/>
         <UsedIn Val="IMPLEMENTATION"/>
         <UsedIn Val="SIMULATION"/>
       </File>
-      <File Name="ip\mesure_xlconcat_0_0\mesure_xlconcat_0_0.xci" Type="IP">
-        <Instance HierarchyPath="Sysmon/adress/xlconcat_0"/>
+      <File Name="ip\mesure_Slidding_average_0_2\mesure_Slidding_average_0_2.xci" Type="IP">
+        <Instance HierarchyPath="Temp_voltage_measure/Slidding_average_voltage"/>
         <Properties IsEditable="false" IsVisible="true" Timestamp="0" IsTrackable="true" IsStatusTracked="true"/>
         <Library Name="xil_defaultlib"/>
         <UsedIn Val="SYNTHESIS"/>
         <UsedIn Val="IMPLEMENTATION"/>
         <UsedIn Val="SIMULATION"/>
       </File>
-      <File Name="ip\mesure_xlconstant_1_0\mesure_xlconstant_1_0.xci" Type="IP">
-        <Instance HierarchyPath="Sysmon/adress/xlconstant_2"/>
+      <File Name="ip\mesure_Slidding_average_0_1\mesure_Slidding_average_0_1.xci" Type="IP">
+        <Instance HierarchyPath="Temp_voltage_measure/Slidding_average_temperature"/>
         <Properties IsEditable="false" IsVisible="true" Timestamp="0" IsTrackable="true" IsStatusTracked="true"/>
         <Library Name="xil_defaultlib"/>
         <UsedIn Val="SYNTHESIS"/>
         <UsedIn Val="IMPLEMENTATION"/>
         <UsedIn Val="SIMULATION"/>
       </File>
-      <File Name="ip\mesure_PWM_Motor_0_0\mesure_PWM_Motor_0_0.xci" Type="IP">
-        <Instance HierarchyPath="PWM_Motor_0"/>
+      <File Name="ip\mesure_xlconcat_0_1\mesure_xlconcat_0_1.xci" Type="IP">
+        <Instance HierarchyPath="Temp_voltage_measure/xlconcat_0"/>
         <Properties IsEditable="false" IsVisible="true" Timestamp="0" IsTrackable="true" IsStatusTracked="true"/>
         <Library Name="xil_defaultlib"/>
         <UsedIn Val="SYNTHESIS"/>
         <UsedIn Val="IMPLEMENTATION"/>
         <UsedIn Val="SIMULATION"/>
       </File>
-      <File Name="ip\mesure_Temp_Voltage_Average_0_0\mesure_Temp_Voltage_Average_0_0.xci" Type="IP">
-        <Instance HierarchyPath="Temp_Voltage_Average_0"/>
+      <File Name="ip\mesure_xlconstant_0_2\mesure_xlconstant_0_2.xci" Type="IP">
+        <Instance HierarchyPath="Temp_voltage_measure/Sysmon1/xlconstant_0"/>
         <Properties IsEditable="false" IsVisible="true" Timestamp="0" IsTrackable="true" IsStatusTracked="true"/>
         <Library Name="xil_defaultlib"/>
         <UsedIn Val="SYNTHESIS"/>
         <UsedIn Val="IMPLEMENTATION"/>
         <UsedIn Val="SIMULATION"/>
       </File>
-      <File Name="ip\mesure_InternalHeater_0_0\mesure_InternalHeater_0_0.xci" Type="IP">
-        <Instance HierarchyPath="InternalHeater_0"/>
+      <File Name="ip\mesure_system_management_wiz_0_0\mesure_system_management_wiz_0_0.xci" Type="IP">
+        <Instance HierarchyPath="Temp_voltage_measure/Sysmon1/system_management_wiz_0"/>
         <Properties IsEditable="false" IsVisible="true" Timestamp="0" IsTrackable="true" IsStatusTracked="true"/>
         <Library Name="xil_defaultlib"/>
         <UsedIn Val="SYNTHESIS"/>
         <UsedIn Val="IMPLEMENTATION"/>
         <UsedIn Val="SIMULATION"/>
       </File>
-      <File Name="ip\mesure_Gen_mode_0_0\mesure_Gen_mode_0_0.xci" Type="IP">
-        <Instance HierarchyPath="Gen_mode_0"/>
+      <File Name="ip\mesure_xlconstant_1_1\mesure_xlconstant_1_1.xci" Type="IP">
+        <Instance HierarchyPath="Temp_voltage_measure/Sysmon1/xlconstant_1"/>
+        <Properties IsEditable="false" IsVisible="true" Timestamp="0" IsTrackable="true" IsStatusTracked="true"/>
+        <Library Name="xil_defaultlib"/>
+        <UsedIn Val="SYNTHESIS"/>
+        <UsedIn Val="IMPLEMENTATION"/>
+        <UsedIn Val="SIMULATION"/>
+      </File>
+      <File Name="ip\mesure_xlconcat_0_2\mesure_xlconcat_0_2.xci" Type="IP">
+        <Instance HierarchyPath="Temp_voltage_measure/Sysmon1/adress/xlconcat_0"/>
+        <Properties IsEditable="false" IsVisible="true" Timestamp="0" IsTrackable="true" IsStatusTracked="true"/>
+        <Library Name="xil_defaultlib"/>
+        <UsedIn Val="SYNTHESIS"/>
+        <UsedIn Val="IMPLEMENTATION"/>
+        <UsedIn Val="SIMULATION"/>
+      </File>
+      <File Name="ip\mesure_xlconstant_2_0\mesure_xlconstant_2_0.xci" Type="IP">
+        <Instance HierarchyPath="Temp_voltage_measure/Sysmon1/adress/xlconstant_2"/>
+        <Properties IsEditable="false" IsVisible="true" Timestamp="0" IsTrackable="true" IsStatusTracked="true"/>
+        <Library Name="xil_defaultlib"/>
+        <UsedIn Val="SYNTHESIS"/>
+        <UsedIn Val="IMPLEMENTATION"/>
+        <UsedIn Val="SIMULATION"/>
+      </File>
+      <File Name="ip\mesure_Registre_0_0\mesure_Registre_0_0.xci" Type="IP">
+        <Instance HierarchyPath="Temp_voltage_measure/Registre_data/Registre_temperature_10Hz"/>
+        <Properties IsEditable="false" IsVisible="true" Timestamp="0" IsTrackable="true" IsStatusTracked="true"/>
+        <Library Name="xil_defaultlib"/>
+        <UsedIn Val="SYNTHESIS"/>
+        <UsedIn Val="IMPLEMENTATION"/>
+        <UsedIn Val="SIMULATION"/>
+      </File>
+      <File Name="ip\mesure_Registre_0_1\mesure_Registre_0_1.xci" Type="IP">
+        <Instance HierarchyPath="Temp_voltage_measure/Registre_data/Registre_voltage_10Hz"/>
+        <Properties IsEditable="false" IsVisible="true" Timestamp="0" IsTrackable="true" IsStatusTracked="true"/>
+        <Library Name="xil_defaultlib"/>
+        <UsedIn Val="SYNTHESIS"/>
+        <UsedIn Val="IMPLEMENTATION"/>
+        <UsedIn Val="SIMULATION"/>
+      </File>
+      <File Name="ip\mesure_shift_ram_temperature_0\mesure_shift_ram_temperature_0.xci" Type="IP">
+        <Instance HierarchyPath="Temp_voltage_measure/Data_processing/shift_ram_voltage"/>
+        <Properties IsEditable="false" IsVisible="true" Timestamp="0" IsTrackable="true" IsStatusTracked="true"/>
+        <Library Name="xil_defaultlib"/>
+        <UsedIn Val="SYNTHESIS"/>
+        <UsedIn Val="IMPLEMENTATION"/>
+        <UsedIn Val="SIMULATION"/>
+      </File>
+      <File Name="ip\mesure_Slidding_average_temperature_0\mesure_Slidding_average_temperature_0.xci" Type="IP">
+        <Instance HierarchyPath="Temp_voltage_measure/Data_processing/Slidding_average_voltage"/>
+        <Properties IsEditable="false" IsVisible="true" Timestamp="0" IsTrackable="true" IsStatusTracked="true"/>
+        <Library Name="xil_defaultlib"/>
+        <UsedIn Val="SYNTHESIS"/>
+        <UsedIn Val="IMPLEMENTATION"/>
+        <UsedIn Val="SIMULATION"/>
+      </File>
+      <File Name="ip\mesure_c_shift_ram_0_0\mesure_c_shift_ram_0_0.xci" Type="IP">
+        <Instance HierarchyPath="Temp_voltage_measure/Data_processing/shift_ram_temperature"/>
+        <Properties IsEditable="false" IsVisible="true" Timestamp="0" IsTrackable="true" IsStatusTracked="true"/>
+        <Library Name="xil_defaultlib"/>
+        <UsedIn Val="SYNTHESIS"/>
+        <UsedIn Val="IMPLEMENTATION"/>
+        <UsedIn Val="SIMULATION"/>
+      </File>
+      <File Name="ip\mesure_Slidding_average_0_0\mesure_Slidding_average_0_0.xci" Type="IP">
+        <Instance HierarchyPath="Temp_voltage_measure/Data_processing/Slidding_average_temperature"/>
+        <Properties IsEditable="false" IsVisible="true" Timestamp="0" IsTrackable="true" IsStatusTracked="true"/>
+        <Library Name="xil_defaultlib"/>
+        <UsedIn Val="SYNTHESIS"/>
+        <UsedIn Val="IMPLEMENTATION"/>
+        <UsedIn Val="SIMULATION"/>
+      </File>
+      <File Name="ip\mesure_De_Mux_0_1\mesure_De_Mux_0_1.xci" Type="IP">
+        <Instance HierarchyPath="Temp_voltage_measure/Data_processing/De_Mux_0"/>
+        <Properties IsEditable="false" IsVisible="true" Timestamp="0" IsTrackable="true" IsStatusTracked="true"/>
+        <Library Name="xil_defaultlib"/>
+        <UsedIn Val="SYNTHESIS"/>
+        <UsedIn Val="IMPLEMENTATION"/>
+        <UsedIn Val="SIMULATION"/>
+      </File>
+      <File Name="ip\mesure_Data_Memory_0_0\mesure_Data_Memory_0_0.xci" Type="IP">
+        <Instance HierarchyPath="Data_Memory_0"/>
+        <Properties IsEditable="false" IsVisible="true" Timestamp="0" IsTrackable="true" IsStatusTracked="true"/>
+        <Library Name="xil_defaultlib"/>
+        <UsedIn Val="SYNTHESIS"/>
+        <UsedIn Val="IMPLEMENTATION"/>
+        <UsedIn Val="SIMULATION"/>
+      </File>
+      <File Name="ip\mesure_PWM_0_0\mesure_PWM_0_0.xci" Type="IP">
+        <Instance HierarchyPath="PWM_0"/>
+        <Properties IsEditable="false" IsVisible="true" Timestamp="0" IsTrackable="true" IsStatusTracked="true"/>
+        <Library Name="xil_defaultlib"/>
+        <UsedIn Val="SYNTHESIS"/>
+        <UsedIn Val="IMPLEMENTATION"/>
+        <UsedIn Val="SIMULATION"/>
+      </File>
+      <File Name="ip\mesure_InternalHeaterGlobal_0_0\mesure_InternalHeaterGlobal_0_0.xci" Type="IP">
+        <Instance HierarchyPath="InternalHeaterGlobal_0"/>
         <Properties IsEditable="false" IsVisible="true" Timestamp="0" IsTrackable="true" IsStatusTracked="true"/>
         <Library Name="xil_defaultlib"/>
         <UsedIn Val="SYNTHESIS"/>

@@ -40,7 +40,7 @@ if { [string first $scripts_vivado_version $current_vivado_version] == -1 } {
 
 # The design that will be created by this Tcl script contains the following 
 # module references:
-# All_Ro_out, De_Mux, Gen_mode, Gen_stress, InternalHeater, PWM_Motor, Temp_Voltage_Average
+# All_Ro_out, Data_Memory, Gen_stress, InternalHeaterGlobal, PWM, Gen_mode, Gen_time, Slidding_average, Slidding_average, De_Mux, Slidding_average, Slidding_average, Registre, Registre
 
 # Please add the sources of those modules before sourcing this Tcl script.
 
@@ -192,13 +192,13 @@ proc create_hier_cell_adress { parentCell nameHier } {
   current_bd_instance $oldCurInst
 }
 
-# Hierarchical cell: Sysmon
-proc create_hier_cell_Sysmon { parentCell nameHier } {
+# Hierarchical cell: Sysmon1
+proc create_hier_cell_Sysmon1 { parentCell nameHier } {
 
   variable script_folder
 
   if { $parentCell eq "" || $nameHier eq "" } {
-     catch {common::send_msg_id "BD_TCL-102" "ERROR" "create_hier_cell_Sysmon() - Empty argument(s)!"}
+     catch {common::send_msg_id "BD_TCL-102" "ERROR" "create_hier_cell_Sysmon1() - Empty argument(s)!"}
      return
   }
 
@@ -274,6 +274,388 @@ proc create_hier_cell_Sysmon { parentCell nameHier } {
   current_bd_instance $oldCurInst
 }
 
+# Hierarchical cell: Registre_data
+proc create_hier_cell_Registre_data { parentCell nameHier } {
+
+  variable script_folder
+
+  if { $parentCell eq "" || $nameHier eq "" } {
+     catch {common::send_msg_id "BD_TCL-102" "ERROR" "create_hier_cell_Registre_data() - Empty argument(s)!"}
+     return
+  }
+
+  # Get object for parentCell
+  set parentObj [get_bd_cells $parentCell]
+  if { $parentObj == "" } {
+     catch {common::send_msg_id "BD_TCL-100" "ERROR" "Unable to find parent cell <$parentCell>!"}
+     return
+  }
+
+  # Make sure parentObj is hier blk
+  set parentType [get_property TYPE $parentObj]
+  if { $parentType ne "hier" } {
+     catch {common::send_msg_id "BD_TCL-101" "ERROR" "Parent <$parentObj> has TYPE = <$parentType>. Expected to be <hier>."}
+     return
+  }
+
+  # Save current instance; Restore later
+  set oldCurInst [current_bd_instance .]
+
+  # Set parent object as current
+  current_bd_instance $parentObj
+
+  # Create cell and set as current instance
+  set hier_obj [create_bd_cell -type hier $nameHier]
+  current_bd_instance $hier_obj
+
+  # Create interface pins
+
+  # Create pins
+  create_bd_pin -dir I CE
+  create_bd_pin -dir I -type clk Clk
+  create_bd_pin -dir I -from 15 -to 0 D
+  create_bd_pin -dir I -from 15 -to 0 D1
+  create_bd_pin -dir O -from 15 -to 0 Q
+  create_bd_pin -dir O -from 15 -to 0 Q1
+
+  # Create instance: Registre_temperature_10Hz, and set properties
+  set block_name Registre
+  set block_cell_name Registre_temperature_10Hz
+  if { [catch {set Registre_temperature_10Hz [create_bd_cell -type module -reference $block_name $block_cell_name] } errmsg] } {
+     catch {common::send_msg_id "BD_TCL-105" "ERROR" "Unable to add referenced block <$block_name>. Please add the files for ${block_name}'s definition into the project."}
+     return 1
+   } elseif { $Registre_temperature_10Hz eq "" } {
+     catch {common::send_msg_id "BD_TCL-106" "ERROR" "Unable to referenced block <$block_name>. Please add the files for ${block_name}'s definition into the project."}
+     return 1
+   }
+  
+  # Create instance: Registre_voltage_10Hz, and set properties
+  set block_name Registre
+  set block_cell_name Registre_voltage_10Hz
+  if { [catch {set Registre_voltage_10Hz [create_bd_cell -type module -reference $block_name $block_cell_name] } errmsg] } {
+     catch {common::send_msg_id "BD_TCL-105" "ERROR" "Unable to add referenced block <$block_name>. Please add the files for ${block_name}'s definition into the project."}
+     return 1
+   } elseif { $Registre_voltage_10Hz eq "" } {
+     catch {common::send_msg_id "BD_TCL-106" "ERROR" "Unable to referenced block <$block_name>. Please add the files for ${block_name}'s definition into the project."}
+     return 1
+   }
+  
+  # Create port connections
+  connect_bd_net -net CE_1 [get_bd_pins CE] [get_bd_pins Registre_temperature_10Hz/CE] [get_bd_pins Registre_voltage_10Hz/CE]
+  connect_bd_net -net Clk_1 [get_bd_pins Clk] [get_bd_pins Registre_temperature_10Hz/Clk] [get_bd_pins Registre_voltage_10Hz/Clk]
+  connect_bd_net -net D1_1 [get_bd_pins D1] [get_bd_pins Registre_voltage_10Hz/D]
+  connect_bd_net -net D_1 [get_bd_pins D] [get_bd_pins Registre_temperature_10Hz/D]
+  connect_bd_net -net Registre_temperature_10Hz_Q [get_bd_pins Q] [get_bd_pins Registre_temperature_10Hz/Q]
+  connect_bd_net -net Registre_voltage_10Hz_Q [get_bd_pins Q1] [get_bd_pins Registre_voltage_10Hz/Q]
+
+  # Restore current instance
+  current_bd_instance $oldCurInst
+}
+
+# Hierarchical cell: Data_processing
+proc create_hier_cell_Data_processing { parentCell nameHier } {
+
+  variable script_folder
+
+  if { $parentCell eq "" || $nameHier eq "" } {
+     catch {common::send_msg_id "BD_TCL-102" "ERROR" "create_hier_cell_Data_processing() - Empty argument(s)!"}
+     return
+  }
+
+  # Get object for parentCell
+  set parentObj [get_bd_cells $parentCell]
+  if { $parentObj == "" } {
+     catch {common::send_msg_id "BD_TCL-100" "ERROR" "Unable to find parent cell <$parentCell>!"}
+     return
+  }
+
+  # Make sure parentObj is hier blk
+  set parentType [get_property TYPE $parentObj]
+  if { $parentType ne "hier" } {
+     catch {common::send_msg_id "BD_TCL-101" "ERROR" "Parent <$parentObj> has TYPE = <$parentType>. Expected to be <hier>."}
+     return
+  }
+
+  # Save current instance; Restore later
+  set oldCurInst [current_bd_instance .]
+
+  # Set parent object as current
+  current_bd_instance $parentObj
+
+  # Create cell and set as current instance
+  set hier_obj [create_bd_cell -type hier $nameHier]
+  current_bd_instance $hier_obj
+
+  # Create interface pins
+
+  # Create pins
+  create_bd_pin -dir I -type clk Clk
+  create_bd_pin -dir O -from 15 -to 0 Data_average
+  create_bd_pin -dir O -from 15 -to 0 Data_average1
+  create_bd_pin -dir I -from 15 -to 0 ED1
+  create_bd_pin -dir I Enable
+  create_bd_pin -dir I -type rst Reset
+  create_bd_pin -dir I -from 5 -to 0 Sel
+
+  # Create instance: De_Mux_0, and set properties
+  set block_name De_Mux
+  set block_cell_name De_Mux_0
+  if { [catch {set De_Mux_0 [create_bd_cell -type module -reference $block_name $block_cell_name] } errmsg] } {
+     catch {common::send_msg_id "BD_TCL-105" "ERROR" "Unable to add referenced block <$block_name>. Please add the files for ${block_name}'s definition into the project."}
+     return 1
+   } elseif { $De_Mux_0 eq "" } {
+     catch {common::send_msg_id "BD_TCL-106" "ERROR" "Unable to referenced block <$block_name>. Please add the files for ${block_name}'s definition into the project."}
+     return 1
+   }
+  
+  # Create instance: Slidding_average_temperature, and set properties
+  set block_name Slidding_average
+  set block_cell_name Slidding_average_temperature
+  if { [catch {set Slidding_average_temperature [create_bd_cell -type module -reference $block_name $block_cell_name] } errmsg] } {
+     catch {common::send_msg_id "BD_TCL-105" "ERROR" "Unable to add referenced block <$block_name>. Please add the files for ${block_name}'s definition into the project."}
+     return 1
+   } elseif { $Slidding_average_temperature eq "" } {
+     catch {common::send_msg_id "BD_TCL-106" "ERROR" "Unable to referenced block <$block_name>. Please add the files for ${block_name}'s definition into the project."}
+     return 1
+   }
+  
+  # Create instance: Slidding_average_voltage, and set properties
+  set block_name Slidding_average
+  set block_cell_name Slidding_average_voltage
+  if { [catch {set Slidding_average_voltage [create_bd_cell -type module -reference $block_name $block_cell_name] } errmsg] } {
+     catch {common::send_msg_id "BD_TCL-105" "ERROR" "Unable to add referenced block <$block_name>. Please add the files for ${block_name}'s definition into the project."}
+     return 1
+   } elseif { $Slidding_average_voltage eq "" } {
+     catch {common::send_msg_id "BD_TCL-106" "ERROR" "Unable to referenced block <$block_name>. Please add the files for ${block_name}'s definition into the project."}
+     return 1
+   }
+  
+  # Create instance: shift_ram_temperature, and set properties
+  set shift_ram_temperature [ create_bd_cell -type ip -vlnv xilinx.com:ip:c_shift_ram:12.0 shift_ram_temperature ]
+  set_property -dict [ list \
+   CONFIG.CE {true} \
+ ] $shift_ram_temperature
+
+  # Create instance: shift_ram_voltage, and set properties
+  set shift_ram_voltage [ create_bd_cell -type ip -vlnv xilinx.com:ip:c_shift_ram:12.0 shift_ram_voltage ]
+  set_property -dict [ list \
+   CONFIG.CE {true} \
+ ] $shift_ram_voltage
+
+  # Create port connections
+  connect_bd_net -net Clk_1 [get_bd_pins Clk] [get_bd_pins De_Mux_0/Clk] [get_bd_pins Slidding_average_temperature/Clk] [get_bd_pins Slidding_average_voltage/Clk] [get_bd_pins shift_ram_temperature/CLK] [get_bd_pins shift_ram_voltage/CLK]
+  connect_bd_net -net De_Mux_0_SD1 [get_bd_pins De_Mux_0/SD1] [get_bd_pins Slidding_average_temperature/Data] [get_bd_pins shift_ram_temperature/D]
+  connect_bd_net -net De_Mux_0_SD2 [get_bd_pins De_Mux_0/SD2] [get_bd_pins Slidding_average_voltage/Data] [get_bd_pins shift_ram_voltage/D]
+  connect_bd_net -net De_Mux_0_SS1 [get_bd_pins De_Mux_0/SS1] [get_bd_pins Slidding_average_temperature/Enable] [get_bd_pins shift_ram_temperature/CE]
+  connect_bd_net -net De_Mux_0_SS2 [get_bd_pins De_Mux_0/SS2] [get_bd_pins Slidding_average_voltage/Enable] [get_bd_pins shift_ram_voltage/CE]
+  connect_bd_net -net ED1_1 [get_bd_pins ED1] [get_bd_pins De_Mux_0/ED1]
+  connect_bd_net -net Enable_1 [get_bd_pins Enable] [get_bd_pins De_Mux_0/Enable]
+  connect_bd_net -net Reset_1 [get_bd_pins Reset] [get_bd_pins De_Mux_0/Reset] [get_bd_pins Slidding_average_temperature/Reset] [get_bd_pins Slidding_average_voltage/Reset]
+  connect_bd_net -net Sel_1 [get_bd_pins Sel] [get_bd_pins De_Mux_0/Sel]
+  connect_bd_net -net Slidding_average_temperature_Data_average [get_bd_pins Data_average] [get_bd_pins Slidding_average_temperature/Data_average]
+  connect_bd_net -net Slidding_average_voltage_Data_average [get_bd_pins Data_average1] [get_bd_pins Slidding_average_voltage/Data_average]
+  connect_bd_net -net shift_ram_temperature_Q [get_bd_pins Slidding_average_temperature/Data_shift] [get_bd_pins shift_ram_temperature/Q]
+  connect_bd_net -net shift_ram_voltage_Q [get_bd_pins Slidding_average_voltage/Data_shift] [get_bd_pins shift_ram_voltage/Q]
+
+  # Restore current instance
+  current_bd_instance $oldCurInst
+}
+
+# Hierarchical cell: Temp_voltage_measure
+proc create_hier_cell_Temp_voltage_measure { parentCell nameHier } {
+
+  variable script_folder
+
+  if { $parentCell eq "" || $nameHier eq "" } {
+     catch {common::send_msg_id "BD_TCL-102" "ERROR" "create_hier_cell_Temp_voltage_measure() - Empty argument(s)!"}
+     return
+  }
+
+  # Get object for parentCell
+  set parentObj [get_bd_cells $parentCell]
+  if { $parentObj == "" } {
+     catch {common::send_msg_id "BD_TCL-100" "ERROR" "Unable to find parent cell <$parentCell>!"}
+     return
+  }
+
+  # Make sure parentObj is hier blk
+  set parentType [get_property TYPE $parentObj]
+  if { $parentType ne "hier" } {
+     catch {common::send_msg_id "BD_TCL-101" "ERROR" "Parent <$parentObj> has TYPE = <$parentType>. Expected to be <hier>."}
+     return
+  }
+
+  # Save current instance; Restore later
+  set oldCurInst [current_bd_instance .]
+
+  # Set parent object as current
+  current_bd_instance $parentObj
+
+  # Create cell and set as current instance
+  set hier_obj [create_bd_cell -type hier $nameHier]
+  current_bd_instance $hier_obj
+
+  # Create interface pins
+
+  # Create pins
+  create_bd_pin -dir I CE_10Hz
+  create_bd_pin -dir I Clk
+  create_bd_pin -dir I Reset
+  create_bd_pin -dir O -from 31 -to 0 dout
+
+  # Create instance: Data_processing
+  create_hier_cell_Data_processing $hier_obj Data_processing
+
+  # Create instance: Registre_data
+  create_hier_cell_Registre_data $hier_obj Registre_data
+
+  # Create instance: Slidding_average_temperature, and set properties
+  set block_name Slidding_average
+  set block_cell_name Slidding_average_temperature
+  if { [catch {set Slidding_average_temperature [create_bd_cell -type module -reference $block_name $block_cell_name] } errmsg] } {
+     catch {common::send_msg_id "BD_TCL-105" "ERROR" "Unable to add referenced block <$block_name>. Please add the files for ${block_name}'s definition into the project."}
+     return 1
+   } elseif { $Slidding_average_temperature eq "" } {
+     catch {common::send_msg_id "BD_TCL-106" "ERROR" "Unable to referenced block <$block_name>. Please add the files for ${block_name}'s definition into the project."}
+     return 1
+   }
+  
+  # Create instance: Slidding_average_voltage, and set properties
+  set block_name Slidding_average
+  set block_cell_name Slidding_average_voltage
+  if { [catch {set Slidding_average_voltage [create_bd_cell -type module -reference $block_name $block_cell_name] } errmsg] } {
+     catch {common::send_msg_id "BD_TCL-105" "ERROR" "Unable to add referenced block <$block_name>. Please add the files for ${block_name}'s definition into the project."}
+     return 1
+   } elseif { $Slidding_average_voltage eq "" } {
+     catch {common::send_msg_id "BD_TCL-106" "ERROR" "Unable to referenced block <$block_name>. Please add the files for ${block_name}'s definition into the project."}
+     return 1
+   }
+  
+  # Create instance: Sysmon1
+  create_hier_cell_Sysmon1 $hier_obj Sysmon1
+
+  # Create instance: shift_ram_temperature, and set properties
+  set shift_ram_temperature [ create_bd_cell -type ip -vlnv xilinx.com:ip:c_shift_ram:12.0 shift_ram_temperature ]
+  set_property -dict [ list \
+   CONFIG.CE {true} \
+ ] $shift_ram_temperature
+
+  # Create instance: shift_ram_voltage, and set properties
+  set shift_ram_voltage [ create_bd_cell -type ip -vlnv xilinx.com:ip:c_shift_ram:12.0 shift_ram_voltage ]
+  set_property -dict [ list \
+   CONFIG.CE {true} \
+ ] $shift_ram_voltage
+
+  # Create instance: xlconcat_0, and set properties
+  set xlconcat_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:xlconcat:2.1 xlconcat_0 ]
+  set_property -dict [ list \
+   CONFIG.IN0_WIDTH {16} \
+   CONFIG.IN1_WIDTH {16} \
+ ] $xlconcat_0
+
+  # Create port connections
+  connect_bd_net -net CE_1 [get_bd_pins CE_10Hz] [get_bd_pins Registre_data/CE] [get_bd_pins Slidding_average_temperature/Enable] [get_bd_pins Slidding_average_voltage/Enable] [get_bd_pins shift_ram_temperature/CE] [get_bd_pins shift_ram_voltage/CE]
+  connect_bd_net -net Clk_1 [get_bd_pins Clk] [get_bd_pins Data_processing/Clk] [get_bd_pins Registre_data/Clk] [get_bd_pins Slidding_average_temperature/Clk] [get_bd_pins Slidding_average_voltage/Clk] [get_bd_pins Sysmon1/Clk] [get_bd_pins shift_ram_temperature/CLK] [get_bd_pins shift_ram_voltage/CLK]
+  connect_bd_net -net Data_processing_Data_average [get_bd_pins Data_processing/Data_average] [get_bd_pins Registre_data/D]
+  connect_bd_net -net Data_processing_Data_average1 [get_bd_pins Data_processing/Data_average1] [get_bd_pins Registre_data/D1]
+  connect_bd_net -net Registre_data_Q [get_bd_pins Registre_data/Q] [get_bd_pins Slidding_average_temperature/Data] [get_bd_pins shift_ram_temperature/D]
+  connect_bd_net -net Registre_data_Q1 [get_bd_pins Registre_data/Q1] [get_bd_pins Slidding_average_voltage/Data] [get_bd_pins shift_ram_voltage/D]
+  connect_bd_net -net Reset_1 [get_bd_pins Reset] [get_bd_pins Data_processing/Reset] [get_bd_pins Slidding_average_temperature/Reset] [get_bd_pins Slidding_average_voltage/Reset] [get_bd_pins Sysmon1/Reset]
+  connect_bd_net -net Slidding_average_temperature_Data_average [get_bd_pins Slidding_average_temperature/Data_average] [get_bd_pins xlconcat_0/In1]
+  connect_bd_net -net Slidding_average_voltage_Data_average [get_bd_pins Slidding_average_voltage/Data_average] [get_bd_pins xlconcat_0/In0]
+  connect_bd_net -net Sysmon1_Dout [get_bd_pins Data_processing/ED1] [get_bd_pins Sysmon1/Dout]
+  connect_bd_net -net Sysmon1_Enable [get_bd_pins Data_processing/Enable] [get_bd_pins Sysmon1/Enable]
+  connect_bd_net -net Sysmon1_Sel [get_bd_pins Data_processing/Sel] [get_bd_pins Sysmon1/Sel]
+  connect_bd_net -net shift_ram_temperature_Q [get_bd_pins Slidding_average_temperature/Data_shift] [get_bd_pins shift_ram_temperature/Q]
+  connect_bd_net -net shift_ram_voltage_Q [get_bd_pins Slidding_average_voltage/Data_shift] [get_bd_pins shift_ram_voltage/Q]
+  connect_bd_net -net xlconcat_0_dout [get_bd_pins dout] [get_bd_pins xlconcat_0/dout]
+
+  # Restore current instance
+  current_bd_instance $oldCurInst
+}
+
+# Hierarchical cell: Signal_process
+proc create_hier_cell_Signal_process { parentCell nameHier } {
+
+  variable script_folder
+
+  if { $parentCell eq "" || $nameHier eq "" } {
+     catch {common::send_msg_id "BD_TCL-102" "ERROR" "create_hier_cell_Signal_process() - Empty argument(s)!"}
+     return
+  }
+
+  # Get object for parentCell
+  set parentObj [get_bd_cells $parentCell]
+  if { $parentObj == "" } {
+     catch {common::send_msg_id "BD_TCL-100" "ERROR" "Unable to find parent cell <$parentCell>!"}
+     return
+  }
+
+  # Make sure parentObj is hier blk
+  set parentType [get_property TYPE $parentObj]
+  if { $parentType ne "hier" } {
+     catch {common::send_msg_id "BD_TCL-101" "ERROR" "Parent <$parentObj> has TYPE = <$parentType>. Expected to be <hier>."}
+     return
+  }
+
+  # Save current instance; Restore later
+  set oldCurInst [current_bd_instance .]
+
+  # Set parent object as current
+  current_bd_instance $parentObj
+
+  # Create cell and set as current instance
+  set hier_obj [create_bd_cell -type hier $nameHier]
+  current_bd_instance $hier_obj
+
+  # Create interface pins
+
+  # Create pins
+  create_bd_pin -dir O CE_10Hz
+  create_bd_pin -dir O CE_1Hz
+  create_bd_pin -dir I -type clk Clk
+  create_bd_pin -dir O -from 5 -to 0 Mode
+  create_bd_pin -dir I -type rst Reset
+  create_bd_pin -dir O -from 5 -to 0 Reset_RO
+  create_bd_pin -dir O -from 2 -to 0 Ro_sel
+  create_bd_pin -dir O Send
+
+  # Create instance: Gen_mode_0, and set properties
+  set block_name Gen_mode
+  set block_cell_name Gen_mode_0
+  if { [catch {set Gen_mode_0 [create_bd_cell -type module -reference $block_name $block_cell_name] } errmsg] } {
+     catch {common::send_msg_id "BD_TCL-105" "ERROR" "Unable to add referenced block <$block_name>. Please add the files for ${block_name}'s definition into the project."}
+     return 1
+   } elseif { $Gen_mode_0 eq "" } {
+     catch {common::send_msg_id "BD_TCL-106" "ERROR" "Unable to referenced block <$block_name>. Please add the files for ${block_name}'s definition into the project."}
+     return 1
+   }
+  
+  # Create instance: Gen_time_0, and set properties
+  set block_name Gen_time
+  set block_cell_name Gen_time_0
+  if { [catch {set Gen_time_0 [create_bd_cell -type module -reference $block_name $block_cell_name] } errmsg] } {
+     catch {common::send_msg_id "BD_TCL-105" "ERROR" "Unable to add referenced block <$block_name>. Please add the files for ${block_name}'s definition into the project."}
+     return 1
+   } elseif { $Gen_time_0 eq "" } {
+     catch {common::send_msg_id "BD_TCL-106" "ERROR" "Unable to referenced block <$block_name>. Please add the files for ${block_name}'s definition into the project."}
+     return 1
+   }
+  
+  # Create port connections
+  connect_bd_net -net Clk_1 [get_bd_pins Clk] [get_bd_pins Gen_mode_0/Clk] [get_bd_pins Gen_time_0/Clk]
+  connect_bd_net -net Gen_mode_0_Mode [get_bd_pins Mode] [get_bd_pins Gen_mode_0/Mode]
+  connect_bd_net -net Gen_mode_0_Reset_RO [get_bd_pins Reset_RO] [get_bd_pins Gen_mode_0/Reset_RO]
+  connect_bd_net -net Gen_mode_0_Ro_sel [get_bd_pins Ro_sel] [get_bd_pins Gen_mode_0/Ro_sel]
+  connect_bd_net -net Gen_mode_0_Send [get_bd_pins Send] [get_bd_pins Gen_mode_0/Send]
+  connect_bd_net -net Gen_time_0_CE_10Hz [get_bd_pins CE_10Hz] [get_bd_pins Gen_time_0/CE_10Hz]
+  connect_bd_net -net Gen_time_0_CE_1Hz [get_bd_pins CE_1Hz] [get_bd_pins Gen_mode_0/CE_1Hz] [get_bd_pins Gen_time_0/CE_1Hz]
+  connect_bd_net -net Reset_1 [get_bd_pins Reset] [get_bd_pins Gen_mode_0/Reset] [get_bd_pins Gen_time_0/Reset]
+
+  # Restore current instance
+  current_bd_instance $oldCurInst
+}
+
 
 # Procedure to create entire design; Provide argument to make
 # procedure reusable. If parentCell is "", will use root.
@@ -324,24 +706,13 @@ proc create_root_design { parentCell } {
      return 1
    }
   
-  # Create instance: De_Mux_0, and set properties
-  set block_name De_Mux
-  set block_cell_name De_Mux_0
-  if { [catch {set De_Mux_0 [create_bd_cell -type module -reference $block_name $block_cell_name] } errmsg] } {
+  # Create instance: Data_Memory_0, and set properties
+  set block_name Data_Memory
+  set block_cell_name Data_Memory_0
+  if { [catch {set Data_Memory_0 [create_bd_cell -type module -reference $block_name $block_cell_name] } errmsg] } {
      catch {common::send_msg_id "BD_TCL-105" "ERROR" "Unable to add referenced block <$block_name>. Please add the files for ${block_name}'s definition into the project."}
      return 1
-   } elseif { $De_Mux_0 eq "" } {
-     catch {common::send_msg_id "BD_TCL-106" "ERROR" "Unable to referenced block <$block_name>. Please add the files for ${block_name}'s definition into the project."}
-     return 1
-   }
-  
-  # Create instance: Gen_mode_0, and set properties
-  set block_name Gen_mode
-  set block_cell_name Gen_mode_0
-  if { [catch {set Gen_mode_0 [create_bd_cell -type module -reference $block_name $block_cell_name] } errmsg] } {
-     catch {common::send_msg_id "BD_TCL-105" "ERROR" "Unable to add referenced block <$block_name>. Please add the files for ${block_name}'s definition into the project."}
-     return 1
-   } elseif { $Gen_mode_0 eq "" } {
+   } elseif { $Data_Memory_0 eq "" } {
      catch {common::send_msg_id "BD_TCL-106" "ERROR" "Unable to referenced block <$block_name>. Please add the files for ${block_name}'s definition into the project."}
      return 1
    }
@@ -363,42 +734,37 @@ proc create_root_design { parentCell } {
    CONFIG.C_S00_AXI_ADDR_WIDTH {7} \
  ] $IP_Conversion_Axi_0
 
-  # Create instance: InternalHeater_0, and set properties
-  set block_name InternalHeater
-  set block_cell_name InternalHeater_0
-  if { [catch {set InternalHeater_0 [create_bd_cell -type module -reference $block_name $block_cell_name] } errmsg] } {
+  # Create instance: InternalHeaterGlobal_0, and set properties
+  set block_name InternalHeaterGlobal
+  set block_cell_name InternalHeaterGlobal_0
+  if { [catch {set InternalHeaterGlobal_0 [create_bd_cell -type module -reference $block_name $block_cell_name] } errmsg] } {
      catch {common::send_msg_id "BD_TCL-105" "ERROR" "Unable to add referenced block <$block_name>. Please add the files for ${block_name}'s definition into the project."}
      return 1
-   } elseif { $InternalHeater_0 eq "" } {
+   } elseif { $InternalHeaterGlobal_0 eq "" } {
      catch {common::send_msg_id "BD_TCL-106" "ERROR" "Unable to referenced block <$block_name>. Please add the files for ${block_name}'s definition into the project."}
      return 1
    }
-  
-  # Create instance: PWM_Motor_0, and set properties
-  set block_name PWM_Motor
-  set block_cell_name PWM_Motor_0
-  if { [catch {set PWM_Motor_0 [create_bd_cell -type module -reference $block_name $block_cell_name] } errmsg] } {
-     catch {common::send_msg_id "BD_TCL-105" "ERROR" "Unable to add referenced block <$block_name>. Please add the files for ${block_name}'s definition into the project."}
-     return 1
-   } elseif { $PWM_Motor_0 eq "" } {
-     catch {common::send_msg_id "BD_TCL-106" "ERROR" "Unable to referenced block <$block_name>. Please add the files for ${block_name}'s definition into the project."}
-     return 1
-   }
-  
-  # Create instance: Sysmon
-  create_hier_cell_Sysmon [current_bd_instance .] Sysmon
+    set_property -dict [ list \
+   CONFIG.N_HEATERS {50} \
+ ] $InternalHeaterGlobal_0
 
-  # Create instance: Temp_Voltage_Average_0, and set properties
-  set block_name Temp_Voltage_Average
-  set block_cell_name Temp_Voltage_Average_0
-  if { [catch {set Temp_Voltage_Average_0 [create_bd_cell -type module -reference $block_name $block_cell_name] } errmsg] } {
+  # Create instance: PWM_0, and set properties
+  set block_name PWM
+  set block_cell_name PWM_0
+  if { [catch {set PWM_0 [create_bd_cell -type module -reference $block_name $block_cell_name] } errmsg] } {
      catch {common::send_msg_id "BD_TCL-105" "ERROR" "Unable to add referenced block <$block_name>. Please add the files for ${block_name}'s definition into the project."}
      return 1
-   } elseif { $Temp_Voltage_Average_0 eq "" } {
+   } elseif { $PWM_0 eq "" } {
      catch {common::send_msg_id "BD_TCL-106" "ERROR" "Unable to referenced block <$block_name>. Please add the files for ${block_name}'s definition into the project."}
      return 1
    }
   
+  # Create instance: Signal_process
+  create_hier_cell_Signal_process [current_bd_instance .] Signal_process
+
+  # Create instance: Temp_voltage_measure
+  create_hier_cell_Temp_voltage_measure [current_bd_instance .] Temp_voltage_measure
+
   # Create instance: ps8_0_axi_periph, and set properties
   set ps8_0_axi_periph [ create_bd_cell -type ip -vlnv xilinx.com:ip:axi_interconnect:2.1 ps8_0_axi_periph ]
   set_property -dict [ list \
@@ -1032,7 +1398,7 @@ proc create_root_design { parentCell } {
    CONFIG.PSU__USB__RESET__MODE {Boot Pin} \
    CONFIG.PSU__USB__RESET__POLARITY {Active Low} \
    CONFIG.PSU__USE__IRQ0 {1} \
-   CONFIG.PSU__USE__IRQ1 {0} \
+   CONFIG.PSU__USE__IRQ1 {1} \
    CONFIG.PSU__USE__M_AXI_GP0 {1} \
    CONFIG.PSU__USE__M_AXI_GP1 {0} \
    CONFIG.PSU__USE__M_AXI_GP2 {0} \
@@ -1044,29 +1410,25 @@ proc create_root_design { parentCell } {
   connect_bd_intf_net -intf_net zynq_ultra_ps_e_0_M_AXI_HPM0_FPD [get_bd_intf_pins ps8_0_axi_periph/S00_AXI] [get_bd_intf_pins zynq_ultra_ps_e_0/M_AXI_HPM0_FPD]
 
   # Create port connections
-  connect_bd_net -net All_Ro_out_0_Data [get_bd_pins All_Ro_out_0/Data] [get_bd_pins IP_Conversion_Axi_0/Data]
-  connect_bd_net -net De_Mux_0_SD1 [get_bd_pins De_Mux_0/SD1] [get_bd_pins Temp_Voltage_Average_0/SD1]
-  connect_bd_net -net De_Mux_0_SD2 [get_bd_pins De_Mux_0/SD2] [get_bd_pins Temp_Voltage_Average_0/SD2]
-  connect_bd_net -net De_Mux_0_SS1 [get_bd_pins De_Mux_0/SS1] [get_bd_pins Temp_Voltage_Average_0/SS1]
-  connect_bd_net -net De_Mux_0_SS2 [get_bd_pins De_Mux_0/SS2] [get_bd_pins Temp_Voltage_Average_0/SS2]
-  connect_bd_net -net Gen_mode_0_CE_1Hz [get_bd_pins All_Ro_out_0/CE_1Hz] [get_bd_pins Gen_mode_0/CE_1Hz]
-  connect_bd_net -net Gen_mode_0_Mode [get_bd_pins All_Ro_out_0/Mode] [get_bd_pins Gen_mode_0/Mode]
-  connect_bd_net -net Gen_mode_0_Reset_RO [get_bd_pins All_Ro_out_0/Reset_RO] [get_bd_pins Gen_mode_0/Reset_RO]
-  connect_bd_net -net Gen_mode_0_Ro_sel [get_bd_pins All_Ro_out_0/Ro_sel] [get_bd_pins Gen_mode_0/Ro_sel]
-  connect_bd_net -net Gen_mode_0_Send [get_bd_pins Gen_mode_0/Send] [get_bd_pins IP_Conversion_Axi_0/Send]
+  connect_bd_net -net All_Ro_out_0_Data [get_bd_pins All_Ro_out_0/Data] [get_bd_pins Data_Memory_0/Data]
+  connect_bd_net -net Data_Memory_0_Allow [get_bd_pins Data_Memory_0/Allow] [get_bd_pins IP_Conversion_Axi_0/Allow]
+  connect_bd_net -net Data_Memory_0_Data_Out [get_bd_pins Data_Memory_0/Data_Out] [get_bd_pins IP_Conversion_Axi_0/Data_In]
   connect_bd_net -net Gen_stress_0_Stress [get_bd_pins All_Ro_out_0/Stress] [get_bd_pins Gen_stress_0/Stress]
-  connect_bd_net -net IP_Conversion_Axi_0_Data_Ready [get_bd_pins IP_Conversion_Axi_0/Data_Ready] [get_bd_pins zynq_ultra_ps_e_0/pl_ps_irq0]
-  connect_bd_net -net IP_Conversion_Axi_0_Duty_cycle [get_bd_pins IP_Conversion_Axi_0/Duty_cycle] [get_bd_pins PWM_Motor_0/Duty]
-  connect_bd_net -net InternalHeater_0_S_IH [get_bd_ports S_IH_0] [get_bd_pins InternalHeater_0/S_IH]
-  connect_bd_net -net PWM_Motor_0_PWM_Out [get_bd_ports PWM_Out] [get_bd_pins PWM_Motor_0/PWM_Out]
-  connect_bd_net -net Sysmon_Dout [get_bd_pins De_Mux_0/ED1] [get_bd_pins Sysmon/Dout]
-  connect_bd_net -net Sysmon_Enable [get_bd_pins De_Mux_0/Enable] [get_bd_pins Sysmon/Enable]
-  connect_bd_net -net Sysmon_Sel [get_bd_pins De_Mux_0/Sel] [get_bd_pins Sysmon/Sel]
-  connect_bd_net -net Temp_Voltage_Average_0_Temp [get_bd_pins IP_Conversion_Axi_0/Temp] [get_bd_pins Temp_Voltage_Average_0/Temp]
-  connect_bd_net -net Temp_Voltage_Average_0_Voltage [get_bd_pins IP_Conversion_Axi_0/Voltage] [get_bd_pins Temp_Voltage_Average_0/Voltage]
+  connect_bd_net -net IP_Conversion_Axi_0_Data_Ready [get_bd_pins IP_Conversion_Axi_0/Data_Ready_intr] [get_bd_pins zynq_ultra_ps_e_0/pl_ps_irq1]
+  connect_bd_net -net IP_Conversion_Axi_0_Duty_cycle [get_bd_pins IP_Conversion_Axi_0/Duty_cycle] [get_bd_pins PWM_0/Duty_cycle]
+  connect_bd_net -net IP_Conversion_Axi_0_TV_Ready [get_bd_pins IP_Conversion_Axi_0/TV_Ready_intr] [get_bd_pins zynq_ultra_ps_e_0/pl_ps_irq0]
+  connect_bd_net -net InternalHeaterGlobal_0_S_IH [get_bd_ports S_IH_0] [get_bd_pins InternalHeaterGlobal_0/S_IH]
+  connect_bd_net -net PWM_0_PWM_Out [get_bd_ports PWM_Out] [get_bd_pins PWM_0/PWM_Out]
+  connect_bd_net -net Signal_process_CE_10Hz [get_bd_pins Signal_process/CE_10Hz] [get_bd_pins Temp_voltage_measure/CE_10Hz]
+  connect_bd_net -net Signal_process_CE_1Hz [get_bd_pins All_Ro_out_0/CE_1Hz] [get_bd_pins Signal_process/CE_1Hz]
+  connect_bd_net -net Signal_process_Mode [get_bd_pins All_Ro_out_0/Mode] [get_bd_pins Signal_process/Mode]
+  connect_bd_net -net Signal_process_Reset_RO [get_bd_pins All_Ro_out_0/Reset_RO] [get_bd_pins Signal_process/Reset_RO]
+  connect_bd_net -net Signal_process_Ro_sel [get_bd_pins All_Ro_out_0/Ro_sel] [get_bd_pins Signal_process/Ro_sel]
+  connect_bd_net -net Signal_process_Send [get_bd_pins Data_Memory_0/Send] [get_bd_pins Signal_process/Send]
+  connect_bd_net -net Temp_voltage_measure_dout [get_bd_pins IP_Conversion_Axi_0/Temp_Voltage] [get_bd_pins Temp_voltage_measure/dout]
   connect_bd_net -net rst_ps8_0_100M_peripheral_aresetn [get_bd_pins IP_Conversion_Axi_0/s00_axi_aresetn] [get_bd_pins ps8_0_axi_periph/ARESETN] [get_bd_pins ps8_0_axi_periph/M00_ARESETN] [get_bd_pins ps8_0_axi_periph/S00_ARESETN] [get_bd_pins rst_ps8_0_100M/peripheral_aresetn]
-  connect_bd_net -net util_vector_logic_0_Res [get_bd_pins De_Mux_0/Reset] [get_bd_pins Gen_mode_0/Reset] [get_bd_pins Gen_stress_0/Reset] [get_bd_pins PWM_Motor_0/Reset] [get_bd_pins Sysmon/Reset] [get_bd_pins Temp_Voltage_Average_0/Reset] [get_bd_pins util_vector_logic_0/Res]
-  connect_bd_net -net zynq_ultra_ps_e_0_pl_clk0 [get_bd_pins De_Mux_0/Clk] [get_bd_pins Gen_mode_0/Clk] [get_bd_pins Gen_stress_0/Clk] [get_bd_pins IP_Conversion_Axi_0/s00_axi_aclk] [get_bd_pins PWM_Motor_0/Clk] [get_bd_pins Sysmon/Clk] [get_bd_pins Temp_Voltage_Average_0/Clk] [get_bd_pins ps8_0_axi_periph/ACLK] [get_bd_pins ps8_0_axi_periph/M00_ACLK] [get_bd_pins ps8_0_axi_periph/S00_ACLK] [get_bd_pins rst_ps8_0_100M/slowest_sync_clk] [get_bd_pins zynq_ultra_ps_e_0/maxihpm0_fpd_aclk] [get_bd_pins zynq_ultra_ps_e_0/pl_clk0]
+  connect_bd_net -net util_vector_logic_0_Res [get_bd_pins Data_Memory_0/Reset] [get_bd_pins Gen_stress_0/Reset] [get_bd_pins PWM_0/Reset] [get_bd_pins Signal_process/Reset] [get_bd_pins Temp_voltage_measure/Reset] [get_bd_pins util_vector_logic_0/Res]
+  connect_bd_net -net zynq_ultra_ps_e_0_pl_clk0 [get_bd_pins Data_Memory_0/Clk] [get_bd_pins Gen_stress_0/Clk] [get_bd_pins IP_Conversion_Axi_0/s00_axi_aclk] [get_bd_pins PWM_0/Clk] [get_bd_pins Signal_process/Clk] [get_bd_pins Temp_voltage_measure/Clk] [get_bd_pins ps8_0_axi_periph/ACLK] [get_bd_pins ps8_0_axi_periph/M00_ACLK] [get_bd_pins ps8_0_axi_periph/S00_ACLK] [get_bd_pins rst_ps8_0_100M/slowest_sync_clk] [get_bd_pins zynq_ultra_ps_e_0/maxihpm0_fpd_aclk] [get_bd_pins zynq_ultra_ps_e_0/pl_clk0]
   connect_bd_net -net zynq_ultra_ps_e_0_pl_resetn0 [get_bd_pins rst_ps8_0_100M/ext_reset_in] [get_bd_pins util_vector_logic_0/Op1] [get_bd_pins zynq_ultra_ps_e_0/pl_resetn0]
 
   # Create address segments

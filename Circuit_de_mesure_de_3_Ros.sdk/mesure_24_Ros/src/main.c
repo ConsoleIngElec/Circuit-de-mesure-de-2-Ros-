@@ -10,7 +10,6 @@
 #include "platform.h"
 #include "xparameters.h"
 #include "xscugic.h"
-#include "xttcps.h"
 #include "xil_exception.h"
 #include "xil_io.h"
 #include "xil_printf.h"
@@ -22,23 +21,20 @@
 #include "pmic.h"
 #include "RST.h"
 
-XScuGic   INTCInst;
-XTtcPs    TTCInst;
+XScuGic INTCInst;
 
 int main(void)
 {
     init_platform();
 
     int status;
-    XTtcPs_Config *TTCConfig;
-    XInterval Interval;
-    u8        Prescaler;
 
     xil_printf("\n******************************************************\n");
     xil_printf("* SYSTEME DE CARACTERISATION AUTOMATISEE DES ROs     *\n");
     xil_printf("* Societe   : Universite de Bordeaux                  *\n");
     xil_printf("* Ingenieur : Console MBOUBA                          *\n");
     xil_printf("******************************************************\n");
+
 
     /* -------------------------------------------------------------------
      * Initialisation PMIC
@@ -65,6 +61,8 @@ int main(void)
         sd_logger_init();
         xil_printf("[OK]\n\r");
         write_header();
+        // Partie qui nous sert pour la suivi de la régulation
+        write_temp_header();
     } else {
         xil_printf("[ERREUR] Carte SD absente. Mode console uniquement.\n\r");
     }
@@ -85,50 +83,36 @@ int main(void)
     Xil_ExceptionEnable();
 
     /* -------------------------------------------------------------------
-     * Interruption 1 : TTC0 — toutes les 0.1 secondes
-     * Gère : lecture Temp/Voltage, calcul RST, duty cycle, affichage
+     * Interruption 1 : TV_Ready PL->PS (pl_ps_irq0)
+     * Déclenchée par le PL toutes les 0.1 s lorsqu'une nouvelle valeur
+     * Temp/Voltage est mémorisée dans l'Axi_Lite.
      * ------------------------------------------------------------------- */
-    TTCConfig = XTtcPs_LookupConfig(TTC_DEVICE_ID);
-    status = XTtcPs_CfgInitialize(&TTCInst, TTCConfig, TTCConfig->BaseAddress);
+    XScuGic_SetPriorityTriggerType(&INTCInst, TV_READY_IRPT_INTR, 0xA0, 0x1);
+    status = XScuGic_Connect(&INTCInst, TV_READY_IRPT_INTR,
+            (Xil_ExceptionHandler) TVReady_Intr_Handler, NULL);
     if (status != XST_SUCCESS) {
-        xil_printf("[TTC] Erreur initialisation\n\r");
+        xil_printf("[GIC] Erreur connexion TV_Ready\n\r");
         return XST_FAILURE;
     }
-
-    XTtcPs_SetOptions(&TTCInst, XTTCPS_OPTION_INTERVAL_MODE |
-                                 XTTCPS_OPTION_WAVE_DISABLE);
-
-    XTtcPs_CalcIntervalFromFreq(&TTCInst, TTC_TICK_HZ, &Interval, &Prescaler);
-    XTtcPs_SetInterval(&TTCInst, Interval);
-    XTtcPs_SetPrescaler(&TTCInst, Prescaler);
-
-    XScuGic_SetPriorityTriggerType(&INTCInst, TIMER_IRPT_INTR, 0xA0, 0x1);
-    status = XScuGic_Connect(&INTCInst, TIMER_IRPT_INTR,
-            (Xil_ExceptionHandler) TTC_Intr_Handler, (void *) &TTCInst);
-    if (status != XST_SUCCESS) return XST_FAILURE;
-
-    XScuGic_Enable(&INTCInst, TIMER_IRPT_INTR);
-    XTtcPs_EnableInterrupts(&TTCInst, XTTCPS_IXR_INTERVAL_MASK);
-    XTtcPs_Start(&TTCInst);
+    XScuGic_Enable(&INTCInst, TV_READY_IRPT_INTR);
 
     /* -------------------------------------------------------------------
-     * Interruption 2 : Data_Ready PL->PS (IRQ0)
-     * Gère : lecture 24 registres AXI, reconstruction fréquences,
-     *        affichage, écriture SD, reset capture
+     * Interruption 2 : Data_Ready PL->PS (pl_ps_irq1)
+     * Déclenchée par le PL quand les 6 captures sont prêtes.
+     * Lecture des 24 registres AXI, écriture SD, ack capture.
      * ------------------------------------------------------------------- */
     XScuGic_SetPriorityTriggerType(&INTCInst, DATA_READY_IRPT_INTR, 0xB0, 0x3);
     status = XScuGic_Connect(&INTCInst, DATA_READY_IRPT_INTR,
             (Xil_ExceptionHandler) DataReady_Intr_Handler, NULL);
-    if (status != XST_SUCCESS) return XST_FAILURE;
-
+    if (status != XST_SUCCESS) {
+        xil_printf("[GIC] Erreur connexion Data_Ready\n\r");
+        return XST_FAILURE;
+    }
     XScuGic_Enable(&INTCInst, DATA_READY_IRPT_INTR);
 
     xil_printf("[SYSTEME] Interruptions actives. En attente...\n\r");
 
     while (1) {
-        /* Boucle principale vide : tout est géré par les interruptions */
-    }
+                }
 
-    cleanup_platform();
-    return 0;
 }

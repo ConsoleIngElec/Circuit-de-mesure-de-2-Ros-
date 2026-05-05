@@ -7,9 +7,9 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <stdint.h>
 #include "xil_io.h"
 #include "xil_printf.h"
-#include "xttcps.h"
 #include "xtime_l.h"
 #include "main.h"
 #include "acquisition.h"
@@ -39,24 +39,60 @@ static const char *mode_label[6] = {
 };
 
 /* =========================================================================
- * Handler TTC — toutes les 0.1 seconde
+ * Handler TV_Ready (pl_ps_irq0)
  *
+ * Déclenché par le PL à chaque nouvelle mesure Temp/Voltage (~10 Hz).
+ *
+ *   - Phase de warm-up : les premieres interruptions sont rejetees pour
+ *     laisser le temps au moyenneur glissant du PL (Slidding_average sur
+ *     16 echantillons) de se remplir avec de vraies mesures SYSMON.
+ *     Tant que ses shift registers contiennent des zeros initiaux, la
+ *     sortie est une rampe lineaire et les valeurs de T et V sont fausses.
+ *
+ *   Apres warm-up :
  *   - Lecture Temp/Voltage depuis le registre AXI
  *   - Calcul RST et envoi Duty_cycle
- *   - Régulation tension VCCINT
+ *   - Mise a jour de last_temp et last_pwm (utilises par write_data_line)
+ *   - Regulation tension VCCINT
  *   - Affichage console
+ *   - Acquittement de l'IRQ TV_Ready (registre 27, bit 1)
  * ========================================================================= */
-void TTC_Intr_Handler(void *CallBackRef)
+void TVReady_Intr_Handler(void *CallBackRef)
 {
-    XTtcPs *TTCInst = (XTtcPs *) CallBackRef;
+    (void)CallBackRef;
 
-    /* Acquittement de l'interruption TTC */
-    u32 StatusEvent = XTtcPs_GetInterruptStatus(TTCInst);
-    XTtcPs_ClearInterruptStatus(TTCInst, StatusEvent);
+    /* -------------------------------------------------------------------
+     * Phase de warm-up
+     *
+     * Le moyenneur glissant du PL (Slidding_average, profondeur 2^4 = 16)
+     * a besoin de 16 echantillons SYSMON avant de fournir une moyenne
+     * correcte. Avant cela, sa sortie est une rampe (sum partielle / 16).
+     *
+     * On rejette donc les TV_WARMUP_TICKS premieres interruptions :
+     *   - aucune lecture exploitee (T, V)
+     *   - aucune ecriture SD
+     *   - aucun appel PMIC
+     *   - aucun affichage console
+     *   - acquittement de l'IRQ pour autoriser la suivante
+     *
+     * 20 ticks a 10 Hz = 2 s : marge confortable au-dela des 16 ticks
+     * minimaux requis par le moyenneur.
+     * ------------------------------------------------------------------- */
+    #define TV_WARMUP_TICKS 20
+    static int tv_warmup = TV_WARMUP_TICKS;
 
-    if (!(StatusEvent & XTTCPS_IXR_INTERVAL_MASK)) return;
+    if (tv_warmup > 0) {
+        tv_warmup--;
+        Xil_Out32(BASE_ADDR + REG_ACK_IRQ_OFFSET, MASK_ACK_TV_READY);
+        return;
+    }
 
-    /* Initialisation du chronomètre au premier appel */
+    /* -------------------------------------------------------------------
+     * Initialisation du chronometre a la PREMIERE mesure stable.
+     *
+     * On le fait apres le warm-up pour que le timestamp t=0 corresponde
+     * a la premiere donnee exploitable, et non au demarrage du systeme.
+     * ------------------------------------------------------------------- */
     if (!tStart_init) {
         XTime_GetTime(&tStart);
         tStart_init = 1;
@@ -70,14 +106,23 @@ void TTC_Intr_Handler(void *CallBackRef)
 
     /* Lecture Temp et Voltage depuis le registre AXI (offset 0x64) */
     reg_temp_volt     = Xil_In32(BASE_ADDR + REG_TEMP_VOLT_OFFSET);
-    current_temp      = ((float)(reg_temp_volt & MASK_TEMP)
+    current_temp      = ((float)((reg_temp_volt & MASK_TEMP) >> 16)
                         * 509.314f / 65536.0f) - 280.23f;
-    current_volt_fpga = ((float)((reg_temp_volt & MASK_VOLT) >> 16)
+    current_volt_fpga = ((float)(reg_temp_volt & MASK_VOLT)
                         * 3.0f / 65536.0f);
+
+    // --- Partie concernant l'enregistrement, à effacer si possible ---
+    if (sd_ready) {
+        write_temp_line(current_temp, current_volt_fpga);
+    }
 
     /* Calcul RST et envoi du duty cycle */
     duty = RST_compute(current_temp);
     Xil_Out32(BASE_ADDR + REG_DUTY_CYCLE_OFFSET, (u32)duty);
+
+    /* Mémorisation des dernières valeurs T et PWM pour write_data_line */
+    last_temp = current_temp;
+    last_pwm  = duty;
 
     /* Régulation tension VCCINT */
     double error = (double)(VCCINT_VOLTAGE - current_volt_fpga);
@@ -100,40 +145,35 @@ void TTC_Intr_Handler(void *CallBackRef)
 
     /* Affichage Duty */
     xil_printf("PWM=%d\n\r", (int)duty);
+
+    /* Acquittement de l'IRQ TV_Ready (bit 1 du registre 27) */
+    Xil_Out32(BASE_ADDR + REG_ACK_IRQ_OFFSET, MASK_ACK_TV_READY);
 }
 
 /* =========================================================================
- * Handler Data_Ready — déclenché par le front montant de Data_Ready (IRQ0)
+ * Handler Data_Ready (pl_ps_irq1)
  *
- * Même logique que run_capture_cycle() dans l'ancien acquisition.c :
  *   - Lecture des 24 registres AXI (6 captures x 4 mots x 32 bits)
  *   - Reconstruction des fréquences par mode (6 modes x 4 ROs)
- *   - Affichage console identique à l'ancien
- *   - Écriture SD
- *   - Reset du registre capture (offset 0x6C) pour relancer le cycle
+ *     /!\ Stockées en Hz (uint32_t : valeur brute exacte du compteur)
+ *   - Affichage console (en MHz pour rester lisible)
+ *   - Écriture SD (en Hz, voir write_data_line)
+ *   - Acquittement de l'IRQ Data_Ready (registre 27, bit 0)
  * ========================================================================= */
 void DataReady_Intr_Handler(void *CallBackRef)
 {
     (void)CallBackRef;
 
-    int    k, ro_idx;
-    u32    reg_val;
-    u32    frequency_32bit;
-    float  freq_mhz;
-    int    global_ro_id;
-    char   time_str[40];
-    XTime  tNow;
+    int      k, ro_idx;
+    uint32_t reg_val;
+    int      global_ro_id;
+    char     time_str[40];
+    XTime    tNow;
 
     /* Horodatage */
     XTime_GetTime(&tNow);
     double elapsed = (double)(tNow - tStart) / COUNTS_PER_SECOND;
 
-    /* Lecture des 24 registres AXI et reconstruction des fréquences
-     * Registres 0 à 23 (offsets 0x00 à 0x5C)
-     * Capture k : mots 4k, 4k+1, 4k+2, 4k+3
-     *   mot 0 = RO0 (DC:0),  mot 1 = RO1 (DC:1)
-     *   mot 2 = RO2 (100Hz), mot 3 = RO3 (100MHz)
-     */
     for (k = 0; k < NB_MODES; k++) {
 
         /* Horodatage par mode */
@@ -153,7 +193,7 @@ void DataReady_Intr_Handler(void *CallBackRef)
         elapsed_mode[k] = elapsed;
         strcpy(time_mode[k], time_str);
 
-        /* Affichage entête mode (identique à l'ancien acquisition.c) */
+        /* Affichage entête mode */
         xil_printf("\n  CAPTURE %06d | %s | Mode %d: %s | SD:%s\n",
                    cycle_count, time_str, k + 1, mode_label[k],
                    sd_ready ? "OK" : "ABSENTE");
@@ -164,17 +204,19 @@ void DataReady_Intr_Handler(void *CallBackRef)
             int reg_num = k * 4 + ro_idx;
             reg_val = Xil_In32(BASE_ADDR + REG_CAPTURE_BASE_OFFSET
                                + reg_num * 4);
-            frequency_32bit = reg_val;
-            freq_mhz = (float)frequency_32bit / 1000000.0f;
 
             global_ro_id = k * 4 + ro_idx + 1;
-            freq_all[global_ro_id - 1] = freq_mhz;
 
-            /* Affichage identique à l'ancien acquisition.c */
-            int freq_whole = (int)freq_mhz;
-            int freq_frac  = (int)((freq_mhz - (float)freq_whole) * 1000.0f);
-            xil_printf("    RO %-2d (%s) : %d.%03d MHz\n",
-                       global_ro_id, stress_label[ro_idx], freq_whole, freq_frac);
+            /* Stockage en Hz : valeur brute exacte du compteur 32 bits */
+            freq_all[global_ro_id - 1] = reg_val;
+
+            /* Affichage console en MHz : on évite le float pour garder
+             * la précision exacte sur les MHz et les kHz (3 décimales). */
+            uint32_t mhz_int = reg_val / 1000000U;
+            uint32_t khz_rem = (reg_val % 1000000U) / 1000U;
+            xil_printf("    RO %-2d (%s) : %u.%03u MHz\n",
+                       global_ro_id, stress_label[ro_idx],
+                       (unsigned int)mhz_int, (unsigned int)khz_rem);
         }
         xil_printf("\n");
     }
@@ -188,6 +230,6 @@ void DataReady_Intr_Handler(void *CallBackRef)
 
     cycle_count++;
 
-    /* Reset du registre capture pour relancer le prochain cycle */
-    Xil_Out32(BASE_ADDR + REG_RESET_CAPTURE_OFFSET, 0x00000001);
+    /* Acquittement de l'IRQ Data_Ready (bit 0 du registre 27) */
+    Xil_Out32(BASE_ADDR + REG_ACK_IRQ_OFFSET, MASK_ACK_DATA_READY);
 }

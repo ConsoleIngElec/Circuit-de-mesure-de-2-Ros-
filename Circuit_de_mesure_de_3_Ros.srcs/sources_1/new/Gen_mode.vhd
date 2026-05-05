@@ -3,20 +3,26 @@
 -- Engineer:       Consolé MBOUBA
 -- 
 -- Create Date:    23.04.2026 12:43:48
--- Design Name:    Circuit de mesure de 24 ROs
--- Module Name:    Gen_mode1 - Behavioral
--- Project Name:   Circuit de mesure de 24 ROs
+-- Design Name:    Circuit de mesure de 3 ROs
+-- Module Name:    Gen_mode - Behavioral
+-- Project Name:   Circuit de mesure de 3 ROs
 -- Target Devices: Zynq UltraScale+
 -- Tool Versions:  Vivado 2018.3
 -- Description: 
 --   Module top-level du générateur de modes pour la caractérisation
---   automatisée des Ring Oscillators.
---   Instancie et connecte 3 sous-modules :
---     - Gen_1Hz             : génère CE_1Hz à partir de l'horloge 100 MHz
---     - Counter_mode        : génère Mode_G (48s mesure / 552s pause thermique)
---     - State_machine_mode  : FSM séquençant les 6 modes × 4 ROs
+--   automatisée des Ring Oscillators (ROs).
+--   Instancie et connecte 2 sous-modules :
+--     - Counter_mode       : génère Mode_G (48s mesure + stress / 552s pause
+--                            thermique) à partir de la base de temps CE_1Hz.
+--     - State_machine_mode : FSM séquençant les 6 modes (Architecture_number
+--                            × RO_by_architecture) avec, pour chaque mode :
+--                              1s Reset / 6s Oscillation / 1s Mesure (Send).
+--
+--   La base de temps CE_1Hz n'est PAS générée dans ce module : elle est
+--   fournie en entrée depuis le module Gen_time (qui produit également
+--   CE_10Hz pour l'envoi de la tension et de la température).
 -- 
--- Dependencies: Gen_1Hz, Counter_mode, State_machine_mode
+-- Dependencies: Counter_mode, State_machine_mode
 -- 
 -- Revision:
 -- Revision 0.01 - File Created
@@ -39,7 +45,7 @@ entity Gen_mode is
     Port (
         Clk      : in  STD_LOGIC;
         Reset    : in  STD_LOGIC;
-        CE_1Hz   : out STD_LOGIC;
+        CE_1Hz   : in  STD_LOGIC;   -- Base de temps fournie par Gen_time
         Mode     : out STD_LOGIC_VECTOR(Architecture_number * RO_by_architecture - 1 downto 0);
         Reset_RO : out STD_LOGIC_VECTOR(Architecture_number * RO_by_architecture - 1 downto 0);
         Ro_sel   : out STD_LOGIC_VECTOR(2 downto 0);
@@ -48,16 +54,6 @@ entity Gen_mode is
 end Gen_mode;
 
 architecture Behavioral of Gen_mode is
-
-    -- Déclaration de Gen_1Hz
-    component Gen_1Hz is
-        generic(FREQ_Clk : integer);
-        Port (
-            Clk    : in  STD_LOGIC;
-            Reset  : in  STD_LOGIC;
-            CE_1Hz : out STD_LOGIC
-        );
-    end component;
 
     -- Déclaration de Counter_mode
     component Counter_mode is
@@ -70,7 +66,7 @@ architecture Behavioral of Gen_mode is
             Clk    : in  STD_LOGIC;
             Reset  : in  STD_LOGIC;
             Enable : in  STD_LOGIC;
-            Mode_G : out STD_LOGIC
+            MODE_G : out STD_LOGIC
         );
     end component;
 
@@ -92,22 +88,12 @@ architecture Behavioral of Gen_mode is
         );
     end component;
 
-    -- Signaux internes de connexion entre les sous-modules
-    signal CE_1Hz_int : STD_LOGIC;
+    -- Signal interne de connexion entre Counter_mode et State_machine_mode
     signal Mode_G_int : STD_LOGIC;
 
 begin
 
-    -- Instance du générateur de base de temps 1Hz
-    I_Gen_1Hz : Gen_1Hz
-        generic map(FREQ_Clk => FREQ_Clk)
-        port map(
-            Clk    => Clk,
-            Reset  => Reset,
-            CE_1Hz => CE_1Hz_int
-        );
-
-    -- Instance du compteur de cycle mesure/pause
+    -- Instance du compteur de cycle mesure / pause thermique
     I_Counter_mode : Counter_mode
         generic map(
             NB_MODES  => Architecture_number * RO_by_architecture,
@@ -117,8 +103,8 @@ begin
         port map(
             Clk    => Clk,
             Reset  => Reset,
-            Enable => CE_1Hz_int,
-            Mode_G => Mode_G_int
+            Enable => CE_1Hz,
+            MODE_G => Mode_G_int
         );
 
     -- Instance de la machine à états de séquençage des ROs
@@ -130,15 +116,12 @@ begin
         port map(
             Clk      => Clk,
             Reset    => Reset,
-            CE_1Hz   => CE_1Hz_int,
+            CE_1Hz   => CE_1Hz,
             Mode_G   => Mode_G_int,
             Ro_sel   => Ro_sel,
             Mode     => Mode,
             Reset_RO => Reset_RO,
             Send     => Send
         );
-
-    -- Propagation de CE_1Hz vers l'extérieur
-    CE_1Hz <= CE_1Hz_int;
 
 end Behavioral;

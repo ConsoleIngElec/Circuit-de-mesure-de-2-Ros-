@@ -22,6 +22,15 @@ proc validate_PARAM_VALUE.C_AXI_FREQ_HZ { PARAM_VALUE.C_AXI_FREQ_HZ } {
 	return true
 }
 
+proc update_PARAM_VALUE.NB_CAPTURES { PARAM_VALUE.NB_CAPTURES } {
+	# Procedure called to update NB_CAPTURES when any of the dependent parameters in the arguments change
+}
+
+proc validate_PARAM_VALUE.NB_CAPTURES { PARAM_VALUE.NB_CAPTURES } {
+	# Procedure called to validate NB_CAPTURES
+	return true
+}
+
 proc update_PARAM_VALUE.C_S00_AXI_DATA_WIDTH { PARAM_VALUE.C_S00_AXI_DATA_WIDTH } {
 	# Procedure called to update C_S00_AXI_DATA_WIDTH when any of the dependent parameters in the arguments change
 }
@@ -72,5 +81,10 @@ proc update_MODELPARAM_VALUE.C_S00_AXI_ADDR_WIDTH { MODELPARAM_VALUE.C_S00_AXI_A
 proc update_MODELPARAM_VALUE.C_AXI_FREQ_HZ { MODELPARAM_VALUE.C_AXI_FREQ_HZ PARAM_VALUE.C_AXI_FREQ_HZ } {
 	# Procedure called to set VHDL generic/Verilog parameter value(s) based on TCL parameter value
 	set_property value [get_property value ${PARAM_VALUE.C_AXI_FREQ_HZ}] ${MODELPARAM_VALUE.C_AXI_FREQ_HZ}
+}
+
+proc update_MODELPARAM_VALUE.NB_CAPTURES { MODELPARAM_VALUE.NB_CAPTURES PARAM_VALUE.NB_CAPTURES } {
+	# Procedure called to set VHDL generic/Verilog parameter value(s) based on TCL parameter value
+	set_property value [get_property value ${PARAM_VALUE.NB_CAPTURES}] ${MODELPARAM_VALUE.NB_CAPTURES}
 }
 

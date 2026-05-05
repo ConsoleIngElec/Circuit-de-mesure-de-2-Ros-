@@ -1,17 +1,17 @@
 ﻿<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
-<EDKSYSTEM EDWVERSION="1.2" TIMESTAMP="Thu Apr 23 13:43:50 2026" VIVADOVERSION="2018.3">
+<EDKSYSTEM EDWVERSION="1.2" TIMESTAMP="Tue May  5 09:26:36 2026" VIVADOVERSION="2018.3">
 
   <SYSTEMINFO ARCH="zynquplus" BOARD="avnet-tria:ultra96v2:part0:1.3" DEVICE="xczu3eg" NAME="mesure" PACKAGE="sbva484" SPEEDGRADE="-1"/>
 
   <EXTERNALPORTS>
-    <PORT DIR="O" NAME="PWM_Out" SIGIS="undef" SIGNAME="PWM_Motor_0_PWM_Out">
+    <PORT DIR="O" NAME="PWM_Out" SIGIS="undef" SIGNAME="PWM_0_PWM_Out">
       <CONNECTIONS>
-        <CONNECTION INSTANCE="PWM_Motor_0" PORT="PWM_Out"/>
+        <CONNECTION INSTANCE="PWM_0" PORT="PWM_Out"/>
       </CONNECTIONS>
     </PORT>
-    <PORT DIR="O" NAME="S_IH_0" SIGIS="undef" SIGNAME="InternalHeater_0_S_IH">
+    <PORT DIR="O" NAME="S_IH_0" SIGIS="undef" SIGNAME="InternalHeaterGlobal_0_S_IH">
       <CONNECTIONS>
-        <CONNECTION INSTANCE="InternalHeater_0" PORT="S_IH"/>
+        <CONNECTION INSTANCE="InternalHeaterGlobal_0" PORT="S_IH"/>
       </CONNECTIONS>
     </PORT>
   </EXTERNALPORTS>
@@ -29,24 +29,24 @@
         <PARAMETER NAME="EDK_IPTYPE" VALUE="PERIPHERAL"/>
       </PARAMETERS>
       <PORTS>
-        <PORT DIR="I" NAME="CE_1Hz" SIGIS="undef" SIGNAME="Gen_mode_0_CE_1Hz">
+        <PORT DIR="I" NAME="CE_1Hz" SIGIS="undef" SIGNAME="Signal_process_Gen_time_0_CE_1Hz">
           <CONNECTIONS>
-            <CONNECTION INSTANCE="Gen_mode_0" PORT="CE_1Hz"/>
+            <CONNECTION INSTANCE="Signal_process_Gen_time_0" PORT="CE_1Hz"/>
           </CONNECTIONS>
         </PORT>
-        <PORT DIR="I" LEFT="5" NAME="Mode" RIGHT="0" SIGIS="undef" SIGNAME="Gen_mode_0_Mode">
+        <PORT DIR="I" LEFT="5" NAME="Mode" RIGHT="0" SIGIS="undef" SIGNAME="Signal_process_Gen_mode_0_Mode">
           <CONNECTIONS>
-            <CONNECTION INSTANCE="Gen_mode_0" PORT="Mode"/>
+            <CONNECTION INSTANCE="Signal_process_Gen_mode_0" PORT="Mode"/>
           </CONNECTIONS>
         </PORT>
-        <PORT DIR="I" LEFT="5" NAME="Reset_RO" RIGHT="0" SIGIS="undef" SIGNAME="Gen_mode_0_Reset_RO">
+        <PORT DIR="I" LEFT="5" NAME="Reset_RO" RIGHT="0" SIGIS="undef" SIGNAME="Signal_process_Gen_mode_0_Reset_RO">
           <CONNECTIONS>
-            <CONNECTION INSTANCE="Gen_mode_0" PORT="Reset_RO"/>
+            <CONNECTION INSTANCE="Signal_process_Gen_mode_0" PORT="Reset_RO"/>
           </CONNECTIONS>
         </PORT>
-        <PORT DIR="I" LEFT="2" NAME="Ro_sel" RIGHT="0" SIGIS="undef" SIGNAME="Gen_mode_0_Ro_sel">
+        <PORT DIR="I" LEFT="2" NAME="Ro_sel" RIGHT="0" SIGIS="undef" SIGNAME="Signal_process_Gen_mode_0_Ro_sel">
           <CONNECTIONS>
-            <CONNECTION INSTANCE="Gen_mode_0" PORT="Ro_sel"/>
+            <CONNECTION INSTANCE="Signal_process_Gen_mode_0" PORT="Ro_sel"/>
           </CONNECTIONS>
         </PORT>
         <PORT DIR="I" LEFT="3" NAME="Stress" RIGHT="0" SIGIS="undef" SIGNAME="Gen_stress_0_Stress">
@@ -56,16 +56,17 @@
         </PORT>
         <PORT DIR="O" LEFT="127" NAME="Data" RIGHT="0" SIGIS="undef" SIGNAME="All_Ro_out_0_Data">
           <CONNECTIONS>
-            <CONNECTION INSTANCE="IP_Conversion_Axi_0" PORT="Data"/>
+            <CONNECTION INSTANCE="Data_Memory_0" PORT="Data"/>
           </CONNECTIONS>
         </PORT>
       </PORTS>
       <BUSINTERFACES/>
     </MODULE>
-    <MODULE COREREVISION="1" FULLNAME="/De_Mux_0" HWVERSION="1.0" INSTANCE="De_Mux_0" IPTYPE="PERIPHERAL" IS_ENABLE="1" MODCLASS="PERIPHERAL" MODTYPE="De_Mux" VLNV="xilinx.com:module_ref:De_Mux:1.0">
+    <MODULE COREREVISION="1" FULLNAME="/Data_Memory_0" HWVERSION="1.0" INSTANCE="Data_Memory_0" IPTYPE="PERIPHERAL" IS_ENABLE="1" MODCLASS="PERIPHERAL" MODTYPE="Data_Memory" VLNV="xilinx.com:module_ref:Data_Memory:1.0">
       <DOCUMENTS/>
       <PARAMETERS>
-        <PARAMETER NAME="Component_Name" VALUE="mesure_De_Mux_0_0"/>
+        <PARAMETER NAME="NB_CAPTURES" VALUE="6"/>
+        <PARAMETER NAME="Component_Name" VALUE="mesure_Data_Memory_0_0"/>
         <PARAMETER NAME="EDK_IPTYPE" VALUE="PERIPHERAL"/>
       </PARAMETERS>
       <PORTS>
@@ -79,87 +80,24 @@
             <CONNECTION INSTANCE="util_vector_logic_0" PORT="Res"/>
           </CONNECTIONS>
         </PORT>
-        <PORT DIR="I" LEFT="15" NAME="ED1" RIGHT="0" SIGIS="undef" SIGNAME="Sysmon_system_management_wiz_0_do_out">
+        <PORT DIR="I" LEFT="127" NAME="Data" RIGHT="0" SIGIS="undef" SIGNAME="All_Ro_out_0_Data">
           <CONNECTIONS>
-            <CONNECTION INSTANCE="Sysmon_system_management_wiz_0" PORT="do_out"/>
+            <CONNECTION INSTANCE="All_Ro_out_0" PORT="Data"/>
           </CONNECTIONS>
         </PORT>
-        <PORT DIR="I" LEFT="5" NAME="Sel" RIGHT="0" SIGIS="undef" SIGNAME="Sysmon_system_management_wiz_0_channel_out">
+        <PORT DIR="I" NAME="Send" SIGIS="undef" SIGNAME="Signal_process_Gen_mode_0_Send">
           <CONNECTIONS>
-            <CONNECTION INSTANCE="Sysmon_system_management_wiz_0" PORT="channel_out"/>
+            <CONNECTION INSTANCE="Signal_process_Gen_mode_0" PORT="Send"/>
           </CONNECTIONS>
         </PORT>
-        <PORT DIR="I" NAME="Enable" SIGIS="undef" SIGNAME="Sysmon_system_management_wiz_0_drdy_out">
+        <PORT DIR="O" LEFT="767" NAME="Data_Out" RIGHT="0" SIGIS="undef" SIGNAME="Data_Memory_0_Data_Out">
           <CONNECTIONS>
-            <CONNECTION INSTANCE="Sysmon_system_management_wiz_0" PORT="drdy_out"/>
+            <CONNECTION INSTANCE="IP_Conversion_Axi_0" PORT="Data_In"/>
           </CONNECTIONS>
         </PORT>
-        <PORT DIR="O" LEFT="15" NAME="SD1" RIGHT="0" SIGIS="undef" SIGNAME="De_Mux_0_SD1">
+        <PORT DIR="O" NAME="Allow" SIGIS="undef" SIGNAME="Data_Memory_0_Allow">
           <CONNECTIONS>
-            <CONNECTION INSTANCE="Temp_Voltage_Average_0" PORT="SD1"/>
-          </CONNECTIONS>
-        </PORT>
-        <PORT DIR="O" LEFT="15" NAME="SD2" RIGHT="0" SIGIS="undef" SIGNAME="De_Mux_0_SD2">
-          <CONNECTIONS>
-            <CONNECTION INSTANCE="Temp_Voltage_Average_0" PORT="SD2"/>
-          </CONNECTIONS>
-        </PORT>
-        <PORT DIR="O" NAME="SS1" SIGIS="undef" SIGNAME="De_Mux_0_SS1">
-          <CONNECTIONS>
-            <CONNECTION INSTANCE="Temp_Voltage_Average_0" PORT="SS1"/>
-          </CONNECTIONS>
-        </PORT>
-        <PORT DIR="O" NAME="SS2" SIGIS="undef" SIGNAME="De_Mux_0_SS2">
-          <CONNECTIONS>
-            <CONNECTION INSTANCE="Temp_Voltage_Average_0" PORT="SS2"/>
-          </CONNECTIONS>
-        </PORT>
-      </PORTS>
-      <BUSINTERFACES/>
-    </MODULE>
-    <MODULE COREREVISION="1" FULLNAME="/Gen_mode_0" HWVERSION="1.0" INSTANCE="Gen_mode_0" IPTYPE="PERIPHERAL" IS_ENABLE="1" MODCLASS="PERIPHERAL" MODTYPE="Gen_mode" VLNV="xilinx.com:module_ref:Gen_mode:1.0">
-      <DOCUMENTS/>
-      <PARAMETERS>
-        <PARAMETER NAME="FREQ_Clk" VALUE="100000000"/>
-        <PARAMETER NAME="Architecture_number" VALUE="2"/>
-        <PARAMETER NAME="RO_by_architecture" VALUE="3"/>
-        <PARAMETER NAME="Component_Name" VALUE="mesure_Gen_mode_0_0"/>
-        <PARAMETER NAME="EDK_IPTYPE" VALUE="PERIPHERAL"/>
-      </PARAMETERS>
-      <PORTS>
-        <PORT CLKFREQUENCY="100000000" DIR="I" NAME="Clk" SIGIS="clk" SIGNAME="zynq_ultra_ps_e_0_pl_clk0">
-          <CONNECTIONS>
-            <CONNECTION INSTANCE="zynq_ultra_ps_e_0" PORT="pl_clk0"/>
-          </CONNECTIONS>
-        </PORT>
-        <PORT DIR="I" NAME="Reset" SIGIS="rst" SIGNAME="util_vector_logic_0_Res">
-          <CONNECTIONS>
-            <CONNECTION INSTANCE="util_vector_logic_0" PORT="Res"/>
-          </CONNECTIONS>
-        </PORT>
-        <PORT DIR="O" NAME="CE_1Hz" SIGIS="undef" SIGNAME="Gen_mode_0_CE_1Hz">
-          <CONNECTIONS>
-            <CONNECTION INSTANCE="All_Ro_out_0" PORT="CE_1Hz"/>
-          </CONNECTIONS>
-        </PORT>
-        <PORT DIR="O" LEFT="5" NAME="Mode" RIGHT="0" SIGIS="undef" SIGNAME="Gen_mode_0_Mode">
-          <CONNECTIONS>
-            <CONNECTION INSTANCE="All_Ro_out_0" PORT="Mode"/>
-          </CONNECTIONS>
-        </PORT>
-        <PORT DIR="O" LEFT="5" NAME="Reset_RO" RIGHT="0" SIGIS="undef" SIGNAME="Gen_mode_0_Reset_RO">
-          <CONNECTIONS>
-            <CONNECTION INSTANCE="All_Ro_out_0" PORT="Reset_RO"/>
-          </CONNECTIONS>
-        </PORT>
-        <PORT DIR="O" LEFT="2" NAME="Ro_sel" RIGHT="0" SIGIS="undef" SIGNAME="Gen_mode_0_Ro_sel">
-          <CONNECTIONS>
-            <CONNECTION INSTANCE="All_Ro_out_0" PORT="Ro_sel"/>
-          </CONNECTIONS>
-        </PORT>
-        <PORT DIR="O" NAME="Send" SIGIS="undef" SIGNAME="Gen_mode_0_Send">
-          <CONNECTIONS>
-            <CONNECTION INSTANCE="IP_Conversion_Axi_0" PORT="Send"/>
+            <CONNECTION INSTANCE="IP_Conversion_Axi_0" PORT="Allow"/>
           </CONNECTIONS>
         </PORT>
       </PORTS>
@@ -190,7 +128,7 @@
       </PORTS>
       <BUSINTERFACES/>
     </MODULE>
-    <MODULE COREREVISION="7" FULLNAME="/IP_Conversion_Axi_0" HWVERSION="1.0" INSTANCE="IP_Conversion_Axi_0" IPTYPE="PERIPHERAL" IS_ENABLE="1" MODCLASS="PERIPHERAL" MODTYPE="IP_Conversion_Axi" VLNV="IMS.bordeaux:user:IP_Conversion_Axi:1.0">
+    <MODULE COREREVISION="15" FULLNAME="/IP_Conversion_Axi_0" HWVERSION="1.0" INSTANCE="IP_Conversion_Axi_0" IPTYPE="PERIPHERAL" IS_ENABLE="1" MODCLASS="PERIPHERAL" MODTYPE="IP_Conversion_Axi" VLNV="IMS.bordeaux:user:IP_Conversion_Axi:1.0">
       <DOCUMENTS/>
       <ADDRESSBLOCKS>
         <ADDRESSBLOCK ACCESS="" INTERFACE="S00_AXI" NAME="S00_AXI_reg" RANGE="4096" USAGE="register"/>
@@ -199,40 +137,41 @@
         <PARAMETER NAME="C_S00_AXI_DATA_WIDTH" VALUE="32"/>
         <PARAMETER NAME="C_S00_AXI_ADDR_WIDTH" VALUE="7"/>
         <PARAMETER NAME="C_AXI_FREQ_HZ" VALUE="100000000"/>
+        <PARAMETER NAME="NB_CAPTURES" VALUE="6"/>
         <PARAMETER NAME="Component_Name" VALUE="mesure_IP_Conversion_Axi_0_0"/>
         <PARAMETER NAME="EDK_IPTYPE" VALUE="PERIPHERAL"/>
         <PARAMETER NAME="C_S00_AXI_BASEADDR" VALUE="0xA0000000"/>
         <PARAMETER NAME="C_S00_AXI_HIGHADDR" VALUE="0xA0000FFF"/>
       </PARAMETERS>
       <PORTS>
-        <PORT DIR="I" LEFT="127" NAME="Data" RIGHT="0" SIGIS="undef" SIGNAME="All_Ro_out_0_Data">
+        <PORT DIR="I" LEFT="767" NAME="Data_In" RIGHT="0" SIGIS="undef" SIGNAME="Data_Memory_0_Data_Out">
           <CONNECTIONS>
-            <CONNECTION INSTANCE="All_Ro_out_0" PORT="Data"/>
+            <CONNECTION INSTANCE="Data_Memory_0" PORT="Data_Out"/>
           </CONNECTIONS>
         </PORT>
-        <PORT DIR="I" NAME="Send" SIGIS="undef" SIGNAME="Gen_mode_0_Send">
+        <PORT DIR="I" NAME="Allow" SIGIS="undef" SIGNAME="Data_Memory_0_Allow">
           <CONNECTIONS>
-            <CONNECTION INSTANCE="Gen_mode_0" PORT="Send"/>
+            <CONNECTION INSTANCE="Data_Memory_0" PORT="Allow"/>
           </CONNECTIONS>
         </PORT>
-        <PORT DIR="I" LEFT="15" NAME="Temp" RIGHT="0" SIGIS="undef" SIGNAME="Temp_Voltage_Average_0_Temp">
+        <PORT DIR="I" LEFT="31" NAME="Temp_Voltage" RIGHT="0" SIGIS="undef" SIGNAME="Temp_voltage_measure_xlconcat_0_dout">
           <CONNECTIONS>
-            <CONNECTION INSTANCE="Temp_Voltage_Average_0" PORT="Temp"/>
+            <CONNECTION INSTANCE="Temp_voltage_measure_xlconcat_0" PORT="dout"/>
           </CONNECTIONS>
         </PORT>
-        <PORT DIR="I" LEFT="15" NAME="Voltage" RIGHT="0" SIGIS="undef" SIGNAME="Temp_Voltage_Average_0_Voltage">
+        <PORT DIR="O" NAME="Data_Ready_intr" SENSITIVITY="LEVEL_HIGH" SIGIS="INTERRUPT" SIGNAME="IP_Conversion_Axi_0_Data_Ready_intr">
           <CONNECTIONS>
-            <CONNECTION INSTANCE="Temp_Voltage_Average_0" PORT="Voltage"/>
+            <CONNECTION INSTANCE="zynq_ultra_ps_e_0" PORT="pl_ps_irq1"/>
           </CONNECTIONS>
         </PORT>
-        <PORT DIR="O" NAME="Data_Ready" SIGIS="undef" SIGNAME="IP_Conversion_Axi_0_Data_Ready">
+        <PORT DIR="O" NAME="TV_Ready_intr" SENSITIVITY="LEVEL_HIGH" SIGIS="INTERRUPT" SIGNAME="IP_Conversion_Axi_0_TV_Ready_intr">
           <CONNECTIONS>
             <CONNECTION INSTANCE="zynq_ultra_ps_e_0" PORT="pl_ps_irq0"/>
           </CONNECTIONS>
         </PORT>
-        <PORT DIR="O" LEFT="15" NAME="Duty_cycle" RIGHT="0" SIGIS="undef" SIGNAME="IP_Conversion_Axi_0_Duty_cycle">
+        <PORT DIR="O" LEFT="31" NAME="Duty_cycle" RIGHT="0" SIGIS="undef" SIGNAME="IP_Conversion_Axi_0_Duty_cycle">
           <CONNECTIONS>
-            <CONNECTION INSTANCE="PWM_Motor_0" PORT="Duty"/>
+            <CONNECTION INSTANCE="PWM_0" PORT="Duty_cycle"/>
           </CONNECTIONS>
         </PORT>
         <PORT DIR="I" LEFT="6" NAME="s00_axi_awaddr" RIGHT="0" SIGIS="undef" SIGNAME="IP_Conversion_Axi_0_s00_axi_awaddr">
@@ -400,14 +339,15 @@
         </BUSINTERFACE>
       </BUSINTERFACES>
     </MODULE>
-    <MODULE COREREVISION="1" FULLNAME="/InternalHeater_0" HWVERSION="1.0" INSTANCE="InternalHeater_0" IPTYPE="PERIPHERAL" IS_ENABLE="1" MODCLASS="PERIPHERAL" MODTYPE="InternalHeater" VLNV="xilinx.com:module_ref:InternalHeater:1.0">
+    <MODULE COREREVISION="1" FULLNAME="/InternalHeaterGlobal_0" HWVERSION="1.0" INSTANCE="InternalHeaterGlobal_0" IPTYPE="PERIPHERAL" IS_ENABLE="1" MODCLASS="PERIPHERAL" MODTYPE="InternalHeaterGlobal" VLNV="xilinx.com:module_ref:InternalHeaterGlobal:1.0">
       <DOCUMENTS/>
       <PARAMETERS>
-        <PARAMETER NAME="Component_Name" VALUE="mesure_InternalHeater_0_0"/>
+        <PARAMETER NAME="N_HEATERS" VALUE="50"/>
+        <PARAMETER NAME="Component_Name" VALUE="mesure_InternalHeaterGlobal_0_0"/>
         <PARAMETER NAME="EDK_IPTYPE" VALUE="PERIPHERAL"/>
       </PARAMETERS>
       <PORTS>
-        <PORT DIR="O" NAME="S_IH" SIGIS="undef" SIGNAME="InternalHeater_0_S_IH">
+        <PORT DIR="O" NAME="S_IH" SIGIS="undef" SIGNAME="InternalHeaterGlobal_0_S_IH">
           <CONNECTIONS>
             <CONNECTION INSTANCE="External_Ports" PORT="S_IH_0"/>
           </CONNECTIONS>
@@ -415,10 +355,10 @@
       </PORTS>
       <BUSINTERFACES/>
     </MODULE>
-    <MODULE COREREVISION="1" FULLNAME="/PWM_Motor_0" HWVERSION="1.0" INSTANCE="PWM_Motor_0" IPTYPE="PERIPHERAL" IS_ENABLE="1" MODCLASS="PERIPHERAL" MODTYPE="PWM_Motor" VLNV="xilinx.com:module_ref:PWM_Motor:1.0">
+    <MODULE COREREVISION="1" FULLNAME="/PWM_0" HWVERSION="1.0" INSTANCE="PWM_0" IPTYPE="PERIPHERAL" IS_ENABLE="1" MODCLASS="PERIPHERAL" MODTYPE="PWM" VLNV="xilinx.com:module_ref:PWM:1.0">
       <DOCUMENTS/>
       <PARAMETERS>
-        <PARAMETER NAME="Component_Name" VALUE="mesure_PWM_Motor_0_0"/>
+        <PARAMETER NAME="Component_Name" VALUE="mesure_PWM_0_0"/>
         <PARAMETER NAME="EDK_IPTYPE" VALUE="PERIPHERAL"/>
       </PARAMETERS>
       <PORTS>
@@ -432,12 +372,12 @@
             <CONNECTION INSTANCE="util_vector_logic_0" PORT="Res"/>
           </CONNECTIONS>
         </PORT>
-        <PORT DIR="I" LEFT="15" NAME="Duty" RIGHT="0" SIGIS="undef" SIGNAME="IP_Conversion_Axi_0_Duty_cycle">
+        <PORT DIR="I" LEFT="31" NAME="Duty_cycle" RIGHT="0" SIGIS="undef" SIGNAME="IP_Conversion_Axi_0_Duty_cycle">
           <CONNECTIONS>
             <CONNECTION INSTANCE="IP_Conversion_Axi_0" PORT="Duty_cycle"/>
           </CONNECTIONS>
         </PORT>
-        <PORT DIR="O" NAME="PWM_Out" SIGIS="undef" SIGNAME="PWM_Motor_0_PWM_Out">
+        <PORT DIR="O" NAME="PWM_Out" SIGIS="undef" SIGNAME="PWM_0_PWM_Out">
           <CONNECTIONS>
             <CONNECTION INSTANCE="External_Ports" PORT="PWM_Out"/>
           </CONNECTIONS>
@@ -445,7 +385,523 @@
       </PORTS>
       <BUSINTERFACES/>
     </MODULE>
-    <MODULE COREREVISION="1" FULLNAME="/Sysmon/adress/xlconcat_0" HWVERSION="2.1" INSTANCE="Sysmon_adress_xlconcat_0" IPTYPE="PERIPHERAL" IS_ENABLE="1" MODCLASS="PERIPHERAL" MODTYPE="xlconcat" VLNV="xilinx.com:ip:xlconcat:2.1">
+    <MODULE COREREVISION="1" FULLNAME="/Signal_process/Gen_mode_0" HWVERSION="1.0" INSTANCE="Signal_process_Gen_mode_0" IPTYPE="PERIPHERAL" IS_ENABLE="1" MODCLASS="PERIPHERAL" MODTYPE="Gen_mode" VLNV="xilinx.com:module_ref:Gen_mode:1.0">
+      <DOCUMENTS/>
+      <PARAMETERS>
+        <PARAMETER NAME="FREQ_Clk" VALUE="100000000"/>
+        <PARAMETER NAME="Architecture_number" VALUE="2"/>
+        <PARAMETER NAME="RO_by_architecture" VALUE="3"/>
+        <PARAMETER NAME="Component_Name" VALUE="mesure_Gen_mode_0_1"/>
+        <PARAMETER NAME="EDK_IPTYPE" VALUE="PERIPHERAL"/>
+      </PARAMETERS>
+      <PORTS>
+        <PORT CLKFREQUENCY="100000000" DIR="I" NAME="Clk" SIGIS="clk" SIGNAME="zynq_ultra_ps_e_0_pl_clk0">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="zynq_ultra_ps_e_0" PORT="pl_clk0"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="I" NAME="Reset" SIGIS="rst" SIGNAME="util_vector_logic_0_Res">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="util_vector_logic_0" PORT="Res"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="I" NAME="CE_1Hz" SIGIS="undef" SIGNAME="Signal_process_Gen_time_0_CE_1Hz">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="Signal_process_Gen_time_0" PORT="CE_1Hz"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="O" LEFT="5" NAME="Mode" RIGHT="0" SIGIS="undef" SIGNAME="Signal_process_Gen_mode_0_Mode">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="All_Ro_out_0" PORT="Mode"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="O" LEFT="5" NAME="Reset_RO" RIGHT="0" SIGIS="undef" SIGNAME="Signal_process_Gen_mode_0_Reset_RO">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="All_Ro_out_0" PORT="Reset_RO"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="O" LEFT="2" NAME="Ro_sel" RIGHT="0" SIGIS="undef" SIGNAME="Signal_process_Gen_mode_0_Ro_sel">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="All_Ro_out_0" PORT="Ro_sel"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="O" NAME="Send" SIGIS="undef" SIGNAME="Signal_process_Gen_mode_0_Send">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="Data_Memory_0" PORT="Send"/>
+          </CONNECTIONS>
+        </PORT>
+      </PORTS>
+      <BUSINTERFACES/>
+    </MODULE>
+    <MODULE COREREVISION="1" FULLNAME="/Signal_process/Gen_time_0" HWVERSION="1.0" INSTANCE="Signal_process_Gen_time_0" IPTYPE="PERIPHERAL" IS_ENABLE="1" MODCLASS="PERIPHERAL" MODTYPE="Gen_time" VLNV="xilinx.com:module_ref:Gen_time:1.0">
+      <DOCUMENTS/>
+      <PARAMETERS>
+        <PARAMETER NAME="FREQ_Clk" VALUE="100000000"/>
+        <PARAMETER NAME="Component_Name" VALUE="mesure_Gen_time_0_0"/>
+        <PARAMETER NAME="EDK_IPTYPE" VALUE="PERIPHERAL"/>
+      </PARAMETERS>
+      <PORTS>
+        <PORT CLKFREQUENCY="100000000" DIR="I" NAME="Clk" SIGIS="clk" SIGNAME="zynq_ultra_ps_e_0_pl_clk0">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="zynq_ultra_ps_e_0" PORT="pl_clk0"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="I" NAME="Reset" SIGIS="rst" SIGNAME="util_vector_logic_0_Res">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="util_vector_logic_0" PORT="Res"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="O" NAME="CE_1Hz" SIGIS="undef" SIGNAME="Signal_process_Gen_time_0_CE_1Hz">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="All_Ro_out_0" PORT="CE_1Hz"/>
+            <CONNECTION INSTANCE="Signal_process_Gen_mode_0" PORT="CE_1Hz"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="O" NAME="CE_10Hz" SIGIS="undef" SIGNAME="Signal_process_Gen_time_0_CE_10Hz">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="Temp_voltage_measure_Registre_data_Registre_temperature_10Hz" PORT="CE"/>
+            <CONNECTION INSTANCE="Temp_voltage_measure_Registre_data_Registre_voltage_10Hz" PORT="CE"/>
+            <CONNECTION INSTANCE="Temp_voltage_measure_Slidding_average_temperature" PORT="Enable"/>
+            <CONNECTION INSTANCE="Temp_voltage_measure_Slidding_average_voltage" PORT="Enable"/>
+            <CONNECTION INSTANCE="Temp_voltage_measure_shift_ram_voltage" PORT="CE"/>
+            <CONNECTION INSTANCE="Temp_voltage_measure_shift_ram_temperature" PORT="CE"/>
+          </CONNECTIONS>
+        </PORT>
+      </PORTS>
+      <BUSINTERFACES/>
+    </MODULE>
+    <MODULE COREREVISION="1" FULLNAME="/Temp_voltage_measure/Data_processing/De_Mux_0" HWVERSION="1.0" INSTANCE="Temp_voltage_measure_Data_processing_De_Mux_0" IPTYPE="PERIPHERAL" IS_ENABLE="1" MODCLASS="PERIPHERAL" MODTYPE="De_Mux" VLNV="xilinx.com:module_ref:De_Mux:1.0">
+      <DOCUMENTS/>
+      <PARAMETERS>
+        <PARAMETER NAME="Component_Name" VALUE="mesure_De_Mux_0_1"/>
+        <PARAMETER NAME="EDK_IPTYPE" VALUE="PERIPHERAL"/>
+      </PARAMETERS>
+      <PORTS>
+        <PORT CLKFREQUENCY="100000000" DIR="I" NAME="Clk" SIGIS="clk" SIGNAME="zynq_ultra_ps_e_0_pl_clk0">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="zynq_ultra_ps_e_0" PORT="pl_clk0"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="I" NAME="Reset" SIGIS="rst" SIGNAME="util_vector_logic_0_Res">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="util_vector_logic_0" PORT="Res"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="I" LEFT="15" NAME="ED1" RIGHT="0" SIGIS="undef" SIGNAME="Temp_voltage_measure_Sysmon1_system_management_wiz_0_do_out">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="Temp_voltage_measure_Sysmon1_system_management_wiz_0" PORT="do_out"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="I" LEFT="5" NAME="Sel" RIGHT="0" SIGIS="undef" SIGNAME="Temp_voltage_measure_Sysmon1_system_management_wiz_0_channel_out">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="Temp_voltage_measure_Sysmon1_system_management_wiz_0" PORT="channel_out"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="I" NAME="Enable" SIGIS="undef" SIGNAME="Temp_voltage_measure_Sysmon1_system_management_wiz_0_drdy_out">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="Temp_voltage_measure_Sysmon1_system_management_wiz_0" PORT="drdy_out"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="O" LEFT="15" NAME="SD1" RIGHT="0" SIGIS="undef" SIGNAME="Temp_voltage_measure_Data_processing_De_Mux_0_SD1">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="Temp_voltage_measure_Data_processing_shift_ram_temperature" PORT="D"/>
+            <CONNECTION INSTANCE="Temp_voltage_measure_Data_processing_Slidding_average_temperature" PORT="Data"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="O" LEFT="15" NAME="SD2" RIGHT="0" SIGIS="undef" SIGNAME="Temp_voltage_measure_Data_processing_De_Mux_0_SD2">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="Temp_voltage_measure_Data_processing_shift_ram_voltage" PORT="D"/>
+            <CONNECTION INSTANCE="Temp_voltage_measure_Data_processing_Slidding_average_voltage" PORT="Data"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="O" NAME="SS1" SIGIS="undef" SIGNAME="Temp_voltage_measure_Data_processing_De_Mux_0_SS1">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="Temp_voltage_measure_Data_processing_shift_ram_temperature" PORT="CE"/>
+            <CONNECTION INSTANCE="Temp_voltage_measure_Data_processing_Slidding_average_temperature" PORT="Enable"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="O" NAME="SS2" SIGIS="undef" SIGNAME="Temp_voltage_measure_Data_processing_De_Mux_0_SS2">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="Temp_voltage_measure_Data_processing_shift_ram_voltage" PORT="CE"/>
+            <CONNECTION INSTANCE="Temp_voltage_measure_Data_processing_Slidding_average_voltage" PORT="Enable"/>
+          </CONNECTIONS>
+        </PORT>
+      </PORTS>
+      <BUSINTERFACES/>
+    </MODULE>
+    <MODULE COREREVISION="1" FULLNAME="/Temp_voltage_measure/Data_processing/Slidding_average_temperature" HWVERSION="1.0" INSTANCE="Temp_voltage_measure_Data_processing_Slidding_average_temperature" IPTYPE="PERIPHERAL" IS_ENABLE="1" MODCLASS="PERIPHERAL" MODTYPE="Slidding_average" VLNV="xilinx.com:module_ref:Slidding_average:1.0">
+      <DOCUMENTS/>
+      <PARAMETERS>
+        <PARAMETER NAME="n" VALUE="4"/>
+        <PARAMETER NAME="Component_Name" VALUE="mesure_Slidding_average_0_0"/>
+        <PARAMETER NAME="EDK_IPTYPE" VALUE="PERIPHERAL"/>
+      </PARAMETERS>
+      <PORTS>
+        <PORT CLKFREQUENCY="100000000" DIR="I" NAME="Clk" SIGIS="clk" SIGNAME="zynq_ultra_ps_e_0_pl_clk0">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="zynq_ultra_ps_e_0" PORT="pl_clk0"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="I" NAME="Reset" SIGIS="rst" SIGNAME="util_vector_logic_0_Res">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="util_vector_logic_0" PORT="Res"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="I" NAME="Enable" SIGIS="undef" SIGNAME="Temp_voltage_measure_Data_processing_De_Mux_0_SS1">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="Temp_voltage_measure_Data_processing_De_Mux_0" PORT="SS1"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="I" LEFT="15" NAME="Data" RIGHT="0" SIGIS="undef" SIGNAME="Temp_voltage_measure_Data_processing_De_Mux_0_SD1">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="Temp_voltage_measure_Data_processing_De_Mux_0" PORT="SD1"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="I" LEFT="15" NAME="Data_shift" RIGHT="0" SIGIS="undef" SIGNAME="Temp_voltage_measure_Data_processing_shift_ram_temperature_Q">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="Temp_voltage_measure_Data_processing_shift_ram_temperature" PORT="Q"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="O" LEFT="15" NAME="Data_average" RIGHT="0" SIGIS="undef" SIGNAME="Temp_voltage_measure_Data_processing_Slidding_average_temperature_Data_average">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="Temp_voltage_measure_Registre_data_Registre_temperature_10Hz" PORT="D"/>
+          </CONNECTIONS>
+        </PORT>
+      </PORTS>
+      <BUSINTERFACES/>
+    </MODULE>
+    <MODULE COREREVISION="1" FULLNAME="/Temp_voltage_measure/Data_processing/Slidding_average_voltage" HWVERSION="1.0" INSTANCE="Temp_voltage_measure_Data_processing_Slidding_average_voltage" IPTYPE="PERIPHERAL" IS_ENABLE="1" MODCLASS="PERIPHERAL" MODTYPE="Slidding_average" VLNV="xilinx.com:module_ref:Slidding_average:1.0">
+      <DOCUMENTS/>
+      <PARAMETERS>
+        <PARAMETER NAME="n" VALUE="4"/>
+        <PARAMETER NAME="Component_Name" VALUE="mesure_Slidding_average_temperature_0"/>
+        <PARAMETER NAME="EDK_IPTYPE" VALUE="PERIPHERAL"/>
+      </PARAMETERS>
+      <PORTS>
+        <PORT CLKFREQUENCY="100000000" DIR="I" NAME="Clk" SIGIS="clk" SIGNAME="zynq_ultra_ps_e_0_pl_clk0">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="zynq_ultra_ps_e_0" PORT="pl_clk0"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="I" NAME="Reset" SIGIS="rst" SIGNAME="util_vector_logic_0_Res">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="util_vector_logic_0" PORT="Res"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="I" NAME="Enable" SIGIS="undef" SIGNAME="Temp_voltage_measure_Data_processing_De_Mux_0_SS2">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="Temp_voltage_measure_Data_processing_De_Mux_0" PORT="SS2"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="I" LEFT="15" NAME="Data" RIGHT="0" SIGIS="undef" SIGNAME="Temp_voltage_measure_Data_processing_De_Mux_0_SD2">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="Temp_voltage_measure_Data_processing_De_Mux_0" PORT="SD2"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="I" LEFT="15" NAME="Data_shift" RIGHT="0" SIGIS="undef" SIGNAME="Temp_voltage_measure_Data_processing_shift_ram_voltage_Q">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="Temp_voltage_measure_Data_processing_shift_ram_voltage" PORT="Q"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="O" LEFT="15" NAME="Data_average" RIGHT="0" SIGIS="undef" SIGNAME="Temp_voltage_measure_Data_processing_Slidding_average_voltage_Data_average">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="Temp_voltage_measure_Registre_data_Registre_voltage_10Hz" PORT="D"/>
+          </CONNECTIONS>
+        </PORT>
+      </PORTS>
+      <BUSINTERFACES/>
+    </MODULE>
+    <MODULE COREREVISION="12" FULLNAME="/Temp_voltage_measure/Data_processing/shift_ram_temperature" HWVERSION="12.0" INSTANCE="Temp_voltage_measure_Data_processing_shift_ram_temperature" IPTYPE="PERIPHERAL" IS_ENABLE="1" MODCLASS="PERIPHERAL" MODTYPE="c_shift_ram" VLNV="xilinx.com:ip:c_shift_ram:12.0">
+      <DOCUMENTS>
+        <DOCUMENT SOURCE="http://www.xilinx.com/cgi-bin/docs/ipdoc?c=c_shift_ram;v=v12_0;d=pg122-c-shift-ram.pdf"/>
+      </DOCUMENTS>
+      <PARAMETERS>
+        <PARAMETER NAME="C_XDEVICEFAMILY" VALUE="zynquplus"/>
+        <PARAMETER NAME="C_VERBOSITY" VALUE="0"/>
+        <PARAMETER NAME="C_WIDTH" VALUE="16"/>
+        <PARAMETER NAME="C_DEPTH" VALUE="16"/>
+        <PARAMETER NAME="C_ADDR_WIDTH" VALUE="4"/>
+        <PARAMETER NAME="C_SHIFT_TYPE" VALUE="0"/>
+        <PARAMETER NAME="C_OPT_GOAL" VALUE="0"/>
+        <PARAMETER NAME="C_AINIT_VAL" VALUE="0000000000000000"/>
+        <PARAMETER NAME="C_SINIT_VAL" VALUE="0000000000000000"/>
+        <PARAMETER NAME="C_DEFAULT_DATA" VALUE="0000000000000000"/>
+        <PARAMETER NAME="C_HAS_A" VALUE="0"/>
+        <PARAMETER NAME="C_HAS_CE" VALUE="1"/>
+        <PARAMETER NAME="C_REG_LAST_BIT" VALUE="1"/>
+        <PARAMETER NAME="C_SYNC_PRIORITY" VALUE="1"/>
+        <PARAMETER NAME="C_SYNC_ENABLE" VALUE="0"/>
+        <PARAMETER NAME="C_HAS_SCLR" VALUE="0"/>
+        <PARAMETER NAME="C_HAS_SSET" VALUE="0"/>
+        <PARAMETER NAME="C_HAS_SINIT" VALUE="0"/>
+        <PARAMETER NAME="C_MEM_INIT_FILE" VALUE="no_coe_file_loaded"/>
+        <PARAMETER NAME="C_ELABORATION_DIR" VALUE="./"/>
+        <PARAMETER NAME="C_READ_MIF" VALUE="0"/>
+        <PARAMETER NAME="C_PARSER_TYPE" VALUE="0"/>
+        <PARAMETER NAME="Component_Name" VALUE="mesure_c_shift_ram_0_0"/>
+        <PARAMETER NAME="ShiftRegType" VALUE="Fixed_Length"/>
+        <PARAMETER NAME="OptGoal" VALUE="Resources"/>
+        <PARAMETER NAME="RegLastBit" VALUE="true"/>
+        <PARAMETER NAME="CE" VALUE="true"/>
+        <PARAMETER NAME="Width" VALUE="16"/>
+        <PARAMETER NAME="Depth" VALUE="16"/>
+        <PARAMETER NAME="DefaultDataRadix" VALUE="2"/>
+        <PARAMETER NAME="DefaultData" VALUE="0000000000000000"/>
+        <PARAMETER NAME="ReadMifFile" VALUE="false"/>
+        <PARAMETER NAME="MemInitFile" VALUE="no_coe_file_loaded"/>
+        <PARAMETER NAME="AsyncInitRadix" VALUE="2"/>
+        <PARAMETER NAME="AsyncInitVal" VALUE="0000000000000000"/>
+        <PARAMETER NAME="SSET" VALUE="false"/>
+        <PARAMETER NAME="SCLR" VALUE="false"/>
+        <PARAMETER NAME="SINIT" VALUE="false"/>
+        <PARAMETER NAME="SyncInitRadix" VALUE="2"/>
+        <PARAMETER NAME="SyncInitVal" VALUE="0000000000000000"/>
+        <PARAMETER NAME="SyncCtrlPriority" VALUE="Reset_Overrides_Set"/>
+        <PARAMETER NAME="CEPriority" VALUE="Sync_Overrides_CE"/>
+        <PARAMETER NAME="EDK_IPTYPE" VALUE="PERIPHERAL"/>
+      </PARAMETERS>
+      <PORTS>
+        <PORT DIR="I" LEFT="15" NAME="D" RIGHT="0" SIGIS="data" SIGNAME="Temp_voltage_measure_Data_processing_De_Mux_0_SD1">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="Temp_voltage_measure_Data_processing_De_Mux_0" PORT="SD1"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT CLKFREQUENCY="100000000" DIR="I" NAME="CLK" SIGIS="clk" SIGNAME="zynq_ultra_ps_e_0_pl_clk0">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="zynq_ultra_ps_e_0" PORT="pl_clk0"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="I" NAME="CE" SIGIS="ce" SIGNAME="Temp_voltage_measure_Data_processing_De_Mux_0_SS1">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="Temp_voltage_measure_Data_processing_De_Mux_0" PORT="SS1"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="O" LEFT="15" NAME="Q" RIGHT="0" SIGIS="data" SIGNAME="Temp_voltage_measure_Data_processing_shift_ram_temperature_Q">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="Temp_voltage_measure_Data_processing_Slidding_average_temperature" PORT="Data_shift"/>
+          </CONNECTIONS>
+        </PORT>
+      </PORTS>
+      <BUSINTERFACES/>
+    </MODULE>
+    <MODULE COREREVISION="12" FULLNAME="/Temp_voltage_measure/Data_processing/shift_ram_voltage" HWVERSION="12.0" INSTANCE="Temp_voltage_measure_Data_processing_shift_ram_voltage" IPTYPE="PERIPHERAL" IS_ENABLE="1" MODCLASS="PERIPHERAL" MODTYPE="c_shift_ram" VLNV="xilinx.com:ip:c_shift_ram:12.0">
+      <DOCUMENTS>
+        <DOCUMENT SOURCE="http://www.xilinx.com/cgi-bin/docs/ipdoc?c=c_shift_ram;v=v12_0;d=pg122-c-shift-ram.pdf"/>
+      </DOCUMENTS>
+      <PARAMETERS>
+        <PARAMETER NAME="C_XDEVICEFAMILY" VALUE="zynquplus"/>
+        <PARAMETER NAME="C_VERBOSITY" VALUE="0"/>
+        <PARAMETER NAME="C_WIDTH" VALUE="16"/>
+        <PARAMETER NAME="C_DEPTH" VALUE="16"/>
+        <PARAMETER NAME="C_ADDR_WIDTH" VALUE="4"/>
+        <PARAMETER NAME="C_SHIFT_TYPE" VALUE="0"/>
+        <PARAMETER NAME="C_OPT_GOAL" VALUE="0"/>
+        <PARAMETER NAME="C_AINIT_VAL" VALUE="0000000000000000"/>
+        <PARAMETER NAME="C_SINIT_VAL" VALUE="0000000000000000"/>
+        <PARAMETER NAME="C_DEFAULT_DATA" VALUE="0000000000000000"/>
+        <PARAMETER NAME="C_HAS_A" VALUE="0"/>
+        <PARAMETER NAME="C_HAS_CE" VALUE="1"/>
+        <PARAMETER NAME="C_REG_LAST_BIT" VALUE="1"/>
+        <PARAMETER NAME="C_SYNC_PRIORITY" VALUE="1"/>
+        <PARAMETER NAME="C_SYNC_ENABLE" VALUE="0"/>
+        <PARAMETER NAME="C_HAS_SCLR" VALUE="0"/>
+        <PARAMETER NAME="C_HAS_SSET" VALUE="0"/>
+        <PARAMETER NAME="C_HAS_SINIT" VALUE="0"/>
+        <PARAMETER NAME="C_MEM_INIT_FILE" VALUE="no_coe_file_loaded"/>
+        <PARAMETER NAME="C_ELABORATION_DIR" VALUE="./"/>
+        <PARAMETER NAME="C_READ_MIF" VALUE="0"/>
+        <PARAMETER NAME="C_PARSER_TYPE" VALUE="0"/>
+        <PARAMETER NAME="Component_Name" VALUE="mesure_shift_ram_temperature_0"/>
+        <PARAMETER NAME="ShiftRegType" VALUE="Fixed_Length"/>
+        <PARAMETER NAME="OptGoal" VALUE="Resources"/>
+        <PARAMETER NAME="RegLastBit" VALUE="true"/>
+        <PARAMETER NAME="CE" VALUE="true"/>
+        <PARAMETER NAME="Width" VALUE="16"/>
+        <PARAMETER NAME="Depth" VALUE="16"/>
+        <PARAMETER NAME="DefaultDataRadix" VALUE="2"/>
+        <PARAMETER NAME="DefaultData" VALUE="0000000000000000"/>
+        <PARAMETER NAME="ReadMifFile" VALUE="false"/>
+        <PARAMETER NAME="MemInitFile" VALUE="no_coe_file_loaded"/>
+        <PARAMETER NAME="AsyncInitRadix" VALUE="2"/>
+        <PARAMETER NAME="AsyncInitVal" VALUE="0000000000000000"/>
+        <PARAMETER NAME="SSET" VALUE="false"/>
+        <PARAMETER NAME="SCLR" VALUE="false"/>
+        <PARAMETER NAME="SINIT" VALUE="false"/>
+        <PARAMETER NAME="SyncInitRadix" VALUE="2"/>
+        <PARAMETER NAME="SyncInitVal" VALUE="0000000000000000"/>
+        <PARAMETER NAME="SyncCtrlPriority" VALUE="Reset_Overrides_Set"/>
+        <PARAMETER NAME="CEPriority" VALUE="Sync_Overrides_CE"/>
+        <PARAMETER NAME="EDK_IPTYPE" VALUE="PERIPHERAL"/>
+      </PARAMETERS>
+      <PORTS>
+        <PORT DIR="I" LEFT="15" NAME="D" RIGHT="0" SIGIS="data" SIGNAME="Temp_voltage_measure_Data_processing_De_Mux_0_SD2">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="Temp_voltage_measure_Data_processing_De_Mux_0" PORT="SD2"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT CLKFREQUENCY="100000000" DIR="I" NAME="CLK" SIGIS="clk" SIGNAME="zynq_ultra_ps_e_0_pl_clk0">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="zynq_ultra_ps_e_0" PORT="pl_clk0"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="I" NAME="CE" SIGIS="ce" SIGNAME="Temp_voltage_measure_Data_processing_De_Mux_0_SS2">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="Temp_voltage_measure_Data_processing_De_Mux_0" PORT="SS2"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="O" LEFT="15" NAME="Q" RIGHT="0" SIGIS="data" SIGNAME="Temp_voltage_measure_Data_processing_shift_ram_voltage_Q">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="Temp_voltage_measure_Data_processing_Slidding_average_voltage" PORT="Data_shift"/>
+          </CONNECTIONS>
+        </PORT>
+      </PORTS>
+      <BUSINTERFACES/>
+    </MODULE>
+    <MODULE COREREVISION="1" FULLNAME="/Temp_voltage_measure/Registre_data/Registre_temperature_10Hz" HWVERSION="1.0" INSTANCE="Temp_voltage_measure_Registre_data_Registre_temperature_10Hz" IPTYPE="PERIPHERAL" IS_ENABLE="1" MODCLASS="PERIPHERAL" MODTYPE="Registre" VLNV="xilinx.com:module_ref:Registre:1.0">
+      <DOCUMENTS/>
+      <PARAMETERS>
+        <PARAMETER NAME="Component_Name" VALUE="mesure_Registre_0_0"/>
+        <PARAMETER NAME="EDK_IPTYPE" VALUE="PERIPHERAL"/>
+      </PARAMETERS>
+      <PORTS>
+        <PORT CLKFREQUENCY="100000000" DIR="I" NAME="Clk" SIGIS="clk" SIGNAME="zynq_ultra_ps_e_0_pl_clk0">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="zynq_ultra_ps_e_0" PORT="pl_clk0"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="I" NAME="CE" SIGIS="undef" SIGNAME="Signal_process_Gen_time_0_CE_10Hz">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="Signal_process_Gen_time_0" PORT="CE_10Hz"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="I" LEFT="15" NAME="D" RIGHT="0" SIGIS="undef" SIGNAME="Temp_voltage_measure_Data_processing_Slidding_average_temperature_Data_average">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="Temp_voltage_measure_Data_processing_Slidding_average_temperature" PORT="Data_average"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="O" LEFT="15" NAME="Q" RIGHT="0" SIGIS="undef" SIGNAME="Temp_voltage_measure_Registre_data_Registre_temperature_10Hz_Q">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="Temp_voltage_measure_shift_ram_temperature" PORT="D"/>
+            <CONNECTION INSTANCE="Temp_voltage_measure_Slidding_average_temperature" PORT="Data"/>
+          </CONNECTIONS>
+        </PORT>
+      </PORTS>
+      <BUSINTERFACES/>
+    </MODULE>
+    <MODULE COREREVISION="1" FULLNAME="/Temp_voltage_measure/Registre_data/Registre_voltage_10Hz" HWVERSION="1.0" INSTANCE="Temp_voltage_measure_Registre_data_Registre_voltage_10Hz" IPTYPE="PERIPHERAL" IS_ENABLE="1" MODCLASS="PERIPHERAL" MODTYPE="Registre" VLNV="xilinx.com:module_ref:Registre:1.0">
+      <DOCUMENTS/>
+      <PARAMETERS>
+        <PARAMETER NAME="Component_Name" VALUE="mesure_Registre_0_1"/>
+        <PARAMETER NAME="EDK_IPTYPE" VALUE="PERIPHERAL"/>
+      </PARAMETERS>
+      <PORTS>
+        <PORT CLKFREQUENCY="100000000" DIR="I" NAME="Clk" SIGIS="clk" SIGNAME="zynq_ultra_ps_e_0_pl_clk0">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="zynq_ultra_ps_e_0" PORT="pl_clk0"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="I" NAME="CE" SIGIS="undef" SIGNAME="Signal_process_Gen_time_0_CE_10Hz">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="Signal_process_Gen_time_0" PORT="CE_10Hz"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="I" LEFT="15" NAME="D" RIGHT="0" SIGIS="undef" SIGNAME="Temp_voltage_measure_Data_processing_Slidding_average_voltage_Data_average">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="Temp_voltage_measure_Data_processing_Slidding_average_voltage" PORT="Data_average"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="O" LEFT="15" NAME="Q" RIGHT="0" SIGIS="undef" SIGNAME="Temp_voltage_measure_Registre_data_Registre_voltage_10Hz_Q">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="Temp_voltage_measure_shift_ram_voltage" PORT="D"/>
+            <CONNECTION INSTANCE="Temp_voltage_measure_Slidding_average_voltage" PORT="Data"/>
+          </CONNECTIONS>
+        </PORT>
+      </PORTS>
+      <BUSINTERFACES/>
+    </MODULE>
+    <MODULE COREREVISION="1" FULLNAME="/Temp_voltage_measure/Slidding_average_temperature" HWVERSION="1.0" INSTANCE="Temp_voltage_measure_Slidding_average_temperature" IPTYPE="PERIPHERAL" IS_ENABLE="1" MODCLASS="PERIPHERAL" MODTYPE="Slidding_average" VLNV="xilinx.com:module_ref:Slidding_average:1.0">
+      <DOCUMENTS/>
+      <PARAMETERS>
+        <PARAMETER NAME="n" VALUE="4"/>
+        <PARAMETER NAME="Component_Name" VALUE="mesure_Slidding_average_0_1"/>
+        <PARAMETER NAME="EDK_IPTYPE" VALUE="PERIPHERAL"/>
+      </PARAMETERS>
+      <PORTS>
+        <PORT CLKFREQUENCY="100000000" DIR="I" NAME="Clk" SIGIS="clk" SIGNAME="zynq_ultra_ps_e_0_pl_clk0">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="zynq_ultra_ps_e_0" PORT="pl_clk0"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="I" NAME="Reset" SIGIS="rst" SIGNAME="util_vector_logic_0_Res">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="util_vector_logic_0" PORT="Res"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="I" NAME="Enable" SIGIS="undef" SIGNAME="Signal_process_Gen_time_0_CE_10Hz">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="Signal_process_Gen_time_0" PORT="CE_10Hz"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="I" LEFT="15" NAME="Data" RIGHT="0" SIGIS="undef" SIGNAME="Temp_voltage_measure_Registre_data_Registre_temperature_10Hz_Q">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="Temp_voltage_measure_Registre_data_Registre_temperature_10Hz" PORT="Q"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="I" LEFT="15" NAME="Data_shift" RIGHT="0" SIGIS="undef" SIGNAME="Temp_voltage_measure_shift_ram_temperature_Q">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="Temp_voltage_measure_shift_ram_temperature" PORT="Q"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="O" LEFT="15" NAME="Data_average" RIGHT="0" SIGIS="undef" SIGNAME="Temp_voltage_measure_Slidding_average_temperature_Data_average">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="Temp_voltage_measure_xlconcat_0" PORT="In1"/>
+          </CONNECTIONS>
+        </PORT>
+      </PORTS>
+      <BUSINTERFACES/>
+    </MODULE>
+    <MODULE COREREVISION="1" FULLNAME="/Temp_voltage_measure/Slidding_average_voltage" HWVERSION="1.0" INSTANCE="Temp_voltage_measure_Slidding_average_voltage" IPTYPE="PERIPHERAL" IS_ENABLE="1" MODCLASS="PERIPHERAL" MODTYPE="Slidding_average" VLNV="xilinx.com:module_ref:Slidding_average:1.0">
+      <DOCUMENTS/>
+      <PARAMETERS>
+        <PARAMETER NAME="n" VALUE="4"/>
+        <PARAMETER NAME="Component_Name" VALUE="mesure_Slidding_average_0_2"/>
+        <PARAMETER NAME="EDK_IPTYPE" VALUE="PERIPHERAL"/>
+      </PARAMETERS>
+      <PORTS>
+        <PORT CLKFREQUENCY="100000000" DIR="I" NAME="Clk" SIGIS="clk" SIGNAME="zynq_ultra_ps_e_0_pl_clk0">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="zynq_ultra_ps_e_0" PORT="pl_clk0"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="I" NAME="Reset" SIGIS="rst" SIGNAME="util_vector_logic_0_Res">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="util_vector_logic_0" PORT="Res"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="I" NAME="Enable" SIGIS="undef" SIGNAME="Signal_process_Gen_time_0_CE_10Hz">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="Signal_process_Gen_time_0" PORT="CE_10Hz"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="I" LEFT="15" NAME="Data" RIGHT="0" SIGIS="undef" SIGNAME="Temp_voltage_measure_Registre_data_Registre_voltage_10Hz_Q">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="Temp_voltage_measure_Registre_data_Registre_voltage_10Hz" PORT="Q"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="I" LEFT="15" NAME="Data_shift" RIGHT="0" SIGIS="undef" SIGNAME="Temp_voltage_measure_shift_ram_voltage_Q">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="Temp_voltage_measure_shift_ram_voltage" PORT="Q"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="O" LEFT="15" NAME="Data_average" RIGHT="0" SIGIS="undef" SIGNAME="Temp_voltage_measure_Slidding_average_voltage_Data_average">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="Temp_voltage_measure_xlconcat_0" PORT="In0"/>
+          </CONNECTIONS>
+        </PORT>
+      </PORTS>
+      <BUSINTERFACES/>
+    </MODULE>
+    <MODULE COREREVISION="1" FULLNAME="/Temp_voltage_measure/Sysmon1/adress/xlconcat_0" HWVERSION="2.1" INSTANCE="Temp_voltage_measure_Sysmon1_adress_xlconcat_0" IPTYPE="PERIPHERAL" IS_ENABLE="1" MODCLASS="PERIPHERAL" MODTYPE="xlconcat" VLNV="xilinx.com:ip:xlconcat:2.1">
       <DOCUMENTS/>
       <PARAMETERS>
         <PARAMETER NAME="IN0_WIDTH" VALUE="6"/>
@@ -482,46 +938,46 @@
         <PARAMETER NAME="IN31_WIDTH" VALUE="1"/>
         <PARAMETER NAME="dout_width" VALUE="8"/>
         <PARAMETER NAME="NUM_PORTS" VALUE="2"/>
-        <PARAMETER NAME="Component_Name" VALUE="mesure_xlconcat_0_0"/>
+        <PARAMETER NAME="Component_Name" VALUE="mesure_xlconcat_0_2"/>
         <PARAMETER NAME="EDK_IPTYPE" VALUE="PERIPHERAL"/>
       </PARAMETERS>
       <PORTS>
-        <PORT DIR="I" LEFT="5" NAME="In0" RIGHT="0" SIGIS="undef" SIGNAME="Sysmon_system_management_wiz_0_channel_out">
+        <PORT DIR="I" LEFT="5" NAME="In0" RIGHT="0" SIGIS="undef" SIGNAME="Temp_voltage_measure_Sysmon1_system_management_wiz_0_channel_out">
           <CONNECTIONS>
-            <CONNECTION INSTANCE="Sysmon_system_management_wiz_0" PORT="channel_out"/>
+            <CONNECTION INSTANCE="Temp_voltage_measure_Sysmon1_system_management_wiz_0" PORT="channel_out"/>
           </CONNECTIONS>
         </PORT>
-        <PORT DIR="I" LEFT="1" NAME="In1" RIGHT="0" SIGIS="undef" SIGNAME="Sysmon_adress_xlconstant_2_dout">
+        <PORT DIR="I" LEFT="1" NAME="In1" RIGHT="0" SIGIS="undef" SIGNAME="Temp_voltage_measure_Sysmon1_adress_xlconstant_2_dout">
           <CONNECTIONS>
-            <CONNECTION INSTANCE="Sysmon_adress_xlconstant_2" PORT="dout"/>
+            <CONNECTION INSTANCE="Temp_voltage_measure_Sysmon1_adress_xlconstant_2" PORT="dout"/>
           </CONNECTIONS>
         </PORT>
-        <PORT DIR="O" LEFT="7" NAME="dout" RIGHT="0" SIGIS="undef" SIGNAME="Sysmon_adress_xlconcat_0_dout">
+        <PORT DIR="O" LEFT="7" NAME="dout" RIGHT="0" SIGIS="undef" SIGNAME="Temp_voltage_measure_Sysmon1_adress_xlconcat_0_dout">
           <CONNECTIONS>
-            <CONNECTION INSTANCE="Sysmon_system_management_wiz_0" PORT="daddr_in"/>
+            <CONNECTION INSTANCE="Temp_voltage_measure_Sysmon1_system_management_wiz_0" PORT="daddr_in"/>
           </CONNECTIONS>
         </PORT>
       </PORTS>
       <BUSINTERFACES/>
     </MODULE>
-    <MODULE COREREVISION="5" FULLNAME="/Sysmon/adress/xlconstant_2" HWVERSION="1.1" INSTANCE="Sysmon_adress_xlconstant_2" IPTYPE="PERIPHERAL" IS_ENABLE="1" MODCLASS="PERIPHERAL" MODTYPE="xlconstant" VLNV="xilinx.com:ip:xlconstant:1.1">
+    <MODULE COREREVISION="5" FULLNAME="/Temp_voltage_measure/Sysmon1/adress/xlconstant_2" HWVERSION="1.1" INSTANCE="Temp_voltage_measure_Sysmon1_adress_xlconstant_2" IPTYPE="PERIPHERAL" IS_ENABLE="1" MODCLASS="PERIPHERAL" MODTYPE="xlconstant" VLNV="xilinx.com:ip:xlconstant:1.1">
       <DOCUMENTS/>
       <PARAMETERS>
         <PARAMETER NAME="CONST_WIDTH" VALUE="2"/>
         <PARAMETER NAME="CONST_VAL" VALUE="0x0"/>
-        <PARAMETER NAME="Component_Name" VALUE="mesure_xlconstant_1_0"/>
+        <PARAMETER NAME="Component_Name" VALUE="mesure_xlconstant_2_0"/>
         <PARAMETER NAME="EDK_IPTYPE" VALUE="PERIPHERAL"/>
       </PARAMETERS>
       <PORTS>
-        <PORT DIR="O" LEFT="1" NAME="dout" RIGHT="0" SIGIS="undef" SIGNAME="Sysmon_adress_xlconstant_2_dout">
+        <PORT DIR="O" LEFT="1" NAME="dout" RIGHT="0" SIGIS="undef" SIGNAME="Temp_voltage_measure_Sysmon1_adress_xlconstant_2_dout">
           <CONNECTIONS>
-            <CONNECTION INSTANCE="Sysmon_adress_xlconcat_0" PORT="In1"/>
+            <CONNECTION INSTANCE="Temp_voltage_measure_Sysmon1_adress_xlconcat_0" PORT="In1"/>
           </CONNECTIONS>
         </PORT>
       </PORTS>
       <BUSINTERFACES/>
     </MODULE>
-    <MODULE COREREVISION="9" FULLNAME="/Sysmon/system_management_wiz_0" HWVERSION="1.3" INSTANCE="Sysmon_system_management_wiz_0" IPTYPE="PERIPHERAL" IS_ENABLE="1" MODCLASS="PERIPHERAL" MODTYPE="system_management_wiz" VLNV="xilinx.com:ip:system_management_wiz:1.3">
+    <MODULE COREREVISION="9" FULLNAME="/Temp_voltage_measure/Sysmon1/system_management_wiz_0" HWVERSION="1.3" INSTANCE="Temp_voltage_measure_Sysmon1_system_management_wiz_0" IPTYPE="PERIPHERAL" IS_ENABLE="1" MODCLASS="PERIPHERAL" MODTYPE="system_management_wiz" VLNV="xilinx.com:ip:system_management_wiz:1.3">
       <DOCUMENTS>
         <DOCUMENT SOURCE="http://www.xilinx.com/cgi-bin/docs/ipdoc?c=system_management_wiz;v=v1_3;d=pg185-system-management-wiz.pdf"/>
       </DOCUMENTS>
@@ -538,7 +994,7 @@
         <PARAMETER NAME="C_ENABLE_ADC_DATA_OUT_SLAVE1" VALUE="0"/>
         <PARAMETER NAME="C_ENABLE_ADC_DATA_OUT_SLAVE2" VALUE="0"/>
         <PARAMETER NAME="C_ENABLE_DUAL_SEQUENCE_MODE" VALUE="0"/>
-        <PARAMETER NAME="c_component_name" VALUE="mesure_system_management_wiz_0_1"/>
+        <PARAMETER NAME="c_component_name" VALUE="mesure_system_management_wiz_0_0"/>
         <PARAMETER NAME="C_SIM_FILE_SEL" VALUE="Default"/>
         <PARAMETER NAME="C_SIM_DEVICE" VALUE="ZYNQ_ULTRASCALE"/>
         <PARAMETER NAME="C_SIM_FILE_REL_PATH" VALUE="./"/>
@@ -845,7 +1301,7 @@
         <PARAMETER NAME="C_VAUXP15_LOC" VALUE="U2"/>
         <PARAMETER NAME="C_I2C_SCLK_LOC" VALUE="F3"/>
         <PARAMETER NAME="C_I2C_SDA_LOC" VALUE="D2"/>
-        <PARAMETER NAME="Component_Name" VALUE="mesure_system_management_wiz_0_1"/>
+        <PARAMETER NAME="Component_Name" VALUE="mesure_system_management_wiz_0_0"/>
         <PARAMETER NAME="INTERFACE_SELECTION" VALUE="Enable_DRP"/>
         <PARAMETER NAME="USE_BOARD_FLOW" VALUE="false"/>
         <PARAMETER NAME="VAUX0_BOARD_INTERFACE" VALUE="Custom"/>
@@ -1409,34 +1865,34 @@
         <PARAMETER NAME="EDK_IPTYPE" VALUE="PERIPHERAL"/>
       </PARAMETERS>
       <PORTS>
-        <PORT DIR="I" LEFT="15" NAME="di_in" RIGHT="0" SIGIS="undef" SIGNAME="Sysmon_xlconstant_0_dout">
+        <PORT DIR="I" LEFT="15" NAME="di_in" RIGHT="0" SIGIS="undef" SIGNAME="Temp_voltage_measure_Sysmon1_xlconstant_0_dout">
           <CONNECTIONS>
-            <CONNECTION INSTANCE="Sysmon_xlconstant_0" PORT="dout"/>
+            <CONNECTION INSTANCE="Temp_voltage_measure_Sysmon1_xlconstant_0" PORT="dout"/>
           </CONNECTIONS>
         </PORT>
-        <PORT DIR="I" LEFT="7" NAME="daddr_in" RIGHT="0" SIGIS="undef" SIGNAME="Sysmon_adress_xlconcat_0_dout">
+        <PORT DIR="I" LEFT="7" NAME="daddr_in" RIGHT="0" SIGIS="undef" SIGNAME="Temp_voltage_measure_Sysmon1_adress_xlconcat_0_dout">
           <CONNECTIONS>
-            <CONNECTION INSTANCE="Sysmon_adress_xlconcat_0" PORT="dout"/>
+            <CONNECTION INSTANCE="Temp_voltage_measure_Sysmon1_adress_xlconcat_0" PORT="dout"/>
           </CONNECTIONS>
         </PORT>
-        <PORT DIR="I" NAME="den_in" SIGIS="undef" SIGNAME="Sysmon_system_management_wiz_0_eoc_out">
+        <PORT DIR="I" NAME="den_in" SIGIS="undef" SIGNAME="Temp_voltage_measure_Sysmon1_system_management_wiz_0_eoc_out">
           <CONNECTIONS>
-            <CONNECTION INSTANCE="Sysmon_system_management_wiz_0" PORT="eoc_out"/>
+            <CONNECTION INSTANCE="Temp_voltage_measure_Sysmon1_system_management_wiz_0" PORT="eoc_out"/>
           </CONNECTIONS>
         </PORT>
-        <PORT DIR="I" NAME="dwe_in" SIGIS="undef" SIGNAME="Sysmon_xlconstant_1_dout">
+        <PORT DIR="I" NAME="dwe_in" SIGIS="undef" SIGNAME="Temp_voltage_measure_Sysmon1_xlconstant_1_dout">
           <CONNECTIONS>
-            <CONNECTION INSTANCE="Sysmon_xlconstant_1" PORT="dout"/>
+            <CONNECTION INSTANCE="Temp_voltage_measure_Sysmon1_xlconstant_1" PORT="dout"/>
           </CONNECTIONS>
         </PORT>
-        <PORT DIR="O" NAME="drdy_out" SIGIS="undef" SIGNAME="Sysmon_system_management_wiz_0_drdy_out">
+        <PORT DIR="O" NAME="drdy_out" SIGIS="undef" SIGNAME="Temp_voltage_measure_Sysmon1_system_management_wiz_0_drdy_out">
           <CONNECTIONS>
-            <CONNECTION INSTANCE="De_Mux_0" PORT="Enable"/>
+            <CONNECTION INSTANCE="Temp_voltage_measure_Data_processing_De_Mux_0" PORT="Enable"/>
           </CONNECTIONS>
         </PORT>
-        <PORT DIR="O" LEFT="15" NAME="do_out" RIGHT="0" SIGIS="undef" SIGNAME="Sysmon_system_management_wiz_0_do_out">
+        <PORT DIR="O" LEFT="15" NAME="do_out" RIGHT="0" SIGIS="undef" SIGNAME="Temp_voltage_measure_Sysmon1_system_management_wiz_0_do_out">
           <CONNECTIONS>
-            <CONNECTION INSTANCE="De_Mux_0" PORT="ED1"/>
+            <CONNECTION INSTANCE="Temp_voltage_measure_Data_processing_De_Mux_0" PORT="ED1"/>
           </CONNECTIONS>
         </PORT>
         <PORT DIR="I" NAME="dclk_in" SIGIS="undef" SIGNAME="zynq_ultra_ps_e_0_pl_clk0">
@@ -1458,15 +1914,15 @@
         <PORT DIR="O" NAME="vccpsaux_alarm_out" SIGIS="undef"/>
         <PORT DIR="O" NAME="vccaux_alarm_out" SIGIS="undef"/>
         <PORT DIR="O" NAME="ot_out" SIGIS="undef"/>
-        <PORT DIR="O" LEFT="5" NAME="channel_out" RIGHT="0" SIGIS="undef" SIGNAME="Sysmon_system_management_wiz_0_channel_out">
+        <PORT DIR="O" LEFT="5" NAME="channel_out" RIGHT="0" SIGIS="undef" SIGNAME="Temp_voltage_measure_Sysmon1_system_management_wiz_0_channel_out">
           <CONNECTIONS>
-            <CONNECTION INSTANCE="Sysmon_adress_xlconcat_0" PORT="In0"/>
-            <CONNECTION INSTANCE="De_Mux_0" PORT="Sel"/>
+            <CONNECTION INSTANCE="Temp_voltage_measure_Sysmon1_adress_xlconcat_0" PORT="In0"/>
+            <CONNECTION INSTANCE="Temp_voltage_measure_Data_processing_De_Mux_0" PORT="Sel"/>
           </CONNECTIONS>
         </PORT>
-        <PORT DIR="O" NAME="eoc_out" SIGIS="undef" SIGNAME="Sysmon_system_management_wiz_0_eoc_out">
+        <PORT DIR="O" NAME="eoc_out" SIGIS="undef" SIGNAME="Temp_voltage_measure_Sysmon1_system_management_wiz_0_eoc_out">
           <CONNECTIONS>
-            <CONNECTION INSTANCE="Sysmon_system_management_wiz_0" PORT="den_in"/>
+            <CONNECTION INSTANCE="Temp_voltage_measure_Sysmon1_system_management_wiz_0" PORT="den_in"/>
           </CONNECTIONS>
         </PORT>
         <PORT DIR="O" NAME="alarm_out" SIGIS="undef"/>
@@ -1492,85 +1948,240 @@
         </BUSINTERFACE>
       </BUSINTERFACES>
     </MODULE>
-    <MODULE COREREVISION="5" FULLNAME="/Sysmon/xlconstant_0" HWVERSION="1.1" INSTANCE="Sysmon_xlconstant_0" IPTYPE="PERIPHERAL" IS_ENABLE="1" MODCLASS="PERIPHERAL" MODTYPE="xlconstant" VLNV="xilinx.com:ip:xlconstant:1.1">
+    <MODULE COREREVISION="5" FULLNAME="/Temp_voltage_measure/Sysmon1/xlconstant_0" HWVERSION="1.1" INSTANCE="Temp_voltage_measure_Sysmon1_xlconstant_0" IPTYPE="PERIPHERAL" IS_ENABLE="1" MODCLASS="PERIPHERAL" MODTYPE="xlconstant" VLNV="xilinx.com:ip:xlconstant:1.1">
       <DOCUMENTS/>
       <PARAMETERS>
         <PARAMETER NAME="CONST_WIDTH" VALUE="16"/>
         <PARAMETER NAME="CONST_VAL" VALUE="0x0000"/>
-        <PARAMETER NAME="Component_Name" VALUE="mesure_xlconstant_0_0"/>
+        <PARAMETER NAME="Component_Name" VALUE="mesure_xlconstant_0_2"/>
         <PARAMETER NAME="EDK_IPTYPE" VALUE="PERIPHERAL"/>
       </PARAMETERS>
       <PORTS>
-        <PORT DIR="O" LEFT="15" NAME="dout" RIGHT="0" SIGIS="undef" SIGNAME="Sysmon_xlconstant_0_dout">
+        <PORT DIR="O" LEFT="15" NAME="dout" RIGHT="0" SIGIS="undef" SIGNAME="Temp_voltage_measure_Sysmon1_xlconstant_0_dout">
           <CONNECTIONS>
-            <CONNECTION INSTANCE="Sysmon_system_management_wiz_0" PORT="di_in"/>
+            <CONNECTION INSTANCE="Temp_voltage_measure_Sysmon1_system_management_wiz_0" PORT="di_in"/>
           </CONNECTIONS>
         </PORT>
       </PORTS>
       <BUSINTERFACES/>
     </MODULE>
-    <MODULE COREREVISION="5" FULLNAME="/Sysmon/xlconstant_1" HWVERSION="1.1" INSTANCE="Sysmon_xlconstant_1" IPTYPE="PERIPHERAL" IS_ENABLE="1" MODCLASS="PERIPHERAL" MODTYPE="xlconstant" VLNV="xilinx.com:ip:xlconstant:1.1">
+    <MODULE COREREVISION="5" FULLNAME="/Temp_voltage_measure/Sysmon1/xlconstant_1" HWVERSION="1.1" INSTANCE="Temp_voltage_measure_Sysmon1_xlconstant_1" IPTYPE="PERIPHERAL" IS_ENABLE="1" MODCLASS="PERIPHERAL" MODTYPE="xlconstant" VLNV="xilinx.com:ip:xlconstant:1.1">
       <DOCUMENTS/>
       <PARAMETERS>
         <PARAMETER NAME="CONST_WIDTH" VALUE="1"/>
         <PARAMETER NAME="CONST_VAL" VALUE="0x0"/>
-        <PARAMETER NAME="Component_Name" VALUE="mesure_xlconstant_0_1"/>
+        <PARAMETER NAME="Component_Name" VALUE="mesure_xlconstant_1_1"/>
         <PARAMETER NAME="EDK_IPTYPE" VALUE="PERIPHERAL"/>
       </PARAMETERS>
       <PORTS>
-        <PORT DIR="O" LEFT="0" NAME="dout" RIGHT="0" SIGIS="undef" SIGNAME="Sysmon_xlconstant_1_dout">
+        <PORT DIR="O" LEFT="0" NAME="dout" RIGHT="0" SIGIS="undef" SIGNAME="Temp_voltage_measure_Sysmon1_xlconstant_1_dout">
           <CONNECTIONS>
-            <CONNECTION INSTANCE="Sysmon_system_management_wiz_0" PORT="dwe_in"/>
+            <CONNECTION INSTANCE="Temp_voltage_measure_Sysmon1_system_management_wiz_0" PORT="dwe_in"/>
           </CONNECTIONS>
         </PORT>
       </PORTS>
       <BUSINTERFACES/>
     </MODULE>
-    <MODULE COREREVISION="1" FULLNAME="/Temp_Voltage_Average_0" HWVERSION="1.0" INSTANCE="Temp_Voltage_Average_0" IPTYPE="PERIPHERAL" IS_ENABLE="1" MODCLASS="PERIPHERAL" MODTYPE="Temp_Voltage_Average" VLNV="xilinx.com:module_ref:Temp_Voltage_Average:1.0">
-      <DOCUMENTS/>
+    <MODULE COREREVISION="12" FULLNAME="/Temp_voltage_measure/shift_ram_temperature" HWVERSION="12.0" INSTANCE="Temp_voltage_measure_shift_ram_temperature" IPTYPE="PERIPHERAL" IS_ENABLE="1" MODCLASS="PERIPHERAL" MODTYPE="c_shift_ram" VLNV="xilinx.com:ip:c_shift_ram:12.0">
+      <DOCUMENTS>
+        <DOCUMENT SOURCE="http://www.xilinx.com/cgi-bin/docs/ipdoc?c=c_shift_ram;v=v12_0;d=pg122-c-shift-ram.pdf"/>
+      </DOCUMENTS>
       <PARAMETERS>
-        <PARAMETER NAME="Component_Name" VALUE="mesure_Temp_Voltage_Average_0_0"/>
+        <PARAMETER NAME="C_XDEVICEFAMILY" VALUE="zynquplus"/>
+        <PARAMETER NAME="C_VERBOSITY" VALUE="0"/>
+        <PARAMETER NAME="C_WIDTH" VALUE="16"/>
+        <PARAMETER NAME="C_DEPTH" VALUE="16"/>
+        <PARAMETER NAME="C_ADDR_WIDTH" VALUE="4"/>
+        <PARAMETER NAME="C_SHIFT_TYPE" VALUE="0"/>
+        <PARAMETER NAME="C_OPT_GOAL" VALUE="0"/>
+        <PARAMETER NAME="C_AINIT_VAL" VALUE="0000000000000000"/>
+        <PARAMETER NAME="C_SINIT_VAL" VALUE="0000000000000000"/>
+        <PARAMETER NAME="C_DEFAULT_DATA" VALUE="0000000000000000"/>
+        <PARAMETER NAME="C_HAS_A" VALUE="0"/>
+        <PARAMETER NAME="C_HAS_CE" VALUE="1"/>
+        <PARAMETER NAME="C_REG_LAST_BIT" VALUE="1"/>
+        <PARAMETER NAME="C_SYNC_PRIORITY" VALUE="1"/>
+        <PARAMETER NAME="C_SYNC_ENABLE" VALUE="0"/>
+        <PARAMETER NAME="C_HAS_SCLR" VALUE="0"/>
+        <PARAMETER NAME="C_HAS_SSET" VALUE="0"/>
+        <PARAMETER NAME="C_HAS_SINIT" VALUE="0"/>
+        <PARAMETER NAME="C_MEM_INIT_FILE" VALUE="no_coe_file_loaded"/>
+        <PARAMETER NAME="C_ELABORATION_DIR" VALUE="./"/>
+        <PARAMETER NAME="C_READ_MIF" VALUE="0"/>
+        <PARAMETER NAME="C_PARSER_TYPE" VALUE="0"/>
+        <PARAMETER NAME="Component_Name" VALUE="mesure_c_shift_ram_0_1"/>
+        <PARAMETER NAME="ShiftRegType" VALUE="Fixed_Length"/>
+        <PARAMETER NAME="OptGoal" VALUE="Resources"/>
+        <PARAMETER NAME="RegLastBit" VALUE="true"/>
+        <PARAMETER NAME="CE" VALUE="true"/>
+        <PARAMETER NAME="Width" VALUE="16"/>
+        <PARAMETER NAME="Depth" VALUE="16"/>
+        <PARAMETER NAME="DefaultDataRadix" VALUE="2"/>
+        <PARAMETER NAME="DefaultData" VALUE="0000000000000000"/>
+        <PARAMETER NAME="ReadMifFile" VALUE="false"/>
+        <PARAMETER NAME="MemInitFile" VALUE="no_coe_file_loaded"/>
+        <PARAMETER NAME="AsyncInitRadix" VALUE="2"/>
+        <PARAMETER NAME="AsyncInitVal" VALUE="0000000000000000"/>
+        <PARAMETER NAME="SSET" VALUE="false"/>
+        <PARAMETER NAME="SCLR" VALUE="false"/>
+        <PARAMETER NAME="SINIT" VALUE="false"/>
+        <PARAMETER NAME="SyncInitRadix" VALUE="2"/>
+        <PARAMETER NAME="SyncInitVal" VALUE="0000000000000000"/>
+        <PARAMETER NAME="SyncCtrlPriority" VALUE="Reset_Overrides_Set"/>
+        <PARAMETER NAME="CEPriority" VALUE="Sync_Overrides_CE"/>
         <PARAMETER NAME="EDK_IPTYPE" VALUE="PERIPHERAL"/>
       </PARAMETERS>
       <PORTS>
-        <PORT CLKFREQUENCY="100000000" DIR="I" NAME="Clk" SIGIS="clk" SIGNAME="zynq_ultra_ps_e_0_pl_clk0">
+        <PORT DIR="I" LEFT="15" NAME="D" RIGHT="0" SIGIS="data" SIGNAME="Temp_voltage_measure_Registre_data_Registre_temperature_10Hz_Q">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="Temp_voltage_measure_Registre_data_Registre_temperature_10Hz" PORT="Q"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT CLKFREQUENCY="100000000" DIR="I" NAME="CLK" SIGIS="clk" SIGNAME="zynq_ultra_ps_e_0_pl_clk0">
           <CONNECTIONS>
             <CONNECTION INSTANCE="zynq_ultra_ps_e_0" PORT="pl_clk0"/>
           </CONNECTIONS>
         </PORT>
-        <PORT DIR="I" NAME="Reset" SIGIS="rst" SIGNAME="util_vector_logic_0_Res">
+        <PORT DIR="I" NAME="CE" SIGIS="ce" SIGNAME="Signal_process_Gen_time_0_CE_10Hz">
           <CONNECTIONS>
-            <CONNECTION INSTANCE="util_vector_logic_0" PORT="Res"/>
+            <CONNECTION INSTANCE="Signal_process_Gen_time_0" PORT="CE_10Hz"/>
           </CONNECTIONS>
         </PORT>
-        <PORT DIR="I" LEFT="15" NAME="SD1" RIGHT="0" SIGIS="undef" SIGNAME="De_Mux_0_SD1">
+        <PORT DIR="O" LEFT="15" NAME="Q" RIGHT="0" SIGIS="data" SIGNAME="Temp_voltage_measure_shift_ram_temperature_Q">
           <CONNECTIONS>
-            <CONNECTION INSTANCE="De_Mux_0" PORT="SD1"/>
+            <CONNECTION INSTANCE="Temp_voltage_measure_Slidding_average_temperature" PORT="Data_shift"/>
           </CONNECTIONS>
         </PORT>
-        <PORT DIR="I" LEFT="15" NAME="SD2" RIGHT="0" SIGIS="undef" SIGNAME="De_Mux_0_SD2">
+      </PORTS>
+      <BUSINTERFACES/>
+    </MODULE>
+    <MODULE COREREVISION="12" FULLNAME="/Temp_voltage_measure/shift_ram_voltage" HWVERSION="12.0" INSTANCE="Temp_voltage_measure_shift_ram_voltage" IPTYPE="PERIPHERAL" IS_ENABLE="1" MODCLASS="PERIPHERAL" MODTYPE="c_shift_ram" VLNV="xilinx.com:ip:c_shift_ram:12.0">
+      <DOCUMENTS>
+        <DOCUMENT SOURCE="http://www.xilinx.com/cgi-bin/docs/ipdoc?c=c_shift_ram;v=v12_0;d=pg122-c-shift-ram.pdf"/>
+      </DOCUMENTS>
+      <PARAMETERS>
+        <PARAMETER NAME="C_XDEVICEFAMILY" VALUE="zynquplus"/>
+        <PARAMETER NAME="C_VERBOSITY" VALUE="0"/>
+        <PARAMETER NAME="C_WIDTH" VALUE="16"/>
+        <PARAMETER NAME="C_DEPTH" VALUE="16"/>
+        <PARAMETER NAME="C_ADDR_WIDTH" VALUE="4"/>
+        <PARAMETER NAME="C_SHIFT_TYPE" VALUE="0"/>
+        <PARAMETER NAME="C_OPT_GOAL" VALUE="0"/>
+        <PARAMETER NAME="C_AINIT_VAL" VALUE="0000000000000000"/>
+        <PARAMETER NAME="C_SINIT_VAL" VALUE="0000000000000000"/>
+        <PARAMETER NAME="C_DEFAULT_DATA" VALUE="0000000000000000"/>
+        <PARAMETER NAME="C_HAS_A" VALUE="0"/>
+        <PARAMETER NAME="C_HAS_CE" VALUE="1"/>
+        <PARAMETER NAME="C_REG_LAST_BIT" VALUE="1"/>
+        <PARAMETER NAME="C_SYNC_PRIORITY" VALUE="1"/>
+        <PARAMETER NAME="C_SYNC_ENABLE" VALUE="0"/>
+        <PARAMETER NAME="C_HAS_SCLR" VALUE="0"/>
+        <PARAMETER NAME="C_HAS_SSET" VALUE="0"/>
+        <PARAMETER NAME="C_HAS_SINIT" VALUE="0"/>
+        <PARAMETER NAME="C_MEM_INIT_FILE" VALUE="no_coe_file_loaded"/>
+        <PARAMETER NAME="C_ELABORATION_DIR" VALUE="./"/>
+        <PARAMETER NAME="C_READ_MIF" VALUE="0"/>
+        <PARAMETER NAME="C_PARSER_TYPE" VALUE="0"/>
+        <PARAMETER NAME="Component_Name" VALUE="mesure_shift_ram_temperature_1"/>
+        <PARAMETER NAME="ShiftRegType" VALUE="Fixed_Length"/>
+        <PARAMETER NAME="OptGoal" VALUE="Resources"/>
+        <PARAMETER NAME="RegLastBit" VALUE="true"/>
+        <PARAMETER NAME="CE" VALUE="true"/>
+        <PARAMETER NAME="Width" VALUE="16"/>
+        <PARAMETER NAME="Depth" VALUE="16"/>
+        <PARAMETER NAME="DefaultDataRadix" VALUE="2"/>
+        <PARAMETER NAME="DefaultData" VALUE="0000000000000000"/>
+        <PARAMETER NAME="ReadMifFile" VALUE="false"/>
+        <PARAMETER NAME="MemInitFile" VALUE="no_coe_file_loaded"/>
+        <PARAMETER NAME="AsyncInitRadix" VALUE="2"/>
+        <PARAMETER NAME="AsyncInitVal" VALUE="0000000000000000"/>
+        <PARAMETER NAME="SSET" VALUE="false"/>
+        <PARAMETER NAME="SCLR" VALUE="false"/>
+        <PARAMETER NAME="SINIT" VALUE="false"/>
+        <PARAMETER NAME="SyncInitRadix" VALUE="2"/>
+        <PARAMETER NAME="SyncInitVal" VALUE="0000000000000000"/>
+        <PARAMETER NAME="SyncCtrlPriority" VALUE="Reset_Overrides_Set"/>
+        <PARAMETER NAME="CEPriority" VALUE="Sync_Overrides_CE"/>
+        <PARAMETER NAME="EDK_IPTYPE" VALUE="PERIPHERAL"/>
+      </PARAMETERS>
+      <PORTS>
+        <PORT DIR="I" LEFT="15" NAME="D" RIGHT="0" SIGIS="data" SIGNAME="Temp_voltage_measure_Registre_data_Registre_voltage_10Hz_Q">
           <CONNECTIONS>
-            <CONNECTION INSTANCE="De_Mux_0" PORT="SD2"/>
+            <CONNECTION INSTANCE="Temp_voltage_measure_Registre_data_Registre_voltage_10Hz" PORT="Q"/>
           </CONNECTIONS>
         </PORT>
-        <PORT DIR="I" NAME="SS1" SIGIS="undef" SIGNAME="De_Mux_0_SS1">
+        <PORT CLKFREQUENCY="100000000" DIR="I" NAME="CLK" SIGIS="clk" SIGNAME="zynq_ultra_ps_e_0_pl_clk0">
           <CONNECTIONS>
-            <CONNECTION INSTANCE="De_Mux_0" PORT="SS1"/>
+            <CONNECTION INSTANCE="zynq_ultra_ps_e_0" PORT="pl_clk0"/>
           </CONNECTIONS>
         </PORT>
-        <PORT DIR="I" NAME="SS2" SIGIS="undef" SIGNAME="De_Mux_0_SS2">
+        <PORT DIR="I" NAME="CE" SIGIS="ce" SIGNAME="Signal_process_Gen_time_0_CE_10Hz">
           <CONNECTIONS>
-            <CONNECTION INSTANCE="De_Mux_0" PORT="SS2"/>
+            <CONNECTION INSTANCE="Signal_process_Gen_time_0" PORT="CE_10Hz"/>
           </CONNECTIONS>
         </PORT>
-        <PORT DIR="O" LEFT="15" NAME="Temp" RIGHT="0" SIGIS="undef" SIGNAME="Temp_Voltage_Average_0_Temp">
+        <PORT DIR="O" LEFT="15" NAME="Q" RIGHT="0" SIGIS="data" SIGNAME="Temp_voltage_measure_shift_ram_voltage_Q">
           <CONNECTIONS>
-            <CONNECTION INSTANCE="IP_Conversion_Axi_0" PORT="Temp"/>
+            <CONNECTION INSTANCE="Temp_voltage_measure_Slidding_average_voltage" PORT="Data_shift"/>
           </CONNECTIONS>
         </PORT>
-        <PORT DIR="O" LEFT="15" NAME="Voltage" RIGHT="0" SIGIS="undef" SIGNAME="Temp_Voltage_Average_0_Voltage">
+      </PORTS>
+      <BUSINTERFACES/>
+    </MODULE>
+    <MODULE COREREVISION="1" FULLNAME="/Temp_voltage_measure/xlconcat_0" HWVERSION="2.1" INSTANCE="Temp_voltage_measure_xlconcat_0" IPTYPE="PERIPHERAL" IS_ENABLE="1" MODCLASS="PERIPHERAL" MODTYPE="xlconcat" VLNV="xilinx.com:ip:xlconcat:2.1">
+      <DOCUMENTS/>
+      <PARAMETERS>
+        <PARAMETER NAME="IN0_WIDTH" VALUE="16"/>
+        <PARAMETER NAME="IN1_WIDTH" VALUE="16"/>
+        <PARAMETER NAME="IN2_WIDTH" VALUE="1"/>
+        <PARAMETER NAME="IN3_WIDTH" VALUE="1"/>
+        <PARAMETER NAME="IN4_WIDTH" VALUE="1"/>
+        <PARAMETER NAME="IN5_WIDTH" VALUE="1"/>
+        <PARAMETER NAME="IN6_WIDTH" VALUE="1"/>
+        <PARAMETER NAME="IN7_WIDTH" VALUE="1"/>
+        <PARAMETER NAME="IN8_WIDTH" VALUE="1"/>
+        <PARAMETER NAME="IN9_WIDTH" VALUE="1"/>
+        <PARAMETER NAME="IN10_WIDTH" VALUE="1"/>
+        <PARAMETER NAME="IN11_WIDTH" VALUE="1"/>
+        <PARAMETER NAME="IN12_WIDTH" VALUE="1"/>
+        <PARAMETER NAME="IN13_WIDTH" VALUE="1"/>
+        <PARAMETER NAME="IN14_WIDTH" VALUE="1"/>
+        <PARAMETER NAME="IN15_WIDTH" VALUE="1"/>
+        <PARAMETER NAME="IN16_WIDTH" VALUE="1"/>
+        <PARAMETER NAME="IN17_WIDTH" VALUE="1"/>
+        <PARAMETER NAME="IN18_WIDTH" VALUE="1"/>
+        <PARAMETER NAME="IN19_WIDTH" VALUE="1"/>
+        <PARAMETER NAME="IN20_WIDTH" VALUE="1"/>
+        <PARAMETER NAME="IN21_WIDTH" VALUE="1"/>
+        <PARAMETER NAME="IN22_WIDTH" VALUE="1"/>
+        <PARAMETER NAME="IN23_WIDTH" VALUE="1"/>
+        <PARAMETER NAME="IN24_WIDTH" VALUE="1"/>
+        <PARAMETER NAME="IN25_WIDTH" VALUE="1"/>
+        <PARAMETER NAME="IN26_WIDTH" VALUE="1"/>
+        <PARAMETER NAME="IN27_WIDTH" VALUE="1"/>
+        <PARAMETER NAME="IN28_WIDTH" VALUE="1"/>
+        <PARAMETER NAME="IN29_WIDTH" VALUE="1"/>
+        <PARAMETER NAME="IN30_WIDTH" VALUE="1"/>
+        <PARAMETER NAME="IN31_WIDTH" VALUE="1"/>
+        <PARAMETER NAME="dout_width" VALUE="32"/>
+        <PARAMETER NAME="NUM_PORTS" VALUE="2"/>
+        <PARAMETER NAME="Component_Name" VALUE="mesure_xlconcat_0_1"/>
+        <PARAMETER NAME="EDK_IPTYPE" VALUE="PERIPHERAL"/>
+      </PARAMETERS>
+      <PORTS>
+        <PORT DIR="I" LEFT="15" NAME="In0" RIGHT="0" SIGIS="undef" SIGNAME="Temp_voltage_measure_Slidding_average_voltage_Data_average">
           <CONNECTIONS>
-            <CONNECTION INSTANCE="IP_Conversion_Axi_0" PORT="Voltage"/>
+            <CONNECTION INSTANCE="Temp_voltage_measure_Slidding_average_voltage" PORT="Data_average"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="I" LEFT="15" NAME="In1" RIGHT="0" SIGIS="undef" SIGNAME="Temp_voltage_measure_Slidding_average_temperature_Data_average">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="Temp_voltage_measure_Slidding_average_temperature" PORT="Data_average"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="O" LEFT="31" NAME="dout" RIGHT="0" SIGIS="undef" SIGNAME="Temp_voltage_measure_xlconcat_0_dout">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="IP_Conversion_Axi_0" PORT="Temp_Voltage"/>
           </CONNECTIONS>
         </PORT>
       </PORTS>
@@ -2347,11 +2958,16 @@
         <PORT DIR="O" LEFT="0" NAME="Res" RIGHT="0" SIGIS="undef" SIGNAME="util_vector_logic_0_Res">
           <CONNECTIONS>
             <CONNECTION INSTANCE="Gen_stress_0" PORT="Reset"/>
-            <CONNECTION INSTANCE="De_Mux_0" PORT="Reset"/>
-            <CONNECTION INSTANCE="Sysmon_system_management_wiz_0" PORT="reset_in"/>
-            <CONNECTION INSTANCE="Temp_Voltage_Average_0" PORT="Reset"/>
-            <CONNECTION INSTANCE="PWM_Motor_0" PORT="Reset"/>
-            <CONNECTION INSTANCE="Gen_mode_0" PORT="Reset"/>
+            <CONNECTION INSTANCE="Temp_voltage_measure_Sysmon1_system_management_wiz_0" PORT="reset_in"/>
+            <CONNECTION INSTANCE="Temp_voltage_measure_Data_processing_De_Mux_0" PORT="Reset"/>
+            <CONNECTION INSTANCE="Temp_voltage_measure_Data_processing_Slidding_average_temperature" PORT="Reset"/>
+            <CONNECTION INSTANCE="Temp_voltage_measure_Data_processing_Slidding_average_voltage" PORT="Reset"/>
+            <CONNECTION INSTANCE="Temp_voltage_measure_Slidding_average_temperature" PORT="Reset"/>
+            <CONNECTION INSTANCE="Temp_voltage_measure_Slidding_average_voltage" PORT="Reset"/>
+            <CONNECTION INSTANCE="Signal_process_Gen_mode_0" PORT="Reset"/>
+            <CONNECTION INSTANCE="Signal_process_Gen_time_0" PORT="Reset"/>
+            <CONNECTION INSTANCE="Data_Memory_0" PORT="Reset"/>
+            <CONNECTION INSTANCE="PWM_0" PORT="Reset"/>
           </CONNECTIONS>
         </PORT>
       </PORTS>
@@ -2980,7 +3596,7 @@
         <PARAMETER NAME="PSU__USE__GDMA" VALUE="0"/>
         <PARAMETER NAME="PSU__USE__IRQ" VALUE="0"/>
         <PARAMETER NAME="PSU__USE__IRQ0" VALUE="1"/>
-        <PARAMETER NAME="PSU__USE__IRQ1" VALUE="0"/>
+        <PARAMETER NAME="PSU__USE__IRQ1" VALUE="1"/>
         <PARAMETER NAME="PSU__USE__CLK0" VALUE="0"/>
         <PARAMETER NAME="PSU__USE__CLK1" VALUE="0"/>
         <PARAMETER NAME="PSU__USE__CLK2" VALUE="0"/>
@@ -4175,9 +4791,14 @@
             <CONNECTION INSTANCE="ps8_0_axi_periph" PORT="S00_AXI_arqos"/>
           </CONNECTIONS>
         </PORT>
-        <PORT DIR="I" LEFT="0" NAME="pl_ps_irq0" RIGHT="0" SENSITIVITY="LEVEL_HIGH" SIGIS="INTERRUPT" SIGNAME="IP_Conversion_Axi_0_Data_Ready">
+        <PORT DIR="I" LEFT="0" NAME="pl_ps_irq0" RIGHT="0" SENSITIVITY="LEVEL_HIGH" SIGIS="INTERRUPT" SIGNAME="IP_Conversion_Axi_0_TV_Ready_intr">
           <CONNECTIONS>
-            <CONNECTION INSTANCE="IP_Conversion_Axi_0" PORT="Data_Ready"/>
+            <CONNECTION INSTANCE="IP_Conversion_Axi_0" PORT="TV_Ready_intr"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="I" LEFT="0" NAME="pl_ps_irq1" RIGHT="0" SENSITIVITY="LEVEL_HIGH" SIGIS="INTERRUPT" SIGNAME="IP_Conversion_Axi_0_Data_Ready_intr">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="IP_Conversion_Axi_0" PORT="Data_Ready_intr"/>
           </CONNECTIONS>
         </PORT>
         <PORT DIR="O" NAME="pl_resetn0" SIGIS="rst" SIGNAME="zynq_ultra_ps_e_0_pl_resetn0">
@@ -4193,13 +4814,24 @@
             <CONNECTION INSTANCE="rst_ps8_0_100M" PORT="slowest_sync_clk"/>
             <CONNECTION INSTANCE="ps8_0_axi_periph" PORT="M00_ACLK"/>
             <CONNECTION INSTANCE="ps8_0_axi_periph" PORT="ACLK"/>
-            <CONNECTION INSTANCE="Sysmon_system_management_wiz_0" PORT="dclk_in"/>
             <CONNECTION INSTANCE="Gen_stress_0" PORT="Clk"/>
-            <CONNECTION INSTANCE="De_Mux_0" PORT="Clk"/>
-            <CONNECTION INSTANCE="Temp_Voltage_Average_0" PORT="Clk"/>
-            <CONNECTION INSTANCE="PWM_Motor_0" PORT="Clk"/>
+            <CONNECTION INSTANCE="Temp_voltage_measure_Sysmon1_system_management_wiz_0" PORT="dclk_in"/>
+            <CONNECTION INSTANCE="Temp_voltage_measure_Registre_data_Registre_temperature_10Hz" PORT="Clk"/>
+            <CONNECTION INSTANCE="Temp_voltage_measure_Registre_data_Registre_voltage_10Hz" PORT="Clk"/>
+            <CONNECTION INSTANCE="Temp_voltage_measure_Data_processing_De_Mux_0" PORT="Clk"/>
+            <CONNECTION INSTANCE="Temp_voltage_measure_Data_processing_shift_ram_temperature" PORT="CLK"/>
+            <CONNECTION INSTANCE="Temp_voltage_measure_Data_processing_shift_ram_voltage" PORT="CLK"/>
+            <CONNECTION INSTANCE="Temp_voltage_measure_Data_processing_Slidding_average_temperature" PORT="Clk"/>
+            <CONNECTION INSTANCE="Temp_voltage_measure_Data_processing_Slidding_average_voltage" PORT="Clk"/>
+            <CONNECTION INSTANCE="Temp_voltage_measure_Slidding_average_temperature" PORT="Clk"/>
+            <CONNECTION INSTANCE="Temp_voltage_measure_shift_ram_temperature" PORT="CLK"/>
+            <CONNECTION INSTANCE="Temp_voltage_measure_shift_ram_voltage" PORT="CLK"/>
+            <CONNECTION INSTANCE="Temp_voltage_measure_Slidding_average_voltage" PORT="Clk"/>
+            <CONNECTION INSTANCE="Signal_process_Gen_mode_0" PORT="Clk"/>
+            <CONNECTION INSTANCE="Signal_process_Gen_time_0" PORT="Clk"/>
+            <CONNECTION INSTANCE="Data_Memory_0" PORT="Clk"/>
             <CONNECTION INSTANCE="IP_Conversion_Axi_0" PORT="s00_axi_aclk"/>
-            <CONNECTION INSTANCE="Gen_mode_0" PORT="Clk"/>
+            <CONNECTION INSTANCE="PWM_0" PORT="Clk"/>
           </CONNECTIONS>
         </PORT>
       </PORTS>
